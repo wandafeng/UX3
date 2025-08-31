@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>輪盤框架：UX流程、生命週期、方法與技術</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .diagram-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .wheel-diagram {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid #3498db;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ecf0f1, #fff);
+        }
+        
+        .wheel-section {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .section-understand {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-design {
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+        
+        .section-prototype {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-evaluate {
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .hierarchy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .hierarchy-table th,
+        .hierarchy-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .hierarchy-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .hierarchy-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .process-step {
+            background: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+        
+        .arrow {
+            font-size: 1.5em;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第二章：輪盤框架 - UX流程、生命週期、方法與技術</h1>
+            <div class="quote">
+                "設計是一種解決問題的方法，需要系統性的流程來指導"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>流程的必要性</li>
+                    <li>UX的基本流程組成</li>
+                    <li>UX設計生命週期流程</li>
+                    <li>輪盤：UX設計生命週期模板</li>
+                    <li>UX生命週期活動</li>
+                    <li>UX設計方法與技術</li>
+                    <li>UX技術工具箱</li>
+                    <li>基礎UX生命週期活動</li>
+                    <li>選擇與調適UX方法</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>2.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>🚫 這不是軟體開發</h3>
+                <p>本書完全關於UX設計，而非軟體開發。我們產出的是UX設計，通常以線框規格或原型呈現。這些設計將由開發者（軟體工程師或程式設計師）使用對應的軟體工程生命週期來實現。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔄 流程的必要性</h3>
+                <p>軟體工程界很早就認識到，擁有一個流程對於開發複雜系統是必要的。同樣地，在UX方面，對指導性流程的需求也很早就被認識到。</p>
+            </div>
+            
+            <div class="quote">
+                長期以來，軟體工程人員認識到擁有流程對於開發複雜系統是必要的，並投入了大量資源來定義、驗證和遵循流程。
+            </div>
+        </div>
+
+        <!-- Slide 3: Why Process -->
+        <div class="slide">
+            <h2>2.1.3 擁有流程能得到什麼？</h2>
+            
+            <div class="highlight-box">
+                <h4>🎯 流程是指導結構</h4>
+                <p>流程是幫助新手和專家處理專案活動和複雜細節的指導結構。流程強制採用系統性方法，為可能非常混亂的情況（特別是在大型複雜專案中）帶來秩序。沒有流程，設計師和開發者必須邊做邊想。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h4>🔄 流程提供可靠性與一致性</h4>
+                <p>記錄化的流程提供了一種從專案到專案、從團隊成員到另一個成員都使用相同基本方法的方式。快速週轉的壓力（以及由此產生的品質不佳風險）通過必要的流程步驟和檢查得到緩解。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h4>📚 流程為學習提供鷹架</h4>
+                <p>設計就是學習。流程提供一個架構，讓你能建立所學知識的知識庫，將類似過去努力的組織記憶應用到過去學到的經驗教訓中。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h4>🤝 流程提供共同的行動概念</h4>
+                <p>記錄化的流程讓每個人都知道產品或系統（軟體加UX）如何被開發。流程還通過將開發狀態外部化來幫助你的團隊協調和溝通。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Terminology Hierarchy -->
+        <div class="slide">
+            <h2>2.1.4 術語層次結構</h2>
+            
+            <p>為了區分UX設計中事物執行方式描述的層次，我們建立了一種術語階層：</p>
+            
+            <table class="hierarchy-table">
+                <thead>
+                    <tr>
+                        <th>術語</th>
+                        <th>範例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>流程，或UX生命週期流程</strong></td>
+                        <td>傳統瀑布式流程</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UX生命週期活動與子活動</strong></td>
+                        <td>理解需求</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UX方法</strong></td>
+                        <td>客戶訪問</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UX技術</strong></td>
+                        <td>訪談、觀察</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="warning-box">
+                <h4>⚠️ 術語定義模糊</h4>
+                <p>這些術語儘管在文獻中經常出現，但在學科內通常是模糊且定義不清的。我們選擇對這些密切相關術語的定義進行調整，以反映我們認為在這種鬆散的階層關係中最常被理解的含義。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: The Wheel Model -->
+        <div class="slide">
+            <h2>2.2 輪盤：UX設計流程模型</h2>
+            
+            <div class="diagram-container">
+                <h3>UX設計生命週期流程</h3>
+                <div class="wheel-diagram">
+                    <div class="wheel-section section-understand">理解需求</div>
+                    <div class="wheel-section section-design">設計解決方案</div>
+                    <div class="wheel-section section-prototype">原型候選</div>
+                    <div class="wheel-section section-evaluate">評估UX</div>
+                </div>
+                <p><em>基本UX設計生命週期流程的要素活動</em></p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔄 輪盤作為UX設計生命週期模板</h3>
+                <p>如果我們將抽象循環稍作擴展以包含反饋和迭代，我們就得到一種UX設計生命週期模板。我們稱之為輪盤，因為它循環運轉，每次旋轉都讓你更接近目標。</p>
+                <p>這個基本圖是幾乎任何類型設計共同流程的藍圖；無論設計範圍是產品/系統的小部分還是整個系統，都適用。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Four Lifecycle Activities -->
+        <div class="slide">
+            <h2>2.2.3 UX設計生命週期活動</h2>
+            
+            <p>生命週期活動是你在生命週期期間執行的高層次工作。本書大部分內容都涉及這四個基本UX設計生命週期活動：</p>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>1️⃣ 理解需求</h4>
+                    <p>理解使用者、工作實務、使用情境、主題領域，以及最終的設計需求</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>2️⃣ 設計解決方案</h4>
+                    <p>創造設計作為滿足使用者需求的解決方案</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>3️⃣ 原型候選方案</h4>
+                    <p>實現並構想有前途的設計候選方案</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>4️⃣ 評估UX</h4>
+                    <p>就設計提供的使用者體驗來驗證和改善設計</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                將UX生命週期活動描述為不同的框框是為了討論和對應本書章節的方便方式。然而在實務中，這些活動並沒有如此明確的界限；可能有顯著的交織和重疊。
+            </div>
+        </div>
+
+        <!-- Slide 7: Sub-Activities -->
+        <div class="slide">
+            <h2>2.2.4 生命週期子活動</h2>
+            
+            <p>每個生命週期活動都足夠重要，可以用自己的一套子活動來描述。生命週期子活動是你在單一生命週期活動期間執行的事情。</p>
+            
+            <div class="highlight-box">
+                <h3>理解需求活動的範例子活動：</h3>
+                <ul>
+                    <li><strong>資料收集：</strong> 訪談和觀察工作中的使用者，或研究該工作並收集關於工作實務、使用者、使用情況和需求的資料</li>
+                    <li><strong>資料分析：</strong> 提煉和組織UX研究資料</li>
+                    <li><strong>資料建模：</strong> 創建使用者特徵、資訊流、任務和工作環境的表示（用於理解、協作、分享、存檔、排演、沉浸）</li>
+                    <li><strong>使用者故事和需求：</strong> 將研究發現轉化為設計需求</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Methods and Techniques -->
+        <div class="slide">
+            <h2>2.2.5 UX設計方法</h2>
+            
+            <div class="highlight-box">
+                <h3>方法定義</h3>
+                <p>我們使用<strong>方法</strong>一詞作為指代執行任何活動的一般方法的通用詞。理解需求生命週期活動的方法範例是UX研究。</p>
+                <p>活動或子活動的目標可以通過一種或多種方法來完成。例如，執行UX評估活動有豐富的方法，從輕量快速到徹底費力，從完整的實證研究到快速粗糙的檢查。</p>
+            </div>
+            
+            <h2>2.2.6 UX設計技術</h2>
+            
+            <div class="highlight-box">
+                <h3>技術定義</h3>
+                <p>在我們的用法中，<strong>UX技術</strong>是你可以用來在活動、子活動或方法中執行步驟的程序或特定詳細實務。給定的UX設計技術可能在各種不同的生命週期活動中有用，並且不綁定於特定的UX方法。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>UX研究方法中收集資料的UX技術範例：</h4>
+                <ul>
+                    <li>訪談（使用者）</li>
+                    <li>觀察（工作中的使用者）</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Techniques as Life Skills -->
+        <div class="slide">
+            <h2>2.2.6.1 UX技術也是生活技能</h2>
+            
+            <div class="highlight-box">
+                <h3>🏠 生活技能的本質</h3>
+                <p>因為這些技術在我們日常生活中解決問題時也會使用，我們將它們視為生活技能 - 解決問題的基本通用技能，幫助設計師和非設計師作為人類繁榮發展。大多數技術應該看起來很熟悉，因為你在其他情境中遇到或使用過它們。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>租房或買房時使用這些技術的範例：</h4>
+                <ul>
+                    <li><strong>觀察：</strong> 我們探索不同的房屋來了解地區、噪音水平、不同時間的交通模式、陽光如何進入房屋、與鄰居的互動如何等</li>
+                    <li><strong>筆記記錄：</strong> 我們做筆記來捕捉觀察結果，供後續討論或反思，特別是在考慮多個住房選項時</li>
+                    <li><strong>素描：</strong> 我們可能會素描房屋的布局並加上評論和見解</li>
+                    <li><strong>建模：</strong> 對於更有設計思維的人，我們甚至可能建立典型工作流程模型，例如從商店帶雜貨回家到卸載到食品櫃和冰箱的流程</li>
+                    <li><strong>構想：</strong> 如果我們考慮建造房屋，我們可能會為房屋的各種特徵進行腦力激盪，甚至製作一些概念原型</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: UX Technique Toolbox -->
+        <div class="slide">
+            <h2>2.3 UX技術工具箱</h2>
+            
+            <div class="highlight-box">
+                <p>存在許多UX設計技術，隨著時間推移，文獻中描述和實務中使用的技術越來越多。我們不可能在本書中涵蓋所有這些技術。我們在此工具箱中包含了一些在我們的實務和經驗中發現多才多藝的UX技術。</p>
+            </div>
+            
+            <h3>🔍 研究與探索技術</h3>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👁️ 觀察</h4>
+                    <p>觀察是目擊正在進行活動的實務，目的是理解潛在現象。要尋找的事物包括例外、驚喜、一般性、模式、工作流程、順序、什麼有效什麼無效、問題和障礙，以及人們如何對問題做出反應。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 筆記記錄</h4>
+                    <p>筆記記錄是有效捕捉觀察描述和其他形式質性資料的實務。筆記記錄應該作為一種幾乎無意識的活動進行，不會讓你的認知過程從觀察活動中分心。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>✏️ 素描</h4>
+                    <p>UX中的素描是製作描述問題和解決方案本質的簡單圖片和圖表的實務。關於素描最重要的一點是它不關乎藝術或美學，而是關於想法的溝通。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Organizing Data Techniques -->
+        <div class="slide">
+            <h2>2.3.2 組織資料與想法的技術</h2>
+            
+            <p>組織資料和想法的技術用於按類別對項目進行排序，通常是類別和子類別的階層。</p>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 階層列表</h4>
+                    <p>對於少量資料和簡單類別，階層列表是一種經濟的組織方法。最高層類別代表在階層頂部。次級子類別在其對應的父類別下縮排。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🃏 卡片分類</h4>
+                    <p>卡片分類是一種根據共同特徵將標註概念的卡片排序到類別中的技術。卡片分類通常限於少量資料（例如，組織桌面應用程式中的選單結構）。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🧠 概念/心智圖</h4>
+                    <p>心智圖或概念圖是一種以概念為中心並描述它們之間關係的標記圖像繪製技術，作為探索相對於其他已知想法和概念的新想法或概念的方式。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔗 親和力圖</h4>
+                    <p>親和力圖用於組織大量資料，按相關性（親和力）和共同屬性進行階層分組。這是組織收集的資料（例如UX研究或UX評估）的技術，識別主題和關係以理解整個資料語料庫。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>工作活動親和力圖(WAAD)</h4>
+                <p>親和力圖，特別是當調整為UX研究組織的工作活動親和力圖(WAAD)時，是一個強大的按類別組織資料（工作活動筆記）的工具。對於大量UX研究資料筆記，我們推薦WAAD。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Understanding Techniques -->
+        <div class="slide">
+            <h2>2.3.3 理解與意義建構的技術</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🏊 沉浸</h4>
+                    <p>沉浸是對手邊問題進行深度思考和分析的形式 - 生活在問題的情境中以發現和理解其各種維度、屬性、約束和其他特性。</p>
+                    <p><em>就像警探試圖解決困難犯罪時，可能將自己隔離在遠離干擾的房間裡，沉浸在問題中並用人工制品包圍自己。</em></p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 抽象化</h4>
+                    <p>抽象化是基於移除與特定目標或討論焦點無關細節的強大技術。抽象化是分離麥子與糠秕、將事物歸結到其本質的一種方法。</p>
+                    <p><em>抽象化被認為是電腦科學和軟體工程中大多數活動的關鍵技能。</em></p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🧮 推理與演繹</h4>
+                    <p>推理和演繹構成應用邏輯處理觀察事實、將它們結合並得出邏輯結論的長期實務。推理和演繹是通過將邏輯應用於現有事實來綜合新事實的方式。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🖼️ 框架與重新框架</h4>
+                    <p>框架和重新框架是基於選定的幾個突出特徵對設計問題進行特定視角概念化。框架減少複雜性並幫助關注問題最重要的維度。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Framing Example -->
+        <div class="slide">
+            <h2>框架與重新框架範例</h2>
+            
+            <div class="example-box">
+                <h4>🌊 河流氾濫問題的不同框架</h4>
+                <p>假設你在城鎮附近的河流氾濫平原沿線偶爾有田地氾濫：</p>
+                
+                <ul>
+                    <li><strong>框架為「河流下來的水太多」：</strong> 會讓你專注於大壩或其他控制流入山谷水流方式的設計解決方案</li>
+                    
+                    <li><strong>框架為「河流溢出河岸問題」：</strong> 你可能轉向堤壩系統來保持水在河岸內</li>
+                    
+                    <li><strong>框架為「與之合作而非對抗的自然現象」：</strong> 你將要求土地所有者只在氾濫平原以上建造房屋</li>
+                </ul>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔄 重新框架的力量</h3>
+                <p>重新框架是視角的轉換。數學家在轉換座標系統研究現象時就會練習這種技能。例如，20世紀初的電氣工程師從傳統的笛卡爾座標轉移到圓柱座標系統來研究圓柱真空管內的電場。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Synthesis -->
+        <div class="slide">
+            <h2>2.3.3.5 綜合</h2>
+            
+            <div class="highlight-box">
+                <h3>🎭 綜合的定義</h3>
+                <p>綜合涉及結合你已經擁有或知道的事物（例如資料）來創造新的東西。綜合與創造力和創新密切相關，意味著創造原始資料中不存在的新想法和理解。這就是為什麼創意設計的早期階段被稱為生成性的；它們產生新的設計想法。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>🕵️ 警探綜合技能範例</h4>
+                <p>UX之外綜合技能重要性的最佳範例之一是警探如何將不同的線索組合在一起，綜合觀察、訪談、筆記記錄、框架和推理/演繹，建立完整案例來找出罪犯。</p>
+            </div>
+            
+            <div class="quote">
+                「情境研究、競爭研究或標準學術研究用於收集資料，但僅有資料並不表示戰略設計思維的潛力；資料必須被分析、組織和理解...這是一個有戰略意涵和戰略重要性的混亂階段。」
+            </div>
+        </div>
+
+        <!-- Slide 15: Modeling -->
+        <div class="slide">
+            <h2>2.3.3.6 建模</h2>
+            
+            <div class="highlight-box">
+                <h3>建模定義</h3>
+                <p>建模是沿著特定維度表示複雜和抽象現象以簡化和幫助理解的實務。建模是一種特殊的抽象化，是解釋或分類問題空間各方面的方式，並識別和表示該空間內的物件、關係、行動、操作、變數和依賴性。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>🚗 建模作為生活技能範例：買車研究</h4>
+                <p>考慮你在買車前比較可能性所做的研究。你會遇到關於汽車的各種資訊。你的模型可能包括如下維度：</p>
+                <ul>
+                    <li><strong>成本</strong></li>
+                    <li><strong>風格</strong>（敞篷車、SUV、轎車）</li>
+                    <li><strong>機械規格</strong>（MPG、馬力、扭矩、全輪驅動與前輪驅動）</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: Generative Techniques -->
+        <div class="slide">
+            <h2>2.3.4 生成、構想與精煉技術</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🧠 腦力激盪</h4>
+                    <p>腦力激盪是探索和激發不同想法、問題和解決方案的互動小組討論實務：</p>
+                    <ul>
+                        <li>作為小組活動最有效</li>
+                        <li>是設計解決方案生命週期活動的主要技能</li>
+                        <li>可用於評估UX生命週期活動</li>
+                        <li>可用於任何開放式問題的情況</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 構想原型製作</h4>
+                    <p>原型製作是生產或建造設計模型或模型的實務，可以在某種程度上操作和使用以顯示或模擬使用者體驗，這可以被評估。</p>
+                    <p>原型製作擴展了素描的想法。作為UX設計的主要輸出，原型是構想和評估設計作為問題解決方案效果的有形平台。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Communication Techniques -->
+        <div class="slide">
+            <h2>2.3.5 溝通技術</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📚 說故事</h4>
+                    <p>說故事是使用敘事來解釋現象或設計各方面的實務，目的是讓聽眾沉浸在現象中。</p>
+                    <p><em>說故事的好範例是其在廣告中的使用。講述使用產品並從中獲得快樂和/或效用的人的故事，比簡單列出產品優勢更有說服力。</em></p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📌 外化洞察</h4>
+                    <p>視覺化張貼資料組織和其他結果（例如在UX工作室或作戰室中）讓設計師卸載他們的人類記憶，並為字面上穿越資料提供大型視覺和心智頻寬。</p>
+                    <p>空間/視覺表示減少了資料的混亂，張貼提供了支持沉浸的平台或鷹架。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Choosing Methods -->
+        <div class="slide">
+            <h2>2.4 選擇UX流程、方法與技術</h2>
+            
+            <div class="highlight-box">
+                <h3>🔄 技術結合使用</h3>
+                <p>在UX設計或作為生活技能使用時，這些技術通常在方法內結合使用。例如，新聞記者必須結合技能來挖掘和製作新聞故事報導，包括觀察、筆記記錄、說故事和框架。</p>
+            </div>
+            
+            <h3>🎯 UX生命週期流程選擇</h3>
+            <div class="highlight-box">
+                <p>UX生命週期流程選擇是在最高層級做出的。軟體工程界已經幾乎普遍採用敏捷生命週期流程，而我們在UX中也正在做出相同選擇以跟上我們的SE夥伴。如同在SE中，敏捷UX流程是你通過以小塊交付UX設計來管理流程中變化的流程。</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Appropriating Methods -->
+        <div class="slide">
+            <h2>2.4.3 調適方法與技術</h2>
+            
+            <div class="highlight-box">
+                <h3>🌊 方法豐富性</h3>
+                <p>「HCI充斥著方法和支撐它們的理論」。那麼，你如何理解你的專案需要什麼？</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ 從設計情境開始</h4>
+                <p>在這本書或UX設計課程中，通常的做法是作者或講師採用以方法為導向的方法來展示他們最喜愛的UX方法。在本版中，我們認為從設計情境的想法開始更有意義 - 專案的參數、使用者社群和預期任務，然後談論如何通過調適能夠實現目標和預期結果的方法和技術來匹配它。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>🔧 調適的概念</h4>
+                <p>這種調適設計方法的想法來自Harrison和Tatar，是綜合的一個絕佳範例。它簡單意味著你取得你學過的標準方法，並修改、調適和結合它們，使它們成為你在特定設計情境中的自己方法。</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Design Situations -->
+        <div class="slide">
+            <h2>2.4.3.1 設計情境</h2>
+            
+            <div class="highlight-box">
+                <h3>設計情境定義</h3>
+                <p>Harrison和Tatar將設計情境描述為設計方法將被調適和應用的環境。一個好的總括術語是設計情境，因為它包括目標產品或系統以及專案的所有情境，包括：</p>
+                <ul>
+                    <li>市場</li>
+                    <li>對嚴謹性的需求</li>
+                    <li>客戶或管理層對快速週轉的壓力</li>
+                    <li>主題領域複雜性</li>
+                    <li>專案團隊能力、技能和經驗</li>
+                </ul>
+            </div>
+            
+            <div class="process-flow">
+                <div class="process-step">專案參數</div>
+                <div class="arrow">→</div>
+                <div class="process-step">設計情境</div>
+                <div class="arrow">→</div>
+                <div class="process-step">方法選擇</div>
+                <div class="arrow">→</div>
+                <div class="process-step">技術選擇</div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Method Constraints -->
+        <div class="slide">
+            <h2>2.4.3.3 早期選擇約束後期選擇</h2>
+            
+            <div class="highlight-box">
+                <h3>⛓️ 連鎖效應</h3>
+                <p>方法和技術的早期選擇可以透過建議、排除或規定後續選擇的適當方法和技術來約束後期選擇。例如，在給定情況下用於資料分析的方法和技術將取決於你擁有什麼樣的資料以及資料是如何收集的。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>範例：資料收集方法影響分析方法</h4>
+                <p>如果你在理解需求階段選擇了定量問卷調查方法，這將約束你在資料分析階段只能使用統計分析技術，而不能使用質性資料分析方法如親和力圖。</p>
+            </div>
+        </div>
+
+        <!-- Slide 22: Project Parameters Mapping -->
+        <div class="slide">
+            <h2>2.4.3.4 專案參數對應</h2>
+            
+            <div class="diagram-container">
+                <h3>專案參數對應敏捷UX方法選擇</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; align-items: center;">
+                        <div style="background: #3498db; color: white; padding: 20px; border-radius: 10px;">
+                            <h4 style="margin: 0; color: white;">專案參數</h4>
+                            <ul style="margin: 10px 0; color: white;">
+                                <li>專案風險</li>
+                                <li>專案目標</li>
+                                <li>可用資源</li>
+                                <li>系統功能類型</li>
+                                <li>開發組織文化</li>
+                                <li>開發階段</li>
+                            </ul>
+                        </div>
+                        <div style="background: #27ae60; color: white; padding: 20px; border-radius: 10px;">
+                            <h4 style="margin: 0; color: white;">你可以選擇的</h4>
+                            <ul style="margin: 10px 0; color: white;">
+                                <li>要執行的開發活動</li>
+                                <li>使用的嚴謹程度</li>
+                                <li>使用的方法和技術</li>
+                                <li>迭代：是否需要、多少、用於什麼目的</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🎯 實務指導</h3>
+                <p>雖然做出這些對應選擇有一些通用指導原則，但微調是專案團隊的工作，特別是與產品負責人（負責產品成功和追求商業目標的人）諮詢。大部分是直觀和直接的。</p>
+            </div>
+        </div>
+
+        <!-- Slide 23: Summary -->
+        <div class="slide">
+            <h2>2.5 小結</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 本章重點回顧</h3>
+                <ul>
+                    <li><strong>輪盤框架：</strong> 介紹了輪盤作為框架UX流程、生命週期、方法和技術的結構</li>
+                    <li><strong>四大生命週期活動：</strong> 理解需求、設計解決方案、原型候選、評估UX</li>
+                    <li><strong>技術工具箱：</strong> 研究、組織、理解、生成和溝通的各種技術</li>
+                    <li><strong>生活技能：</strong> 這些UX技術也是日常生活中解決問題的基本技能</li>
+                    <li><strong>調適方法：</strong> 根據設計情境選擇和調整方法與技術</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                在下一章中，我們將深入探討專案開發空間的兩個方面：範圍和嚴謹性
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔄 輪盤的價值</h3>
+                <p>輪盤提供了一個靈活而結構化的框架，幫助UX設計師在複雜的設計過程中保持方向，確保每個階段都得到適當的關注，並通過迭代不斷改進設計品質。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">23</span>
+    </div>
+
+    <a href="index.html" class="home-link">Home</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
