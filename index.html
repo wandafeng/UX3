@@ -3,620 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>使用者體驗與使用者體驗設計</title>
+    <title>使用者洞察與研究首頁</title>
     <style>
         body {
             font-family: 'Microsoft JhengHei', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: white; /* 簡化為白色背景 */
             color: #333;
             line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* 確保內容垂直置中 */
         }
-        
+
         .presentation-container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto;
             background: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             border-radius: 10px;
             overflow: hidden;
-        }
-        
-        .slide {
-            min-height: 600px;
             padding: 40px;
-            border-bottom: 2px solid #f0f0f0;
-            display: none;
-            position: relative;
+            width: 90%; /* 讓容器寬度更彈性 */
+        }
+
+        .homepage-content {
+            text-align: center;
         }
         
-        .slide.active {
-            display: block;
-        }
-        
-        .slide h1 {
+        .homepage-content h1 {
             color: #2c3e50;
             font-size: 2.5em;
-            margin-bottom: 20px;
-            text-align: center;
+            margin-bottom: 30px;
             border-bottom: 3px solid #3498db;
             padding-bottom: 10px;
+            display: inline-block;
         }
         
-        .slide h2 {
-            color: #34495e;
-            font-size: 2em;
-            margin-bottom: 15px;
-            border-left: 5px solid #3498db;
-            padding-left: 15px;
-        }
-        
-        .slide h3 {
-            color: #2980b9;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-        
-        .slide p, .slide li {
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-        
-        .slide ul {
-            padding-left: 20px;
-        }
-        
-        .slide li {
-            margin-bottom: 8px;
-            list-style-type: disc;
-        }
-        
-        .highlight-box {
-            background: #ecf0f1;
-            border-left: 5px solid #3498db;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-        
-        .quote {
-            font-style: italic;
-            text-align: center;
-            font-size: 1.2em;
-            color: #7f8c8d;
-            margin: 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 5px;
-        }
-        
-        .components-grid {
+        .chapter-list {
+            list-style-type: none;
+            padding: 0;
+            /* 使用Grid佈局實現左右排列 */
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 20px 0;
+            grid-template-columns: repeat(3, 1fr); /* 預設每行顯示3個項目 */
+            gap: 20px; /* 項目之間的間距 */
+            justify-items: center; /* 讓每個網格項目內容置中 */
         }
         
-        .component-card {
+        /* 針對小螢幕調整顯示數量 */
+        @media (max-width: 768px) {
+            .chapter-list {
+                grid-template-columns: repeat(2, 1fr); /* 中等螢幕每行顯示2個 */
+            }
+        }
+
+        /* 針對更小的螢幕調整顯示數量 */
+        @media (max-width: 480px) {
+            .chapter-list {
+                grid-template-columns: 1fr; /* 小螢幕每行顯示1個 */
+            }
+        }
+
+        .chapter-list li {
             background: #f8f9fa;
             border: 2px solid #3498db;
             border-radius: 10px;
             padding: 20px;
-            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%; /* 確保項目填滿網格單元 */
+            box-sizing: border-box; /* 讓padding和border包含在width內 */
         }
         
-        .component-card h4 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.3em;
+        .chapter-list li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .chapter-list a {
+            text-decoration: none;
+            color: #34495e;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: block; /* 讓連結填滿整個li區域 */
         }
         
-        .navigation {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
+        .chapter-list a:hover {
+            color: #2980b9;
         }
-        
-        .nav-btn {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 0 5px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background 0.3s;
-        }
-        
-        .nav-btn:hover {
-            background: #2980b9;
-        }
-        
-        .nav-btn:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-        }
-        
-        .slide-counter {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(52, 73, 94, 0.8);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-        }
-        
-        .evolution-timeline {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .timeline-item {
-            border-left: 3px solid #3498db;
-            padding-left: 20px;
-            margin-bottom: 15px;
-            position: relative;
-        }
-        
-        .timeline-item::before {
-            content: '';
-            width: 12px;
-            height: 12px;
-            background: #3498db;
-            border-radius: 50%;
-            position: absolute;
-            left: -7.5px;
-            top: 5px;
-        }
-        
-        .example-box {
-            background: #e8f5e8;
-            border: 1px solid #27ae60;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        
-        .example-box h4 {
-            color: #27ae60;
-            margin-top: 0;
-        }
+
     </style>
 </head>
 <body>
     <div class="presentation-container">
-        <!-- Slide 1: Title -->
-        <div class="slide active">
-            <h1>第一章：什麼是使用者體驗與使用者體驗設計？</h1>
-            <div class="quote">
-                "藝術與披薩外送：我們所做的恰好落在兩者之間。"<br>
-                — 大衛·萊特曼（David Letterman）
-            </div>
-            <div class="highlight-box">
-                <p><strong>課程目標：</strong></p>
-                <ul>
-                    <li>理解使用者體驗（UX）的核心概念</li>
-                    <li>探索UX設計的重要性與應用</li>
-                    <li>分析UX的四大組成要素</li>
-                    <li>了解UX領域的發展歷程</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 2: UX Definition -->
-        <div class="slide">
-            <h2>什麼是使用者體驗（UX）？</h2>
-            <div class="highlight-box">
-                <h3>核心定義</h3>
-                <p><strong>使用者體驗是使用者在與產品、系統或生態系統的其他部分互動之前、期間和之後所感受到的所有效應的總和。</strong></p>
-            </div>
-            
-            <h3>UX的關鍵特徵：</h3>
-            <ul>
-                <li><strong>源於互動</strong> - 由使用者與產品的互動產生</li>
-                <li><strong>效應的總和</strong> - 包含完整的感知、解釋和情感</li>
-                <li><strong>內在感受</strong> - 由使用者主觀體驗</li>
-                <li><strong>情境相關</strong> - 受使用環境和生態系統影響</li>
+        <div class="homepage-content">
+            <h1> 使用者洞察與研究 課程內容</h1>
+            <ul class="chapter-list">
+                <li><a href="chapter1.html">CH1</a></li> <li><a href="chapter2.html">CH2</a></li>
+                <li><a href="chapter3.html">CH3</a></li>
+                <li><a href="chapter4.html">CH4</a></li>
+                <li><a href="chapter5.html">CH5</a></li>
+                <li><a href="chapter6.html">CH6</a></li>
+                <li><a href="chapter7.html">CH7</a></li>
+                <li><a href="chapter8.html">CH8</a></li>
+                <li><a href="chapter9.html">CH9</a></li>
+                <li><a href="chapter10.html">CH10</a></li>
+                <li><a href="chapter11.html">CH11</a></li>
+                <li><a href="chapter12.html">CH12</a></li>
+                <li><a href="chapter13.html">CH13</a></li>
+                <li><a href="chapter14.html">CH14</a></li>
+                <li><a href="chapter15.html">CH15</a></li>
+                <li><a href="chapter16.html">CH16</a></li>
+                <li><a href="chapter17.html">CH17</a></li>
+                <li><a href="chapter18.html">CH18</a></li>
             </ul>
-            
-            <div class="quote">
-                UX不僅是產品功能，更是使用者的完整體驗旅程
-            </div>
-        </div>
-
-        <!-- Slide 3: Computing Evolution -->
-        <div class="slide">
-            <h2>運算與互動的演進</h2>
-            
-            <div class="evolution-timeline">
-                <h3>技術發展歷程</h3>
-                <div class="timeline-item">
-                    <h4>1970年代末</h4>
-                    <p>個人電腦出現，主要是資料欄位顯示</p>
-                </div>
-                <div class="timeline-item">
-                    <h4>1980-1990年代</h4>
-                    <p>圖形使用者介面（GUI）、網際網路興起</p>
-                </div>
-                <div class="timeline-item">
-                    <h4>2000年代至今</h4>
-                    <p>行動裝置、穿戴式裝置、物聯網普及</p>
-                </div>
-            </div>
-            
-            <h3>互動模式的擴展</h3>
-            <ul>
-                <li><strong>從WIMP到多模態</strong> - 視窗、圖示、選單、指標 → 觸控、語音、手勢</li>
-                <li><strong>消失的技術</strong> - 融入生活環境，變得無形</li>
-                <li><strong>普及運算</strong> - 智慧手機、手錶、汽車、家電</li>
-            </ul>
-        </div>
-
-        <!-- Slide 4: Activity-based Interaction -->
-        <div class="slide">
-            <h2>活動導向互動</h2>
-            
-            <div class="highlight-box">
-                <h3>什麼是活動導向互動？</h3>
-                <p>一組多重、重疊和相關的任務線程，都服務於使用者生態系統內的共同工作目標。</p>
-            </div>
-            
-            <h3>三種層次的活動導向互動：</h3>
-            <ul>
-                <li><strong>單一裝置</strong> - 在一個裝置上完成複合任務</li>
-                <li><strong>跨多個裝置</strong> - Apple Watch + iPhone 的生態系統</li>
-                <li><strong>跨系統生態</strong> - 涉及多方、多裝置、多位置</li>
-            </ul>
-            
-            <div class="example-box">
-                <h4>實例：電線掉落修復</h4>
-                <p>使用者發現停電 → 聯絡鄰居確認 → 致電電力公司 → 客服建立工單 → 技師接收任務 → 現場修復 → 回報完成</p>
-                <p><em>整個流程跨越多個系統、裝置和人員，但對使用者來說是一個完整活動。</em></p>
-            </div>
-        </div>
-
-        <!-- Slide 5: UX Components -->
-        <div class="slide">
-            <h2>使用者體驗的四大組成要素</h2>
-            
-            <div class="components-grid">
-                <div class="component-card">
-                    <h4>🔧 易用性 (Usability)</h4>
-                    <p>易於使用、高效率、低錯誤率、易學習、易記憶</p>
-                </div>
-                <div class="component-card">
-                    <h4>⚡ 有用性 (Usefulness)</h4>
-                    <p>功能強大、滿足需求、解決問題的能力</p>
-                </div>
-                <div class="component-card">
-                    <h4>❤️ 情感影響 (Emotional Impact)</h4>
-                    <p>愉悅感、滿意度、美感體驗、樂趣</p>
-                </div>
-                <div class="component-card">
-                    <h4>🎯 意義性 (Meaningfulness)</h4>
-                    <p>與使用者生活的長期連結、個人價值</p>
-                </div>
-            </div>
-            
-            <div class="quote">
-                優秀的UX設計需要平衡所有四個要素
-            </div>
-        </div>
-
-        <!-- Slide 6: Emotional Impact Deep Dive -->
-        <div class="slide">
-            <h2>情感影響的重要性</h2>
-            
-            <h3>為什麼情感很重要？</h3>
-            <div class="highlight-box">
-                <p>"使用者不再滿足於僅僅是易用性的效率和有效性；他們也在尋求情感滿足。"</p>
-                <p>"有吸引力的東西讓人感覺良好。" - 唐·諾曼</p>
-            </div>
-            
-            <h3>情感影響的表現形式：</h3>
-            <ul>
-                <li>使用的喜悅、愉悅感、興奮</li>
-                <li>美學體驗、新穎性、驚喜</li>
-                <li>身分認同、社會地位</li>
-                <li>擁有的驕傲、產品親和力</li>
-            </ul>
-            
-            <div class="example-box">
-                <h4>iPad 成功案例</h4>
-                <p>iPad 被批評為"多餘"，但成為史上最成功的個人電子裝置。原因不在於功能理性，而在於情感誘惑 - 持有精美科技藝術品的體驗感受。</p>
-            </div>
-        </div>
-
-        <!-- Slide 7: UX Evolution -->
-        <div class="slide">
-            <h2>UX重要性的演進</h2>
-            
-            <div class="evolution-timeline">
-                <div class="timeline-item">
-                    <h4>早期階段</h4>
-                    <p>容忍不良設計，技術神秘感，"跳舞熊"軟體</p>
-                </div>
-                <div class="timeline-item">
-                    <h4>1990年代</h4>
-                    <p>易用性工程興起，關注評估方法</p>
-                </div>
-                <div class="timeline-item">
-                    <h4>2000年代至今</h4>
-                    <p>UX設計成為核心，超越易用性到全方位體驗</p>
-                </div>
-            </div>
-            
-            <div class="highlight-box">
-                <h3>現今重要性</h3>
-                <p>"商業策略和使用者體驗設計之間不再有任何真正的區別" - IBM 高級副總裁</p>
-                <p>"我們生活在使用者體驗時代" - 《大西洋》雜誌</p>
-            </div>
-        </div>
-
-        <!-- Slide 8: Bad UX Costs -->
-        <div class="slide">
-            <h2>不良UX設計的代價</h2>
-            
-            <h3>高成本實例：</h3>
-            <div class="example-box">
-                <h4>🚗 汽車安全</h4>
-                <p>不良車載系統UX導致駕駛分心，造成交通事故、傷亡</p>
-            </div>
-            
-            <div class="example-box">
-                <h4>✈️ 航空安全</h4>
-                <p>1999年埃及航空990號航班墜毀，原因：駕駛艙控制設計易用性不佳</p>
-            </div>
-            
-            <div class="example-box">
-                <h4>🚢 海事安全</h4>
-                <p>USS McCain 碰撞事故，歸因於導航控制台UX設計問題</p>
-            </div>
-            
-            <div class="example-box">
-                <h4>🏥 醫療安全</h4>
-                <p>自動化醫院系統的22種錯誤用藥方式，多數為經典易用性問題</p>
-            </div>
-            
-            <div class="quote">
-                良好的UX設計不只是錦上添花，而是攸關安全的必需品
-            </div>
-        </div>
-
-        <!-- Slide 9: Service Experience -->
-        <div class="slide">
-            <h2>服務體驗設計</h2>
-            
-            <div class="highlight-box">
-                <h3>服務設計定義</h3>
-                <p>在"交易旅程"內為使用者或客戶體驗而進行的UX設計，關注客戶接觸點。</p>
-            </div>
-            
-            <div class="example-box">
-                <h4>手術服務旅程範例</h4>
-                <ol>
-                    <li><strong>初診</strong> - 家庭醫生檢查症狀</li>
-                    <li><strong>檢測</strong> - 診所進行影像檢查</li>
-                    <li><strong>入院</strong> - 醫院導航、報到、等候</li>
-                    <li><strong>手術</strong> - 手術執行</li>
-                    <li><strong>術後</strong> - 處方、追蹤、復健</li>
-                </ol>
-                <p><em>每個環節都是潛在的UX設計點</em></p>
-            </div>
-            
-            <h3>服務設計特點：</h3>
-            <ul>
-                <li>跨時間、跨地點的體驗</li>
-                <li>多個接觸點整合</li>
-                <li>考慮邊緣情況和問題點</li>
-            </ul>
-        </div>
-
-        <!-- Slide 10: Business Case -->
-        <div class="slide">
-            <h2>UX的商業價值</h2>
-            
-            <h3>從成本正當化到策略核心</h3>
-            <div class="highlight-box">
-                <p><strong>過去：</strong> 需要證明UX投資回報率</p>
-                <p><strong>現在：</strong> UX成為商業策略不可分割的部分</p>
-            </div>
-            
-            <h3>UX價值體現：</h3>
-            <ul>
-                <li><strong>降低支援成本</strong> - 好設計減少客服需求</li>
-                <li><strong>提升客戶滿意度</strong> - 增加忠誠度和回購</li>
-                <li><strong>品牌差異化</strong> - 在競爭中脫穎而出</li>
-                <li><strong>減少開發成本</strong> - 一次做對，避免重工</li>
-            </ul>
-            
-            <div class="quote">
-                "設計思維"的普及讓企業開始像設計師一樣思考
-            </div>
-            
-            <h3>蘋果效應</h3>
-            <p>蘋果的成功證明了優秀UX設計的商業價值，引發全行業對UX的重視。</p>
-        </div>
-
-        <!-- Slide 11: Historical Roots -->
-        <div class="slide">
-            <h2>HCI與UX的歷史根源</h2>
-            
-            <div class="evolution-timeline">
-                <div class="timeline-item">
-                    <h4>1940-1950年代</h4>
-                    <p>人因工程興起，費茨、瓊斯、查帕尼斯等先驅</p>
-                </div>
-                <div class="timeline-item">
-                    <h4>1960年代</h4>
-                    <p>恩格爾巴特發明滑鼠，電腦圖形學起步</p>
-                </div>
-                <div class="timeline-item">
-                    <h4>1980年代</h4>
-                    <p>GUI發展，施樂之星、蘋果Lisa和Macintosh</p>
-                </div>
-                <div class="timeline-item">
-                    <h4>1983年</h4>
-                    <p>首屆CHI會議，HCI學科正式成形</p>
-                </div>
-                <div class="timeline-item">
-                    <h4>2000年代</h4>
-                    <p>從易用性擴展到全面使用者體驗</p>
-                </div>
-            </div>
-            
-            <div class="highlight-box">
-                <h3>多學科整合</h3>
-                <p>HCI與UX結合了心理學、認知科學、工業設計、電腦科學等多個領域的知識。</p>
-            </div>
-        </div>
-
-        <!-- Slide 12: Key Takeaways -->
-        <div class="slide">
-            <h2>關鍵要點總結</h2>
-            
-            <div class="highlight-box">
-                <h3>🎯 核心概念</h3>
-                <ul>
-                    <li>UX是使用者與產品互動的完整感受總和</li>
-                    <li>包含互動前、中、後的所有效應</li>
-                    <li>受情境和生態系統影響</li>
-                </ul>
-            </div>
-            
-            <div class="highlight-box">
-                <h3>🔧 四大組成要素</h3>
-                <ul>
-                    <li><strong>易用性</strong> - 基礎功能表現</li>
-                    <li><strong>有用性</strong> - 解決問題能力</li>
-                    <li><strong>情感影響</strong> - 愉悅和滿足感</li>
-                    <li><strong>意義性</strong> - 長期價值連結</li>
-                </ul>
-            </div>
-            
-            <div class="highlight-box">
-                <h3>📈 戰略重要性</h3>
-                <ul>
-                    <li>從技術補充到商業核心</li>
-                    <li>攸關安全和成本效益</li>
-                    <li>決定產品成功的關鍵因素</li>
-                </ul>
-            </div>
-            
-            <div class="quote">
-                優秀的UX設計是現代產品開發的必需品，不是可選項
-            </div>
-        </div>
-
-        <!-- Slide 13: Discussion & Questions -->
-        <div class="slide">
-            <h2>討論與思考</h2>
-            
-            <h3>🤔 課堂討論題目</h3>
-            <div class="example-box">
-                <h4>1. 個人體驗分析</h4>
-                <p>分享一個你認為UX設計優秀的產品或服務，分析其在四大要素上的表現。</p>
-            </div>
-            
-            <div class="example-box">
-                <h4>2. 設計挑戰</h4>
-                <p>舉例說明如何在工作環境中平衡易用性和樂趣性？什麼情況下不應該追求樂趣？</p>
-            </div>
-            
-            <div class="example-box">
-                <h4>3. 未來趋势</h4>
-                <p>隨著AI、VR、IoT技術發展，你認為UX設計會面臨哪些新挑戰？</p>
-            </div>
-            
-            <h3>💭 課後思考</h3>
-            <ul>
-                <li>觀察日常使用的三個不同類型產品的UX設計</li>
-                <li>識別其優點、缺點和改進機會</li>
-                <li>思考如何從UX角度分析設計決策</li>
-            </ul>
-        </div>
-
-        <!-- Slide 14: Next Steps -->
-        <div class="slide">
-            <h2>下一步學習</h2>
-            
-            <h3>📚 深入學習方向</h3>
-            <ul>
-                <li><strong>理論基礎</strong> - 認知心理學、人因工程</li>
-                <li><strong>設計方法</strong> - 設計思維、使用者研究</li>
-                <li><strong>評估技術</strong> - 易用性測試、分析方法</li>
-                <li><strong>實作技能</strong> - 原型製作、介面設計</li>
-            </ul>
-            
-            <h3>🛠️ 實務練習建議</h3>
-            <ul>
-                <li>建立UX觀察日記</li>
-                <li>參與開源設計專案</li>
-                <li>學習原型製作工具</li>
-                <li>練習使用者訪談技巧</li>
-            </ul>
-            
-            <div class="quote">
-                "最好的學習方式是實作 - 開始設計，開始測試，開始迭代"
-            </div>
-            
-            <h3>📖 下一章預告</h3>
-            <p><strong>第二章：輪盤框架</strong> - 我們將探討組織UX過程、生命週期、方法和技術的框架。</p>
         </div>
     </div>
-
-    <div class="slide-counter">
-        <span id="current-slide">1</span> / <span id="total-slides">14</span>
-    </div>
-
-    <div class="navigation">
-        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
-        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
-    </div>
-
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        
-        document.getElementById('total-slides').textContent = totalSlides;
-        
-        function showSlide(n) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (n + totalSlides) % totalSlides;
-            slides[currentSlide].classList.add('active');
-            
-            document.getElementById('current-slide').textContent = currentSlide + 1;
-            document.getElementById('prev-btn').disabled = currentSlide === 0;
-            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
-        }
-        
-        function changeSlide(direction) {
-            if (direction === 1 && currentSlide < totalSlides - 1) {
-                showSlide(currentSlide + 1);
-            } else if (direction === -1 && currentSlide > 0) {
-                showSlide(currentSlide - 1);
-            }
-        }
-        
-        // 鍵盤導航
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowRight' || event.key === ' ') {
-                changeSlide(1);
-            } else if (event.key === 'ArrowLeft') {
-                changeSlide(-1);
-            }
-        });
-        
-        // 初始化
-        showSlide(0);
-    </script>
 </body>
 </html>
