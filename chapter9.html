@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第九章：UX研究資料建模II：任務、社會與混合模型</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .task-structure {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .hierarchy-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .hierarchy-level {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .task-box {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .subtask-box {
+            background: #2ecc71;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .definition-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .definition-box h4 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+        .sequence-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+        
+        .sequence-table th, .sequence-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .sequence-table th {
+            background: #3498db;
+            color: white;
+        }
+        
+        .sequence-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .social-model {
+            background: #f0f8ff;
+            border: 2px solid #87ceeb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .hybrid-model {
+            background: #f5f5f5;
+            border: 2px solid #9932cc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .lifecycle-position {
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第九章：UX研究資料建模II</h1>
+            <h2 style="text-align: center; border: none; font-size: 1.8em; color: #2980b9;">任務、社會與混合模型</h2>
+            
+            <div class="quote">
+                "這些模型是從特定觀點合成用來表示UX研究資料的抽象，用於告知UX設計過程"
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <p>本章涵蓋任務結構模型（階層式任務清單）、任務序列模型、社會模型以及混合模型等內容，是建模過程的第二部分。</p>
+            </div>
+            
+            <div class="lifecycle-position">
+                <h3>您在UX生命週期中的位置</h3>
+                <p>您在建模的第二部分，在理解需求活動的脈絡中建構UX研究資料模型，位於整體Wheel UX生命週期中</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>9.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>9.1.1 您目前所在的位置</h3>
+                <p>如前一章所述，這些模型是從特定觀點合成用來表示UX研究資料的抽象，用於告知UX設計過程。建模應該在UX研究過程中非常早期開始，從您在開始時所知的內容開始。您在資料蒐集和資料分析子活動中學到的大部分內容可以直接用於建立和更新這些模型。</p>
+            </div>
+            
+            <div class="definition-box">
+                <h4>9.1.2 起點</h4>
+                <p>目前為止，您應該已經開始某些模型，當您首次接觸UX研究資料時。您在本章的目標是繼續將原始UX研究資料合成為可分享的UX研究資料模型。</p>
+                <p>本章涵蓋任務、社會和混合模型。</p>
+            </div>
+            
+            <div class="task-structure">
+                <h3>本章涵蓋模型類型</h3>
+                <div class="technique-grid">
+                    <div class="technique-card">
+                        <h4>任務結構模型</h4>
+                        <p>階層式任務清單</p>
+                    </div>
+                    <div class="technique-card">
+                        <h4>任務序列模型</h4>
+                        <p>步驟式任務描述</p>
+                    </div>
+                    <div class="technique-card">
+                        <h4>社會模型</h4>
+                        <p>工作場所文化和互動</p>
+                    </div>
+                    <div class="technique-card">
+                        <h4>混合模型</h4>
+                        <p>模型組合應用</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Task Structure Models -->
+        <div class="slide">
+            <h2>9.2 任務結構模型——階層式任務清單</h2>
+            
+            <div class="definition-box">
+                <h4>任務結構模型的定義</h4>
+                <p>主要的任務結構模型是階層式任務清單（HTI），它是關於使用者要做什麼或您的產品或系統大量不同使用者任務的目錄。若系統有大量不同類別中許多不同使用者工作角色的使用者任務，HTI是一個好方法，透過編譯任務和子任務來組織，每個使用者工作角色在系統設計中必須支援。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>HTI的用途</h3>
+                <p>HTI可以用於：</p>
+                <ul>
+                    <li>組織和管理任務和子任務</li>
+                    <li>組織使用者故事（第10.2.4.2節中的相同）</li>
+                    <li>作為建立完整使用者故事集的指導，作為需求</li>
+                    <li>在新興設計中作為完整性檢查清單</li>
+                </ul>
+            </div>
+            
+            <div class="task-structure">
+                <h3>9.2.1 任務與功能</h3>
+                <p>非正式地，我們在談論系統特性時可能會或多或少互換使用任務和功能這兩個術語。當我們希望避免混淆時，我們使用任務來指用戶所做的事情，用功能來指系統所做的事情。</p>
+                <p>當觀點不確定時，我們有時會看到對兩者的引用。例如，如果我們談論資訊顯示或查看的情況，這兩個術語代表同一現象的兩個觀點。顯而易見的是，顯示是系統所做的事情，查看是用戶所做的事情，因為用戶和系統協作執行任務功能。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Creating HTI Model -->
+        <div class="slide">
+            <h2>9.2.2-9.2.3 建立HTI模型與階層關係</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>9.2.2 建立HTI模型</h4>
+                    <p>簡單的任務結構可以輕鬆表示為任務和子任務的階層（縮排）清單。更複雜的任務結構最好在HTI圖中表示，其中更大、更一般的任務分解為更小、更具體和更詳細的任務。階層式任務清單可以自上而下或自下而上建構。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>任務結構命名最佳實務</h4>
+                    <p>在此結構中命名任務的最佳方式是作為動作-對象對，例如「添加預約」或「配置參數」，或以動詞-形容詞-名詞三重形式，例如「配置控制參數」。</p>
+                </div>
+            </div>
+            
+            <div class="hierarchy-diagram">
+                <h3>階層關係示例</h3>
+                <div class="hierarchy-level">
+                    <div class="task-box">任務 A</div>
+                </div>
+                <div class="hierarchy-level">
+                    <div class="subtask-box">子任務 B</div>
+                    <div class="subtask-box">子任務 C</div>
+                </div>
+            </div>
+            
+            <div class="definition-box">
+                <h4>9.2.3 階層關係</h4>
+                <p>圖中顯示的位置指示HTI圖中任務和子任務之間的階層關係。如果任務A在HTI圖中直接在任務B之上，則表示任務B是任務A的子任務，任務A是任務B的超任務。此關係的試金石是：如果您正在執行任務B，那麼您也必須在做任務A，因為任務B是任務A的一部分。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Avoid Temporal Implications -->
+        <div class="slide">
+            <h2>9.2.4 避免時序含義</h2>
+            
+            <div class="warning-box">
+                <h4>階層關係的重要限制</h4>
+                <p>階層關係不顯示時間順序。在圖9.3中，我們描述了階層關係的不正確嘗試，因為選擇齒輪不是啟動引擎的一部分，即它未能通過前面提到的試金石測試。</p>
+            </div>
+            
+            <div class="task-structure">
+                <h3>正確的階層關係範例</h3>
+                <p>以「駕駛汽車」為例：</p>
+                <div class="hierarchy-diagram">
+                    <div class="hierarchy-level">
+                        <div class="task-box">駕駛汽車</div>
+                    </div>
+                    <div class="hierarchy-level">
+                        <div class="subtask-box">啟動引擎</div>
+                        <div class="subtask-box">選擇檔位</div>
+                        <div class="subtask-box">踩油門踏板</div>
+                    </div>
+                </div>
+                <p class="warning-box">錯誤的階層關係會暗示時序，但這不是HTI的目的。時序關係應該用任務序列模型表示。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>MUTTS的一級HTI圖範例</h4>
+                <p>從MUTTS的最高任務層級開始，您擁有每個工作角色執行的主要任務集，例如財務管理員、資料庫管理員、售票員、活動經理和廣告經理。使用動作-對象方法進行任務命名，這些主要任務集可能稱為管理財務、管理資料庫等。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: HTI Decomposition -->
+        <div class="slide">
+            <h2>9.2.5 HTI通常可依使用者工作角色分解</h2>
+            
+            <div class="highlight-box">
+                <h3>按角色分解的優勢</h3>
+                <p>HTI對於非平凡系統可能是巨大的。幸運的是，有一種方法來控制這種複雜性。由於一個使用者工作角色執行的任務集通常與其他人執行的任務分離，您通常可以將完整HTI分割為每個使用者工作角色的獨立HTI圖，基本上產生每個使用者工作角色一個獨立HTI。</p>
+            </div>
+            
+            <div class="task-structure">
+                <h3>系統分解結構</h3>
+                <div class="hierarchy-diagram">
+                    <div class="hierarchy-level">
+                        <div class="task-box">系統</div>
+                    </div>
+                    <div class="hierarchy-level">
+                        <div class="subtask-box">使用者工作角色1任務</div>
+                        <div class="subtask-box">使用者工作角色2任務</div>
+                        <div class="subtask-box">使用者工作角色n任務</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>設計含義</h4>
+                <p>團隊通常可以將每個使用者工作角色圖更少或獨立地考慮和設計。當然，有系統間問題和涉及多個使用者工作角色的設計部分，但這種不完美的劃分透過允許UX設計師一次查看一個整個系統而大大幫助。</p>
+                <p>HTI的草圖在圖9.6中僅針對MUTTS中的售票員角色。如前所述，圖9.6中的HTI可以用作檢查清單，以確保您為所有任務建立互動設計。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Task Sequence Models -->
+        <div class="slide">
+            <h2>9.3 任務序列模型</h2>
+            
+            <div class="definition-box">
+                <h4>任務序列模型的定義</h4>
+                <p>任務序列模型是使用者如何使用產品或系統執行任務的逐步描述。任務序列資訊關於任務內步驟和透過任務導航來自資料蒐集中的各種來源。只有其中一些會來自使用者。任務序列建模可能從重要工作流程的模型開始，透過針對性UX研究建立詳細資訊。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>任務序列模型的特性</h3>
+                <p>任務序列模型可以被認為是胚胎互動設計的思考。使用者動作和系統回應通常分離為雙重（或多重）游泳道。任務描述具有某些樣板參數，如後面描述。適合作為任務序列模型輸入的一些範例工作活動筆記包括：</p>
+                <ul>
+                    <li>我需要看到確認頁面，明確顯示我付款前購買的內容</li>
+                    <li>售票亭應該提醒人們在交易結束時取票和信用卡</li>
+                    <li>我需要看到Middleburg附近劇場的劇日排程</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Usage Scenarios -->
+        <div class="slide">
+            <h2>9.3.1 情境作為簡單任務序列模型</h2>
+            
+            <div class="definition-box">
+                <h4>情境的定義</h4>
+                <p>情境是關於特定人員在特定工作情況和特定工作脈絡中執行工作活動的故事，以具體敘事風格講述，就像是真實使用發生的文字記錄一樣（Carroll, 1995）。情境是故意非正式、開放、經濟和關鍵使用情況隨時間發生的片段敘事描述。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>使用情境特性</h4>
+                    <p>使用情境是現有產品或系統使用方式的描述。設計情境是預想產品或系統使用的描述，正在設計中。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>情境的組成要素</h4>
+                    <ul>
+                        <li>結構化敘事</li>
+                        <li>以工作領域中使用者的語言表達</li>
+                        <li>描述與單一使用者意圖或目標相關的任務</li>
+                        <li>抽象性質</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>選單規劃應用程式使用情境範例</h4>
+                <p>此範例取自研究所等級HCI專案的學生專案。最初以高層級撰寫，實質的情境集在此被擴展，以包含更多細節並檢查針對需求的新興設計，識別系統狀態，並識別任務，甚至早期原型互動特性。</p>
+                <p>Bob喜歡烹飪許多不同類型的食物，以至於他的廚房雜亂擺滿了烹飪書。過去，位置配方對他來說是「心情」的很多工作。現在，他有Menu-Bot幫助他。他計畫為六位客人準備晚餐聚會，並且已經打算為他們準備野米杏仁醬配檸檬奶油南瓜的烤鮭魚。所以他直接進入系統並獲得一些會搭配這些菜餚的好食譜。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Step-by-Step Task Sequence Models -->
+        <div class="slide">
+            <h2>9.3.2 逐步任務序列模型</h2>
+            
+            <div class="highlight-box">
+                <h3>9.3.2.1 任務和步驟目標</h3>
+                <p>被Beyer和Holtzblatt（1997）稱為使用者「意圖」的任務或步驟目標，是執行任務或採取步驟的目的或原因。它是使用者希望透過執行任務或步驟完成的事情的描述。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>9.3.2.2 任務觸發器</h4>
+                    <p>任務觸發器（Beyer & Holtzblatt, 1997）或步驟觸發器是發生、事件或啟動條件，導致使用者啟動給定任務或任務步驟。觸發器在您的UX研究分析資料筆記中容易識別。</p>
+                    <p>例如，來電客戶電話可能導致填寫訂單表格。其他觸發器範例包括以下內容：新工作到達使用者收件箱，新飛機出現在空中交通管制員螢幕上，來電要求到達，日曆顯示報告到期。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>9.3.2.3 任務障礙</h4>
+                    <p>您的UX研究資料中的障礙指示是使用者問題和錯誤，妨礙成功、簡單和滿意的任務或步驟完成。任務障礙是痛點，強調使用者在工作實務中遇到困難，這反過來是改善設計的關鍵機會。</p>
+                    <p>要在我們的資料模型中指示障礙，我們使用Beyer和Holtzblatt的紅色閃電符號，您應該放在縮排行開始時解釋障礙。如果使用者對障礙的反應或回應是透過UX研究資料知道的，則在障礙描述之後直接添加該描述的簡要說明。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Task Sequence Example -->
+        <div class="slide">
+            <h2>MUTTS任務序列模型範例</h2>
+            
+            <div class="example-box">
+                <h4>MUTTS售票交易的極簡逐步任務序列表示</h4>
+                <table class="sequence-table">
+                    <thead>
+                        <tr>
+                            <th>MUTTS售票買方</th>
+                            <th>MUTTS售票賣方</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. 排隊等待輪到</td>
+                            <td>2. 問候售票買方</td>
+                        </tr>
+                        <tr>
+                            <td>3. 描述想要票券的活動</td>
+                            <td>4. 在資料庫中查找活動。需要多少票券？</td>
+                        </tr>
+                        <tr>
+                            <td>5. 說明需要的票券數量</td>
+                            <td>6. 查找會場座位圖表。按座位位置和價格描述可用選項</td>
+                        </tr>
+                        <tr>
+                            <td>7. 選擇座位</td>
+                            <td>8. 計算並說明總成本。您希望如何付款？</td>
+                        </tr>
+                        <tr>
+                            <td>9. 用信用卡付款</td>
+                            <td>10. 給票券、收據和卡片給售票買方</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>您可以看到這是一個裸任務序列骨架。您將在學習它們時添加其他步驟和細節。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>詳細任務序列模型的重要性</h4>
+                <p>更詳細的逐步任務序列模型對MUTTS將有助於售票買方在本週五晚上選擇和購買娛樂票券（由售票賣方代表售票買方執行）。</p>
+                <p>任務目標：幫助售票買方選擇並購買本週五晚上的娛樂票券。任務觸發器：售票買方在週四晚上從工作回家的路上到達MUTTS售票視窗，考慮週末。注意：分析和討論對步驟編號有幫助，因此您可以參考它們，就像我們在此範例中所做的那樣。</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Beyond Linear Task Sequences -->
+        <div class="slide">
+            <h2>9.3.3 超越線性任務序列模型</h2>
+            
+            <div class="definition-box">
+                <h4>分支和循環</h4>
+                <p>在開始時，個別任務序列模型大多為線性路徑。稍後您可以添加最重要的分支或循環（稍後見）以涵蓋條件和迭代情況。</p>
+                <p>分支和循環。雖然逐步任務序列模型主要用於捕捉代表性任務步驟的線性序列，有時您會在工作實務中遇到選擇點。例如，線上購買的初始任務序列模型可能不顯示使用者可以用信用卡或PayPal付款的決策點。它只是設置為使用信用卡付款的一組步驟。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>分支處理</h4>
+                    <p>稍後，為PayPal替代付款的獨立路徑被合併，引入決策點和分支，表示為圖9.7左側箭頭。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>循環處理</h4>
+                    <p>類似地，如果您觀察任務或任務步驟的迭代，則可以表示為圖9.7右側所示。對於重複或迭代的步驟集，記錄迭代次數或終止條件。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>MUTTS任務序列分支和循環範例</h4>
+                <p>在圖9.8中，我們顯示MUTTS售票任務序列表示的草圖。注意循環的幾個實例來迭代任務部分，以及在底部框中分支以適應兩種不同情況。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Essential Use Case Models -->
+        <div class="slide">
+            <h2>9.3.4 基本用例任務序列模型</h2>
+            
+            <div class="definition-box">
+                <h4>基本用例的定義</h4>
+                <p>透過結合逐步任務描述和軟體用例的最佳特性，Constantine和Lockwood（1999, p. 100）建立基本用例作為替代任務序列建模技術。用例是軟體工程人工製品，用於記錄功能需求，特別是對象導向。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>基本用例特性</h3>
+                <p>Constantine & Lockwood (2003)指出基本用例具有以下特性：</p>
+                <ul>
+                    <li>結構化敘事</li>
+                    <li>以工作領域中使用者的語言表達</li>
+                    <li>描述與單一使用者意圖或目標相關的任務</li>
+                    <li>抽象性質</li>
+                </ul>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>9.3.4.1 基本用例命名</h4>
+                    <p>根據Constantine和Lockwood（2003），每個基本用例都以繼續動詞命名，以指示正進行的意圖，加上完全限定的對象（例如，「購買電影票券」）。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>9.3.4.2 基本用例是抽象的</h4>
+                    <p>術語基本指的是描述是抽象的（去除外來細節），意思是基本用例只包含任務本質的步驟，代表一個可能任務執行緒，通常是最簡單的執行緒，沒有替代方案或特殊情況。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Essential Use Case Example -->
+        <div class="slide">
+            <h2>基本用例範例</h2>
+            
+            <div class="example-box">
+                <h4>售票亭系統基本用例範例</h4>
+                <p>表9.1包含一個範例，以Constantine和Lockwood（2003）相同風格轉換。注意這些描述是如何抽象的。</p>
+                
+                <table class="sequence-table">
+                    <thead>
+                        <tr>
+                            <th>售票買方意圖</th>
+                            <th>售票賣方和系統責任</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. 表達進行交易的意圖</td>
+                            <td>2. 要求使用者識別自己</td>
+                        </tr>
+                        <tr>
+                            <td>3. 識別自己</td>
+                            <td>4. 要求說明所需交易</td>
+                        </tr>
+                        <tr>
+                            <td>5. 說明所需交易</td>
+                            <td>6. 啟動交易參數的可能協商</td>
+                        </tr>
+                        <tr>
+                            <td>7. 參與可能的交易協商</td>
+                            <td>8. 總結交易和成本；要求交易確認</td>
+                        </tr>
+                        <tr>
+                            <td>9. 提交確認以進行付款</td>
+                            <td>10. 完成交易</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>抽象性的設計價值</h3>
+                <p>注意抽象如何為設計留出空間。例如，使用者識別可以透過信用卡完成。交易確認可以以簽名形式提交，交易可以用收據結束。</p>
+                <p>基本用例幫助圍繞核心任務結構互動設計。這些是高效表示，到達使用者想要做的和系統對應部分的本質，由系統扮演。為了說明，在Constantine和Lockwood的（2003）ATM範例中，使用者的第一步表示為抽象目的，「識別自己」他們不表達它作為「如何」，例如，他們不說第一步是「插入銀行卡」這是一個欺騙性簡單但非常重要的區別。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: User Workflow Diagrams -->
+        <div class="slide">
+            <h2>9.3.5 使用者工作流程圖：表示任務序列和導航的下一步</h2>
+            
+            <div class="definition-box">
+                <h4>使用者工作流程圖的定義</h4>
+                <p>使用者工作流程圖（見第18.3.2節）是簡單任務序列模型的變體，用於當互動涉及多個選擇和導航路徑時突出使用者工作流程。使用者工作流程圖是有向圖，其中節點是對應於畫面（即使用者互動狀態）的狀態，弧線（或箭頭）是由使用者動作或系統事件產生的狀態之間的轉換。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>工作流程圖的應用</h3>
+                <p>使用者工作流程圖也可以幫助理解工作實務生態中資訊對象的生命週期。例如，使用者工作流程圖事件對象包括建立（由活動經理與活動贊助商合作），更新，存取（由多個角色在多個脈絡中），與場地和日期對象關聯，以及在時間後歸檔。事件對象的各種狀態和導致此類轉換的觸發器使用弧線與箭頭顯示。</p>
+                <p>雖然使用者工作流程圖可以在任何詳細層級使用，初始使用者工作流程圖對於如果您堅持主要導航路徑並忽略外圍細節建立初始線框最有用，例如確認對話框的檢查。在交易系統中，流程模型可能變得非常複雜，邊緣情況可能會倍增。抽象使用者工作流程圖可以幫助您找到流程本質，形成簡化版本線框設計的支柱。當您進入系統畫面設計時，您想想每個畫面作為使用者工作流程圖中的狀態。</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Social Model -->
+        <div class="slide">
+            <h2>9.4 社會模型</h2>
+            
+            <div class="social-model">
+                <h3>社會模型的定義</h3>
+                <p>社會模型捕捉共同工作場所文化、使用者組織工作場所作為社會環境的公共問題，以及它們如何影響工作環境中事情完成的方式。我們的社會模型基於Beyer和Holtzblatt的（1997）文化模型。</p>
+            </div>
+            
+            <div class="definition-box">
+                <h4>9.4.1 社會模型的簡化方法</h4>
+                <p>正式而言，社會模型已經被表示為一種氣泡圖，影響者在文化中表示為氣泡，文化或社會關係和影響表示為氣泡間的箭頭。參見Beyer和Holtzblatt（1997）的文化模型。</p>
+                <p>在實務中，我們發現社會模型可以是最不常用的模型，特別是在敏捷環境中。只有當工作實務中人們之間的社會和文化互動複雜或有問題時，才需要它。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>社會模型建構困難</h4>
+                    <ul>
+                        <li>因為使用者在資料蒐集期間很少自願提供所需資訊而難以製作</li>
+                        <li>因為圖形表示的弧線和標籤可能過於忙碌和詳細而難以理解</li>
+                        <li>因為所有結構通常不是必要的而過於複雜</li>
+                        <li>因為社會問題的技術設計解決方案可能是難以捉摸的而難以應用於告知UX設計</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>簡化的實用方法</h4>
+                    <p>我們包含此模型主要是為了完整性。對於那些想要或需要製作社會模型的人，我們試圖將其減少到結構化文字表示中最重要的方面。參見MUTTS稍後的社會模型範例。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Social Model Components -->
+        <div class="slide">
+            <h2>9.4.2-9.4.3 社會模型組件</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>9.4.2 識別活躍實體</h4>
+                    <p>社會模型中的活躍實體包括所有使用者工作角色，可以包括任何參與、影響或受工作實務影響的非使用者代理或力量。</p>
+                    <p>除了工作角色和客戶組織內部實體外，還有與工作角色互動的外部角色，包括外部供應商、客戶、監管機構、政府、市場或競爭。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>9.4.3 識別問題、壓力、擔憂和關注類型</h4>
+                    <p>社會模型問題類別包括以下事項：</p>
+                    <ul>
+                        <li>關注和擔憂</li>
+                        <li>施加或感受的影響</li>
+                        <li>工作壓力</li>
+                        <li>影響工作表現的問題</li>
+                    </ul>
+                    <p>更具體的範例包括：工作場所的整體風味或感覺、組織哲學或文化、工作場所環境和環境因素、工作者的專業和個人目標、政治結構和現實。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>MUTTS社會模型範例</h4>
+                <p>以下是MUTTS社會模型可能的範例摘錄：</p>
+                <ul>
+                    <li><strong>售票買方</strong>
+                        <ul>
+                            <li>感到壓力：從排隊等候的人那裡快速完成、獲得熱門活動的好座位</li>
+                            <li>擔心：系統正確完成交易、如果更改為售票亭則失去喜愛的個人服務</li>
+                        </ul>
+                    </li>
+                    <li><strong>售票賣方</strong>
+                        <ul>
+                            <li>感到壓力：取悅客戶、尖峰期間意味著快節奏和艱苦工作、來自使用者關於無退款政策的推回</li>
+                            <li>擔心：關於可能導致糟糕工作評價的服務投訴、受到外部影響</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 17: Hybrid Models -->
+        <div class="slide">
+            <h2>9.5 混合模型</h2>
+            
+            <div class="hybrid-model">
+                <h3>混合模型的概念</h3>
+                <p>雖然我們分別描述每個UX研究資料模型以求清晰，在實務中模型通常為效率而組合。例如，由於流程模型包含至少主要使用者工作角色，您通常不需要單獨使用者工作角色模型。您可以只標記流程模型的使用者工作角色節點與使用者類別特徵。稍後，您甚至可以用對應的人物誌標記流程模型節點。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>模型組合的目標</h4>
+                    <p>建模的目標是為工作領域合成有用的觀點。每個模型的純度不是目標。做任何有助於捕捉您學習的工作領域。例如，如果工作實務圍繞實體空間中心，例如售票處，將實體模型和流程模型組合為混合模型。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>實用性考量</h4>
+                    <p>如果工作實務圍繞實體空間中心，例如售票處，將實體模型和流程模型組合為混合模型。該目標如何最好地捕捉您學習的工作領域。例如，如果工作實務圍繞實體空間，如售票辦公室，將實體模型和流程模型組合為混合模型。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: WAAD and Models Trade-offs -->
+        <div class="slide">
+            <h2>9.6 工作活動親和圖和模型之間的權衡</h2>
+            
+            <div class="highlight-box">
+                <h3>WAAD與模型的選擇考量</h3>
+                <p>建立工作活動親和圖（WAAD；見第7.5節）是理解UX設計需求的重要步驟。在第八章和本章中，我們學習了建立UX研究資料模型。WAAD和資料模型會經常重疊，表示所蒐集資料的不同觀點。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>何時使用WAAD</h4>
+                    <p>要點是，即使沒有使用案例對於WAAD的單一指導，可以在您完成時做，但這並非必要。在大多數其他情況下，關鍵模型是必要的，例如流程模型和也許WAAD。</p>
+                    <p>如果專案脈絡需要更多建模來理解工作實務，可能需要較少的WAAD，因為大部分工作活動筆記將被用作模型輸入。如果脈絡是UX團隊對工作實務新手，他們可能需要WAAD和一堆模型。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>專案複雜度考量</h4>
+                    <p>在一些小專案中，在領域簡單互動中，簡單四分象限複雜性空間（見第3.2.1.4節），WAAD可能是您所做或需要的全部。對於大多數其他情況，關鍵模型是必要的，例如流程模型和也許WAAD。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Practical Recommendations -->
+        <div class="slide">
+            <h2>9.7-9.8 專業UX實務者的有效資料處理</h2>
+            
+            <div class="highlight-box">
+                <h3>9.7 專業UX實務者的有效資料處理</h3>
+                <p>當您在UX研究活動方面獲得經驗時，您可以通過將即時步驟整合到原始UX研究資料中，仍在實務者頭腦中直接到對應表示來節省時間和中間步驟的努力，例如工作活動筆記、WAAD（見第7.5節）、資料模型（見第八章和本章）或使用者故事和需求（見第十章）。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>流程模型中的工作活動筆記直接表示範例</h4>
+                    <p>作為範例，此工作活動筆記可以在售票買方工作流程中表示為障礙：</p>
+                    <p style="font-style: italic;">"從售票視窗獲得關於活動的足夠資訊通常很困難。"</p>
+                    <p>以下是售票亭系統UX研究分析中一些其他可以直接在流程模型中表示的工作活動筆記：</p>
+                    <ul>
+                        <li>確認頁面顯示我付款前購買的內容非常重要</li>
+                        <li>售票亭應該提醒人們取票券的地方</li>
+                        <li>售票亭應該提醒人們在交易結束時取票券和信用卡（在交易結束）</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>9.8.1 跨所有模型的障礙總結</h4>
+                    <p>使用障礙對特殊興趣來說是特別的，因為它們指出使用者在工作實務中遇到困難的地方。阻礙使用者活動、中斷工作流程或通訊，或干擾工作責任的性能的任何事情都是工作實務的障礙。由於這些障礙也代表設計中改善的關鍵機會，將它們全部收集到單一總結中是有用的。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Summary -->
+        <div class="slide">
+            <h2>9.9 本章總結</h2>
+            
+            <div class="highlight-box">
+                <h3>核心學習成果</h3>
+                <p>在本章和前一章中，我們透過不同模型穿越工作領域空間，每個提供對這個空間的不同觀點。在下一章中，我們進入識別所設想系統中需要的需求和能力。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>已掌握的進階模型</h4>
+                    <ul>
+                        <li><strong>任務結構模型（HTI）：</strong>階層式任務組織和管理</li>
+                        <li><strong>任務序列模型：</strong>逐步任務執行流程</li>
+                        <li><strong>基本用例：</strong>抽象任務描述方法</li>
+                        <li><strong>社會模型：</strong>工作場所文化和社會因素</li>
+                        <li><strong>混合模型：</strong>多種模型的組合應用</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>實務應用要點</h4>
+                    <ul>
+                        <li>根據專案複雜度選擇適當的建模方法</li>
+                        <li>善用WAAD和模型的組合優勢</li>
+                        <li>重視障礙識別作為改善設計的機會</li>
+                        <li>在UX設計工作室中有效展示和應用模型</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote">
+                透過系統性建構任務、社會與混合模型，我們完善了對工作實務的理解，為後續的需求識別和設計決策奠定扎實基礎
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
