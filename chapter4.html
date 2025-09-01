@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用漏斗模型管理變化的敏捷UX</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .waterfall-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .waterfall-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .waterfall-step {
+            background: #3498db;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .waterfall-step::after {
+            content: '↓';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .waterfall-step:last-child::after {
+            display: none;
+        }
+        
+        .funnel-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .funnel-visual {
+            margin: 20px auto;
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(to right, #3498db 0%, #2980b9 100%);
+            clip-path: polygon(20% 0%, 80% 0%, 70% 100%, 30% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .funnel-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .funnel-section {
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .early-funnel {
+            background: #e8f5e8;
+            border-color: #27ae60;
+        }
+        
+        .late-funnel {
+            background: #fdf2e9;
+            border-color: #f39c12;
+        }
+        
+        .process-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .process-card {
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .waterfall-card {
+            background: #fdf2f2;
+            border-color: #e74c3c;
+        }
+        
+        .iterative-card {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .agile-card {
+            background: #e8f5e8;
+            border-color: #27ae60;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .agile-cycle {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .cycle-diagram {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid #3498db;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ecf0f1, #fff);
+        }
+        
+        .cycle-step {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .step-analyze {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .step-design {
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+        
+        .step-prototype {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .step-evaluate {
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+        }
+        
+        .scope-timeline {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            height: 100px;
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timeline-section {
+            position: absolute;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            border-right: 2px solid white;
+        }
+        
+        .section-early {
+            left: 0;
+            width: 60%;
+            background: rgba(52, 152, 219, 0.8);
+        }
+        
+        .section-late {
+            right: 0;
+            width: 40%;
+            background: rgba(41, 128, 185, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第四章：用漏斗模型管理變化的敏捷UX</h1>
+            <div class="quote">
+                "變化是不可避免的。生命週期流程不僅必須處理變化，還必須擁抱變化並將其作為運作特性和學習的必要機制。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>在生命週期流程中管理變化的挑戰</li>
+                    <li>變化的不可避免性</li>
+                    <li>管理設計師對需求和設計的知識狀態</li>
+                    <li>回饋與學習在縮小需求知識差距中的作用</li>
+                    <li>傳統瀑布式生命週期模型</li>
+                    <li>擁抱敏捷生命週期流程</li>
+                    <li>敏捷UX的漏斗模型</li>
+                    <li>早期漏斗活動：前期分析與設計</li>
+                    <li>後期漏斗活動：與SE衝刺同步</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Managing Change Challenges -->
+        <div class="slide">
+            <h2>4.1 在設計和建構系統中管理變化的挑戰</h2>
+            
+            <div class="highlight-box">
+                <h3>變化在專案中發生</h3>
+                <p>或許軟體工程（和UX設計）史上學到的最大單一教訓是<strong>變化是不可避免的</strong>。你的生命週期流程不僅必須處理變化，還必須擁抱變化並將其作為運作特性和學習的必要機制。</p>
+            </div>
+            
+            <h3>🔄 生命週期流程迭代期間可能發生的變化</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 設計需求演進</h4>
+                    <p>設計需求可能因為從設計評估和回饋中學到的內容而演進</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 專案參數成熟</h4>
+                    <p>專案參數（如專案範圍、人員、預算、專案願景）可能隨時間和團隊接觸而成熟</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 產品概念澄清</h4>
+                    <p>隨著設計工作進展，產品概念和專案願景可能變得更清楚</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏢 組織變化</h4>
+                    <p>客戶的方向和焦點可能因組織目標、市場因素或政府法規變化而改變</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Inevitability of Change -->
+        <div class="slide">
+            <h2>4.1.2 幾乎所有東西在生命週期流程的迭代期間都可能發生變化</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔬 系統架構概念化</h4>
+                    <p>當我們更了解需求時，系統架構的概念化可能會演進</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 設計想法聚焦</h4>
+                    <p>設計想法可能變得更聚焦和更可行</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 技術變化</h4>
+                    <p>可用技術可能會發生變化，通常是因為範式轉換</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>4.1.3 及時回饋是理解變化的關鍵</h3>
+                <p>由於這些在生命週期流程的每次迭代期間發生的變化，UX設計和軟體工程實作階段成為移動目標。如果你有一個良好的流程，你對什麼將是最適當需求的知識將在這些迭代中改進。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>及時回饋的來源</h4>
+                <ul>
+                    <li><strong>實際使用情況</strong> - 這是幫助設計師理解真實需求的唯一方法</li>
+                    <li><strong>客戶或贊助商</strong> - 關於產品概念和願景</li>
+                    <li><strong>設計師</strong> - 對迄今為止設計的回顧性觀點</li>
+                    <li><strong>軟體和系統工程人員</strong> - 關於系統架構中可能需要的變化</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Waterfall Model -->
+        <div class="slide">
+            <h2>4.2 軟體系統開發的瀑布模型</h2>
+            
+            <div class="highlight-box">
+                <h3>瀑布模型的歷史背景</h3>
+                <p>舊的軟體系統開發瀑布模型以其無法管理變化而聞名。原始瀑布模型是在大多數系統都是大型企業系統的時代開發的。使用者被訓練使用特定商業目的的系統，幾乎沒有考慮可用性或UX。</p>
+            </div>
+            
+            <div class="waterfall-diagram">
+                <h3>瀑布模型階段流程</h3>
+                <div class="waterfall-flow">
+                    <div class="waterfall-step">系統需求</div>
+                    <div class="waterfall-step">軟體需求</div>
+                    <div class="waterfall-step">分析</div>
+                    <div class="waterfall-step">程式設計</div>
+                    <div class="waterfall-step">編碼</div>
+                    <div class="waterfall-step">測試</div>
+                    <div class="waterfall-step">運營</div>
+                </div>
+                <p><em>從階段到階段的級聯流程，改編自Royce (1970)</em></p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>瀑布模型的問題</h4>
+                <p>瀑布模型是最簡單的（在形式上，至少）組織生命週期活動的方法之一，將SE生命週期流程製作。這個流程被命名為描述作為一個本質上線性的階段序列（生命週期活動），每個階段流入下一個就像一組級聯的瀑布層。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Waterfall Problems -->
+        <div class="slide">
+            <h2>瀑布模型的根本問題</h2>
+            
+            <div class="warning-box">
+                <h4>⚠️ 變化管理失敗</h4>
+                <p>它<strong>不叫瀑布模型</strong>，直到1976年貝爾和塞耶爾將其命名。瀑布模型是將生命週期活動組織在一起以製作SE生命週期流程的最簡單方法之一。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🚫 強制性原則</h4>
+                    <p>一個強大的基本原則（通常實行的）規定，在完成所有先前階段之前，不允許進行任何階段的工作。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 單一交付目標</h4>
+                    <p>瀑布模型的目標是在完整生命週期結束時一次性交付完整系統。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📏 龐大無法管理</h4>
+                    <p>這個流程試圖在極端大範圍中克服以前的方法的未經紀律性，但是瀑布模型過於龐大、無法管理，且對變化沒有回應性。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⏰ 延遲回饋</h4>
+                    <p>在專案後期發現問題時，通常過於昂貴，無法在那個時點回去修復所有先前階段中的問題。瀑布模型的長期和延伸生命週期被證明不可持續。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Embracing Agile -->
+        <div class="slide">
+            <h2>4.3 擁抱敏捷SE生命週期流程</h2>
+            
+            <div class="highlight-box">
+                <h3>敏捷流程的興起</h3>
+                <p>由於第4.2節討論的瀑布模型問題，對替代SE流程的需求導致敏捷SE的想法。敏捷生命週期流程是一種小範圍方法，其中所有生命週期活動都是為產品或系統的一個或一小組功能執行，然後為下一個功能重複生命週期。</p>
+            </div>
+            
+            <div class="process-comparison">
+                <div class="process-card waterfall-card">
+                    <h4>🌊 瀑布式</h4>
+                    <p>為整個系統執行每個生命週期活動，然後移到下一個生命週期活動</p>
+                </div>
+                
+                <div class="process-card iterative-card">
+                    <h4>🔄 迭代式</h4>
+                    <p>在整個系統上重複所有生命週期活動的循環</p>
+                </div>
+                
+                <div class="process-card agile-card">
+                    <h4>⚡ 敏捷式</h4>
+                    <p>為系統的一個功能執行所有生命週期活動，然後移到下一個功能</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                敏捷流程由需求驱動，這些需求被表述為關於能力而不是抽象系統需求的使用者故事
+            </div>
+        </div>
+
+        <!-- Slide 7: Chunking Strategy -->
+        <div class="slide">
+            <h2>4.3.2 分塊以減少範圍並獲得快速回饋</h2>
+            
+            <div class="highlight-box">
+                <h3>分塊定義</h3>
+                <p><strong>分塊</strong>是一種通過分解目標系統或消費性產品的能力並以增量發布的方式交付這些能力來實現小範圍的方法，通常按客戶定義的優先順序。</p>
+            </div>
+            
+            <div class="scope-timeline">
+                <div class="timeline-section section-early">早期漏斗<br>大範圍</div>
+                <div class="timeline-section section-late">後期漏斗<br>小範圍</div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📦 小塊交付</h4>
+                    <p>瀑布模型在整個生命週期中對整個系統進行一次大傳遞。迭代方法對頻繁進行較小但仍然相當大的塊採取步驟，導致多次傳遞。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 真正敏捷</h4>
+                    <p>敏捷方法顯示大量非常小的塊，導致許多小塊的功能 - 真正敏捷的標誌。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: UX Agility Challenges -->
+        <div class="slide">
+            <h2>4.3.3 在UX方面，一直有一種無需分塊就能實現敏捷性的措施</h2>
+            
+            <div class="highlight-box">
+                <h3>UX設計的天然敏捷特質</h3>
+                <p>這些相同的特徵 - 頻繁迭代、回饋、學習和對變化的回應性 - 在UX中一直很重要。事實上，UX設計建立在這些基礎原則之上，所以不需要分塊來實現它們。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔄 天然迭代</h4>
+                    <p>在UX設計流程中，一直有許多揭示需要注意情況的方法。使用者參與設計的構想和素描。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🧪 早期測試</h4>
+                    <p>我們運行所有模型和工作產品由客戶進行。我們使用低保真度原型進行早期且頻繁的設計評估，模擬使用者體驗供用戶學習，然後再建構真實系統。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>SE缺乏使用者面向原型的奢侈</h4>
+                <p>SE沒有製作面向使用者原型的奢侈。在SE方面，大多數關注點都是關於系統方面的，因此他們的工藝品是關於系統內部工作的表示，這往往是抽象和技術性的。在UX方面，我們處理使用者看到和感受的東西。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: SE Had No Interest -->
+        <div class="slide">
+            <h2>4.3.5 SE對使用者沒有興趣</h2>
+            
+            <div class="highlight-box">
+                <h3>SE的歷史局限</h3>
+                <p>在敏捷流程之前，SE人員不知道如何與使用者談論僅用素描或模型設想的行為。他們沒有與專注於產品和體驗方面的使用者的接觸點，以便在設計解決方案領域中定位使用者。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔧 流程導向思維</h4>
+                    <p>SE人員歷史上專注於流程方面的事物和技術問題，如系統架構、程式碼理解和程式碼重用性。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 程式設計師優先</h4>
+                    <p>如果有任何東西，他們尋找讓程式設計師更好的方法，而不是最終使用者。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>轉折點：使用者導向思維</h4>
+                <p>他們的「啊哈」時刻到來了，當他們發現可以翻轉他們的方法來交付人們可以使用的塊並給予產品導向的回饋。從那時起，敏捷軟體開發方法迅速成為事實標準。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Why UX Follow SE Agile -->
+        <div class="slide">
+            <h2>4.3.6 為什麼UX要跟隨SE變得敏捷？</h2>
+            
+            <div class="highlight-box">
+                <h3>實用的原因</h3>
+                <p>UX設計仍然可能需要為交付給SE人員分塊有實用的原因：<strong>與敏捷SE方面的衝刺保持步調</strong>。敏捷SE人員現在是系統建構者，因為他們是敏捷方法，他們將會建構它以塊的形式。</p>
+            </div>
+            
+            <div class="agile-cycle">
+                <h3>敏捷UX生命週期流程</h3>
+                <div class="cycle-diagram">
+                    <div class="cycle-step step-analyze">分析</div>
+                    <div class="cycle-step step-design">設計</div>
+                    <div class="cycle-step step-prototype">原型</div>
+                    <div class="cycle-step step-evaluate">評估</div>
+                </div>
+                <p><em>在衝刺內的迷你敏捷UX生命週期流程</em></p>
+            </div>
+            
+            <div class="quote">
+                作為一個學科，敏捷UX已經演進以適應這種開發模式。我們現在將我們的UX設計塊交付給客戶、使用者、產品擁有者和其他利害關係人以獲得直接回饋，最終交給SE人員實作
+            </div>
+        </div>
+
+        <!-- Slide 11: Funnel Model Introduction -->
+        <div class="slide">
+            <h2>4.4 敏捷UX的漏斗模型</h2>
+            
+            <div class="highlight-box">
+                <h3>為什麼需要新模型？</h3>
+                <p>敏捷UX成為為敏捷SE帶來使用者體驗設計的方式，但最初敏捷UX的方式存在問題：</p>
+                <ul>
+                    <li><strong>敏捷被簡單解釋為快速進行</strong></li>
+                    <li><strong>模仿敏捷SE流程從根本上與UX關注點不匹配</strong></li>
+                </ul>
+            </div>
+            
+            <div class="funnel-diagram">
+                <h3>漏斗模型視覺化</h3>
+                <div class="funnel-visual">
+                    <span>敏捷UX漏斗</span>
+                </div>
+                <div class="funnel-sections">
+                    <div class="funnel-section early-funnel">
+                        <h4>早期漏斗</h4>
+                        <p>大範圍<br>前期分析與設計</p>
+                    </div>
+                    <div class="funnel-section late-funnel">
+                        <h4>後期漏斗</h4>
+                        <p>小範圍<br>與SE衝刺同步</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quote">
+                我們創造了我們稱之為敏捷UX漏斗模型的東西，作為在與敏捷SE衝刺同步之前構想UX設計活動的方式
+            </div>
+        </div>
+
+        <!-- Slide 12: Speed vs Agility -->
+        <div class="slide">
+            <h2>4.4.1 為什麼需要新模型？速度與敏捷性的差別</h2>
+            
+            <div class="warning-box">
+                <h4>⚠️ 常見誤解：速度殺手</h4>
+                <p><strong>快速性和敏捷性不是同一件事。</strong> 有時人們將敏捷與快速混淆。雖然敏捷流程經常是快速的，敏捷性不是由速度定義的。快速進行只是意味著工作得更快；敏捷是關於為小範圍設計和交付分塊，這樣我們可以對通過使用學到的新教訓做出反應。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>Arnowitz (2013) 的警告</h3>
+                <p>Arnowitz 警告我們，雖然敏捷流程幾乎總是與速度相關聯，但對速度的單一專注幾乎保證對結果使用者體驗的品質有害。將速度置於一切之上是對快速週轉壓力的魯莽回應，並且「被證明會在僅僅兩到三次迭代內創造科學怪人的UI」。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>駕駛類比</h4>
+                <p>當你開車並開始迷路時，開得更快不會幫助你找到路。</p>
+            </div>
+            
+            <div class="quote">
+                最大的單一問題：UX被期望完全模仿敏捷SE流程
+            </div>
+        </div>
+
+        <!-- Slide 13: Funnel Model Structure -->
+        <div class="slide">
+            <h2>4.4.2 介紹敏捷UX的漏斗模型</h2>
+            
+            <div class="highlight-box">
+                <h3>漏斗模型的兩大部分</h3>
+                <p>敏捷UX的漏斗模型有兩大部分：<strong>早期漏斗</strong>和<strong>後期漏斗</strong>。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📏 範圍維度</h4>
+                    <p><strong>漏斗中的範圍：</strong> 圖表的垂直維度表示範圍。漏斗在任何點上較大的直徑表示較大的範圍。圖4.3顯示早期漏斗範圍大於後期漏斗範圍的典型情況。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⏱️ 時間與嚴謹性</h4>
+                    <p><strong>漏斗中的速度和嚴謹性：</strong> 圖表的水平維度是時間，表示漏斗中活動需要多長時間進行。條紋或區段在漏斗上視覺上表示迭代或衝刺。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>漏斗的特徵</h4>
+                <ul>
+                    <li><strong>較長衝刺</strong>通常對應較高嚴謹性</li>
+                    <li><strong>較短衝刺</strong>需要更徹底和細緻的方法</li>
+                    <li><strong>段長度</strong>表示該衝刺的持續時間</li>
+                    <li><strong>方法和技術的速度</strong>必須用於該迭代</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: Late Funnel Activities -->
+        <div class="slide">
+            <h2>4.4.3 後期漏斗活動</h2>
+            
+            <div class="highlight-box">
+                <h3>後期漏斗特徵</h3>
+                <p>後期漏斗（圖4.3右側的出口）是敏捷UX和敏捷SE流程協同工作的地方。在這裡，UX和SE活動通常在小範圍內以小塊描述（由漏斗出口的小直徑表示），在相對較小的時間增量內交付（窄衝刺持續時間條）。</p>
+            </div>
+            
+            <div class="agile-cycle">
+                <h3>與SE同步的UX活動</h3>
+                <div class="cycle-diagram">
+                    <div class="cycle-step step-analyze">分析</div>
+                    <div class="cycle-step step-design">設計</div>
+                    <div class="cycle-step step-prototype">原型</div>
+                    <div class="cycle-step step-evaluate">評估</div>
+                </div>
+                <p><em>每個UX設計框（如UX設計1）包含迷你UX生命週期</em></p>
+            </div>
+            
+            <div class="example-box">
+                <h4>理論與實務</h4>
+                <p>理論上，每個交付的軟體塊都會測試，直到它工作，然後與其餘部分整合。結果是回歸測試（回顧）直到一切工作。想法是開始和結束每次迭代，有一些工作的東西。</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Early Funnel Activities -->
+        <div class="slide">
+            <h2>4.4.4 早期漏斗活動</h2>
+            
+            <div class="highlight-box">
+                <h3>早期漏斗的重要性</h3>
+                <p>與此同時，在我們能在後期漏斗的同步化流程中進行小範圍增量發布之前，我們必須從早期漏斗中的一些完整範圍UX分析和概念設計開始。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 UX研究需求</h4>
+                    <ul>
+                        <li>UX研究資料收集</li>
+                        <li>分析</li>
+                        <li>建模</li>
+                        <li>概念設計</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📐 概念設計建立</h4>
+                    <p>在任何被充電設計和建構全新系統或令人困惑現有系統新版本的專案中，你需要建立清楚的概念設計。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>必要的前期工作</h4>
+                <p>這需要多少這些前期活動來理解需求並工作流：</p>
+                <ul>
+                    <li>自我一致的高水平模型或系統如何工作的主題</li>
+                    <li>幫助使用者獲得自己的系統行為心智模型的架構</li>
+                    <li>就其性質而言，大範圍概念</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: Conceptual Design Need -->
+        <div class="slide">
+            <h2>在早期漏斗中建立概念設計的需求</h2>
+            
+            <div class="highlight-box">
+                <h3>概念設計包含什麼</h3>
+                <p>概念設計被定義為建立一個連貫的整體UX設計。概念設計包含：</p>
+                <ul>
+                    <li><strong>自我一致的高水平模型</strong>或系統工作方式的主題</li>
+                    <li><strong>幫助使用者獲取自己的系統行為心智模型</strong>的架構</li>
+                    <li><strong>就其性質而言，大範圍概念</strong></li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h4>小範圍方法的限制</h4>
+                <p>在這個點上，小範圍方法可能導致分裂的概念設計。在建立概念設計之後，UX團隊可以在後期漏斗中轉向小範圍來增量交付個別功能的詳細UX設計給SE方面。</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Early vs Late Funnel -->
+        <div class="slide">
+            <h2>早期和後期漏斗部分的焦點</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card early-funnel">
+                    <h4>🌅 早期漏斗焦點</h4>
+                    <ul>
+                        <li>轉向後期漏斗的關鍵點</li>
+                        <li>所謂的緊縮時間的開始</li>
+                        <li>UX人員與敏捷SE人員同步</li>
+                        <li>使用者或客戶故事的時間</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card late-funnel">
+                    <h4>🌆 後期漏斗總結</h4>
+                    <ul>
+                        <li>UX研究中深入理解（總體）</li>
+                        <li>在UX研究和建模中獲得的資訊</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote">
+                過渡到後期漏斗是專案中的關鍵點；它是所謂緊縮時間的開始，UX人員與敏捷SE人員同步
+            </div>
+        </div>
+
+        <!-- Slide 18: Smartphone Example -->
+        <div class="slide">
+            <h2>範例：從頭開發新智慧型手機設計</h2>
+            
+            <div class="example-box">
+                <h4>專案情境</h4>
+                <p>假設你的專案是創建一個全新的智慧型手機來與當前市場領導者競爭。已經決定這需要一個完全新穎和創新的概念設計 - 一個比現有選項更好和更令人興奮的設計。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>大範圍早期漏斗工作的必要性</h3>
+                <p>這種情況可能需要在早期漏斗中進行重要的大範圍努力來創建完整的概念設計，設定智慧型手機的整體生態系統，並創建連貫的設計前期。</p>
+                <p>簡單來說，沒有從大範圍設計開始在UX方面，就不可能設計智慧型手機或任何全新消費性面向應用的整體操作模型。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 需要的早期工作</h4>
+                    <ul>
+                        <li>市場研究和競爭分析</li>
+                        <li>使用者需求深度研究</li>
+                        <li>創新概念探索</li>
+                        <li>整體生態系統設計</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📱 概念設計要素</h4>
+                    <ul>
+                        <li>操作模式定義</li>
+                        <li>使用者介面架構</li>
+                        <li>互動模式</li>
+                        <li>視覺設計語言</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Summary -->
+        <div class="slide">
+            <h2>4.5 小結</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 本章重點回顧</h3>
+                <ul>
+                    <li><strong>變化管理：</strong> 理解變化的不可避免性以及UX設計如何與敏捷SE生命週期同步</li>
+                    <li><strong>瀑布模型問題：</strong> 傳統方法無法有效管理變化和提供及時回饋</li>
+                    <li><strong>敏捷UX演進：</strong> 從天然敏捷特質到與SE流程同步的需求</li>
+                    <li><strong>漏斗模型：</strong> 早期漏斗和後期漏斗的不同功能和重要性</li>
+                    <li><strong>概念設計：</strong> 在早期漏斗中建立連貫整體UX設計的必要性</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                在本章中，我們討論了UX設計的敏捷方法以及它如何與敏捷SE生命週期同步。現在我們準備進入流程章節，在下一章中作為前奏，我們首先談論實務考慮
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔄 下一步</h3>
+                <p>我們將介紹一個範例，用於本書其餘的流程章節，涵蓋實務考慮，如資源（設計工作室）和人員（UX角色）以及專案如何開始。</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Key Takeaways -->
+        <div class="slide">
+            <h2>重要概念總結</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>⚡ 敏捷性 vs 速度</h4>
+                    <ul>
+                        <li>敏捷性不等於快速性</li>
+                        <li>關注小範圍交付</li>
+                        <li>強調學習和回饋</li>
+                        <li>避免品質犧牲</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 變化管理策略</h4>
+                    <ul>
+                        <li>擁抱變化作為學習機會</li>
+                        <li>建立及時回饋機制</li>
+                        <li>保持設計靈活性</li>
+                        <li>持續調適方法</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏗️ 漏斗模型應用</h4>
+                    <ul>
+                        <li>早期漏斗：大範圍分析</li>
+                        <li>後期漏斗：小範圍實作</li>
+                        <li>概念設計前置</li>
+                        <li>與SE流程同步</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 實務平衡</h4>
+                    <ul>
+                        <li>理論與實務結合</li>
+                        <li>範圍靈活調整</li>
+                        <li>時程現實規劃</li>
+                        <li>品質與效率並重</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>💡 實務建議</h3>
+                <p>成功的敏捷UX實施需要理解何時使用大範圍方法進行概念性工作，何時切換到小範圍增量交付。漏斗模型提供了一個結構化的框架來管理這種轉換並確保UX與SE團隊的有效協作。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">Home</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
