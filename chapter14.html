@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第14章：心智模型與概念設計</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .concept-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .concept-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .concept-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .mental-model-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .model-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .model-box {
+            background: #3498db;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .model-box::after {
+            content: '↓';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .model-box:last-child::after {
+            display: none;
+        }
+        
+        .thermostat-example {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .design-patterns {
+            background: #f3e5f5;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .metaphor-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .metaphor-card {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .case-study {
+            background: #fffde7;
+            border: 2px solid #fbc02d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第14章：心智模型與概念設計</h1>
+            <div class="highlight-box">
+                <p><strong>本章重點</strong></p>
+                <ul>
+                    <li>心智模型的定義與重要性</li>
+                    <li>理想心智模型的建構</li>
+                    <li>設計師與使用者的心智模型差異</li>
+                    <li>概念設計作為心智模型間的橋樑</li>
+                    <li>生態、互動與情感層面的概念設計</li>
+                    <li>設計模式與隱喻的運用</li>
+                    <li>工作角色導向的概念設計策略</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>14.1 引言</h2>
+            
+            <div class="highlight-box">
+                <h3>14.1.1 您現在的位置</h3>
+                <p>我們以每個流程章節的「您現在的位置」圖片開始，該圖片顯示章節主題在輪盤UX設計生命週期模板背景下的位置。在本章中，我們繼續UX設計流程，探討設計師和使用者對系統運作方式的心智模型，以及連接這些心智模型的概念設計。</p>
+            </div>
+            
+            <div class="mental-model-diagram">
+                <h4>心智模型的定義</h4>
+                <p>在UX中，心智模型是對某人（例如設計師或使用者）關於產品或系統運作方式的思維過程的描述、理解或解釋。如果使用者對產品或系統運作方式的心智模型正確，使用者將知道如何使用系統。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Conceptual Design Framework -->
+        <div class="slide">
+            <h2>14.2 概念設計如何作為心智模型的連接</h2>
+            
+            <div class="model-flow">
+                <div class="model-box">理想心智模型</div>
+                <div class="model-box">設計師心智模型</div>
+                <div class="model-box">概念設計映射</div>
+                <div class="model-box">使用者心智模型</div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>運作機制</h3>
+                <ol>
+                    <li>理想心智模型是代表類似恆溫器在世界中運作方式現實的抽象</li>
+                    <li>設計師通過UX研究、與主題專家互動、分析等研究這個現實</li>
+                    <li>設計師發展（可能部分正確的）心智模型</li>
+                    <li>設計師將此心智模型構建到概念設計中。這步驟是您的挑戰！</li>
+                    <li>概念設計將設計師理解的知識傳達給使用者</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 4: Ideal Mental Model -->
+        <div class="slide">
+            <h2>14.2.1 理想心智模型</h2>
+            
+            <div class="thermostat-example">
+                <h4>恆溫器範例</h4>
+                <p>理想心智模型是關於系統或產品運作方式的假設正確描述。以普通家用恆溫器為例，使用者手冊可能會說類似「將溫度調高或調低以使其變暖或變冷」的內容，但這實際上並未完整說明恆溫器的運作方式。</p>
+                
+                <div class="concept-card">
+                    <h4>恆溫器的實際運作</h4>
+                    <p>恆溫器是非常簡單的設備，其理想心智模型廣為人知且被理解。大多數恆溫器是二進制開關，要麼完全開啟要麼關閉。當感應的環境溫度低於目標值時，開關關閉，恆溫器開啟加熱系統。當溫度達到目標值時，加熱系統開關開啟，恆溫器關閉加熱源。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>錯誤心智模型的後果</h4>
+                <p>相信（僅作為一個例子）您可以通過將恆溫器調得比目標溫度更高來更快地使房間變暖是不正確的心智模型。這種錯誤的心智模型可能源自其他正確但依賴於稍有不同設備操作的心智模型。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Designer's Mental Model -->
+        <div class="slide">
+            <h2>14.2.2 設計師的心智模型</h2>
+            
+            <div class="highlight-box">
+                <h3>設計師心智模型的特徵</h3>
+                <p>簡而言之，設計師的心智模型是UX設計師對理想心智模型的概念化。設計師研究理想心智模型、UX研究結果以及數據模型和要求，以可視化要納入概念設計的內容。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>研究基礎</h4>
+                    <p>設計師的心智模型基於對現實的研究和理解，包括UX研究結果、主題專家訪談和技術分析。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>概念化過程</h4>
+                    <p>設計師需要將複雜的技術現實轉化為使用者可以理解和操作的概念框架。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: User's Mental Model -->
+        <div class="slide">
+            <h2>14.2.3 使用者的心智模型</h2>
+            
+            <div class="highlight-box">
+                <h3>使用者心智模型的形成</h3>
+                <p>使用者的心智模型定義為「反映使用者對系統理解的心理表徵」。這是對陌生情況的自然人類反應，開始構建一次一個解釋性模型。我們尋找因果關係並形成理論來解釋我們觀察到的內容以及原因，然後幫助指導在任務表現中的進一步行為和行動。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>多元輸入來源</h4>
+                    <p>每個使用者的心智模型都是許多不同輸入的產物，包括Norman經常說的知識在頭腦中和世界中的知識。來自其他使用者、工作經驗和以前經驗的知識。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>系統設計責任</h4>
+                    <p>來自其他系統的共享慣例、文檔和概念設計本身。這最後的使用者知識來源是UX設計師的責任。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Conceptual Design Mapping -->
+        <div class="slide">
+            <h2>14.2.4 概念設計作為映射</h2>
+            
+            <div class="highlight-box">
+                <h3>概念設計的核心功能</h3>
+                <p>概念設計是包含主題、隱喻、概念或設計願景的設計部分，其目的是傳達關於系統或產品的設計願景，對應於Norman（1990）所稱的「系統影像」。概念設計的目標是將設計師的心智模型傳達給使用者，以便他們知道如何使用系統。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>缺乏概念設計的後果</h4>
+                <p>沒有有效的概念設計，使用者無法利用他們通過與系統互動或與其他系統獲得的經驗。建造沒有清晰概念設計前端的系統是不常見的。結果可能是作為映射不佳的聚焦設計，從而使使用者感到沮喪。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Case Study - Metro Ticket Kiosks -->
+        <div class="slide">
+            <h2>案例研究：地鐵售票亭</h2>
+            
+            <div class="case-study">
+                <h4>華盛頓地鐵售票亭的問題</h4>
+                <p>華盛頓特區的地鐵售票亭是一個缺乏良好概念設計的系統範例。它是我們所謂的「展示並投擲」使用者介面。這種設計類型有時也稱為資訊洪水。設計師未能確定使用者需要的資訊和何時，因此他們決定一次性展示所有內容並讓使用者從那裡找出來。</p>
+                
+                <div class="concept-card">
+                    <h4>設計問題分析</h4>
+                    <p>一個令人困惑的按鈕和顯示陣列迎接走向此售票亭急忙購買車票上火車的使用者。此外，這些使用者中有相當一部分是遊客，對此系統沒有先前經驗，甚至可能對英語語言沒有良好掌握。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>對比：紐約市售票亭</h4>
+                <p>相比之下，紐約市售票亭引導使用者通過任務流程使用者介面，不會一次性被所有選項壓倒。這個售票亭使用觸控螢幕，並為使用者提供單一選項來啟動他們的交易：選擇「開始」按鈕旁邊的明確認知負擔「觸摸開始開始」。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: NYC Kiosk Step-by-Step -->
+        <div class="slide">
+            <h2>紐約地鐵售票亭的逐步引導</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>語言選擇</h4>
+                    <p>使用者然後被提示選擇語言偏好，接著是要購買的車票類型和付款方式。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>更好的概念設計</h4>
+                    <p>此系統的更廣泛概念設計（即一次一個任務的逐步對話）更好地表達並通過設計傳達，該設計在需要時顯示與使用者任務序列相關的資訊，而不是一次性在華盛頓特區地鐵系統中顯示所有內容。</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>心智模型的成功映射</h3>
+                <p>即使設計師有明確的心智模型，他們也未能將其表達為有效的概念設計；因此，使用者無法形成系統運作方式的心智模型。三個工作流程步驟並不會持續支援所有類型的交易。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Mental Models Nature -->
+        <div class="slide">
+            <h2>14.2.5 心智模型與概念設計的本質</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>理想心智模型</h4>
+                    <p>頂部框，理想心智模型，是準確版本的假設抽象，即某事如何運作。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>設計師心智模型</h4>
+                    <p>第二個框，設計師的心智模型，將與頂部框相同，如果設計師對事物運作方式的理解是正確的。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>使用者心智模型</h4>
+                    <p>第一、第二和第四個（使用者心智模型）框代表心智模型。它們是內化（即存在於大腦內部的抽象模式）。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>概念設計映射</h4>
+                    <p>第三個框（概念設計作為映射）與其他三個不同，因為它涉及設計，不是模型。概念設計是某事如何運作的外化，編碼在設計中。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Design Challenge -->
+        <div class="slide">
+            <h2>14.2.6 創建概念設計：設計挑戰</h2>
+            
+            <div class="highlight-box">
+                <h3>概念設計的建構挑戰</h3>
+                <p>概念設計是通過將設計師的心智模型作為系統運作方式的解釋納入設計來構建的。這個主題對學生和新UX實踐者來說可能很困難。這是產品或系統中唯一有形的框，也是您作為UX設計師的步驟。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>表達方式的多樣性</h4>
+                    <p>沒有標準格式；它根據每種情況進行定制，並且沒有實際限制可以如何表達。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>產品開發的解釋方式</h4>
+                    <p>以下是構建產品開發解釋的方法：詞彙豐富的文本描述其運作方式、示意圖、概念圖、模型類型、流程圖、顯示移動部件的動畫、引人注目的類比、對相互理解隱喻的呼籲、通用使用者旅程的範例等。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: My Cousin Vinny Example -->
+        <div class="slide">
+            <h2>心智模型娛樂案例：《我的表哥維尼》</h2>
+            
+            <div class="example-box">
+                <h4>缺乏正確使用者心智模型的娛樂範例</h4>
+                <p>缺乏正確使用者心智模型可能成為喜劇曲線球的素材。一個範例是1992年電影《我的表哥維尼》中的場景，其中Marisa Tomei——作為維尼的未婚妻Mona Lisa Vito——試圖使用老式旋轉電話打電話到南方小鎮。您無法幫助但在她試圖反映觸摸音調操作的映射與她對老式旋轉電話現實的不匹配時發笑，因為她在手指孔中用力戳電話號碼。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>心智模型不匹配的後果</h4>
+                <p>然而，請勿將她視為完全不懂技術，我們提醒您，正是她憑藉對汽車的深奧知識解決了案件，證明維尼的客戶不可能是罪犯。她發現證明有限滑差的關鍵要素是她對汽車運作方式理想心智模型的關鍵要素。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: UX Design Starts with Conceptual Design -->
+        <div class="slide">
+            <h2>14.3 UX設計從概念設計開始</h2>
+            
+            <div class="quote">
+                「在進行UX研究後，許多設計師立即跳入草圖繪製螢幕、選單結構和小工具。然而，將在概念設計之前開始任何螢幕或使用者介面物件是不明智的。」
+            </div>
+            
+            <div class="highlight-box">
+                <h3>14.3.1 使用者需求金字塔每層都需要概念設計組件</h3>
+                <p>在我們開始為生態、互動和情感影響進行設計之前，我們必須首先為使用者需求金字塔中的每一層組成概念設計。描述此三層的概念設計組件在以下部分中描述。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>生態組件</h4>
+                    <p>幫助使用者理解產品或系統如何融入其更廣泛的生態並與其他產品和系統協同工作的生態組件。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>互動組件</h4>
+                    <p>幫助使用者理解如何使用產品或系統的互動組件。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>情感組件</h4>
+                    <p>傳達預期情感影響的情感組件。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Conceptual Design for Ecology -->
+        <div class="slide">
+            <h2>14.3.2 生態的概念設計：描述完整使用情境</h2>
+            
+            <div class="highlight-box">
+                <h3>系統生態的心智模型</h3>
+                <p>系統生態的心智模型幫助使用者理解產品或系統如何融入其生態，以及當使用者與該生態中的產品和系統互動時，系統如何融入使用者的生活。</p>
+            </div>
+            
+            <div class="thermostat-example">
+                <h4>恆溫器生態範例</h4>
+                <p>恆溫器生態包括由三個主要部分組成的加熱（和/或冷卻）系統：熱源或冷卻單元、加熱或冷卻分配網路和控制單元，後者是恆溫器和一些其他隱藏部件。熱源可以是例如瓦斯或電力。冷卻單元可能會運行壓縮機。分配網路可以使用風扇通過風管送送加熱或冷卻空氣，或者泵可能會送送加熱或冷卻的水通過地下管道。</p>
+                
+                <div class="concept-card">
+                    <h4>智慧恆溫器的擴展</h4>
+                    <p>如果設計師計劃創建智慧恆溫器，那麼他們的心智模型還可能包括感知房屋中使用者的方式來確定佔用情況，在房屋無人佔用時節約能源。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Conceptual Design for Interaction -->
+        <div class="slide">
+            <h2>14.3.3 互動的概念設計：描述使用者操作方式</h2>
+            
+            <div class="highlight-box">
+                <h3>互動概念設計的重點</h3>
+                <p>對於互動，概念設計是關於使用者如何操作系統或產品的任務導向視圖。不同平台或互動設備要求不同的互動模型和相應的概念設計。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>實體設備案例</h4>
+                    <p>在實體設備情況下，恆溫器可能是傳統牆壁安裝的實體設備或透過Wi-Fi與實體設備介面的智慧型手機應用程式。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>互動功能設計</h4>
+                    <p>在實體設備情況下，可能使用者可以看到兩個數字溫度顯示，類比或數位。一個值是當前環境溫度的設置，另一個是目標溫度的設置。使用者會有一個按鈕、滑桿或其他互動設備來設置所需目標溫度。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>設計挑戰</h4>
+                <p>互動設計應著重於修復使用者心智模型中的預期故障，其中對採取何種行動來執行例行任務存在不確定性。</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Conceptual Design for Emotional Impact -->
+        <div class="slide">
+            <h2>14.3.4 情感角度的概念設計：描述預期情感影響</h2>
+            
+            <div class="highlight-box">
+                <h3>情感概念設計的描述</h3>
+                <p>對於情感方面，概念設計是對預期覆蓋情感反應的描述。關於恆溫器範例，這可能是關於現代和時尚美學的東西，其鋼鐵和玻璃組件與傳統塑料材料設計形成對比。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>設計美學考量</h4>
+                    <p>概念設計可能會涉及現代美學，並且還包括實體設計如何與房屋裝潢和工藝配合。設計師還可能對視覺設計的顯示有具體計劃，包括可能使用的背光二極管類型、背光選項以及是否會有可用的顏色選項。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>情感反應設計</h4>
+                    <p>也許恆溫器設計可以製作來喚起舒適的感覺，只需足夠溫暖或足夠涼爽就能非常舒適。Nest恆溫器的複雜外觀，特別是當那種時尚的外觀帶有知識表明Nest真的很酷，因為它能夠做到的。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Design Patterns in Conceptual Design -->
+        <div class="slide">
+            <h2>14.3.5 在概念設計中運用設計模式</h2>
+            
+            <div class="design-patterns">
+                <h4>設計模式的定義與應用</h4>
+                <p>設計模式是對常見設計問題的可重複解決方案，出現為最佳實踐，鼓勵分享、重用和一致性。設計模式來自其他學科有助於在設計師概念設計中觸發想法。</p>
+                
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>模式的特徵</h4>
+                        <p>設計模式具有的特徵包括鼓勵互動、重用、一致性和結構、顏色方案、字體、實體佈局、外觀和感覺以及互動物件的位置。</p>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <h4>應用範例</h4>
+                        <p>它們有助於一致性和學習易用性。作為熟悉應用概念設計模式的範例，考慮來自已知應用程式的眾所周知的應用程式，如微軟Outlook。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Metaphors in Design -->
+        <div class="slide">
+            <h2>14.3.6 在概念設計中運用隱喻傳達意義</h2>
+            
+            <div class="highlight-box">
+                <h3>隱喻在設計中的作用</h3>
+                <p>隱喻是設計中用來溝通和解釋不熟悉概念的類比，使主題熟悉傳統知識。核心隱喻通常成為產品的主題，概念設計背後的概念。使用者對現有系統或現有現象的已知了解幫助他們學習如何使用新系統。</p>
+            </div>
+            
+            <div class="metaphor-examples">
+                <div class="metaphor-card">
+                    <h4>桌面隱喻</h4>
+                    <p>桌面隱喻的範例。當圖形使用者介面在個人電腦中成為經濟可行性時，Xerox Parc的設計師面臨有趣的UX挑戰：如何向使用者傳達大多數人將要看到這種電腦。</p>
+                </div>
+                
+                <div class="metaphor-card">
+                    <h4>時間機器功能</h4>
+                    <p>另一個互動概念設計隱喻的絕佳範例可以在Macintosh操作系統上的時間機器功能中找到。它是一個備份，使用者可以回到時間中訪問較舊備份以檢索意外刪除的文件。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>隱喻使用的注意事項</h4>
+                <p>如果現有知識和新設計不匹配，隱喻就像任何類比一樣會崩潰。當隱喻崩潰時，它違反了概念設計中的約定含意。著名的Macintosh平台垃圾桶設計批評就是此類隱喻關注的例證。</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Physics in UX Design -->
+        <div class="slide">
+            <h2>物理學作為UX概念設計的隱喻</h2>
+            
+            <div class="example-box">
+                <h4>物理學在互動設計中的應用</h4>
+                <p>在iOS設備（如iPad）上向下滾動清單是透過用手指向上或向下滑動完成的，演示了互動物理學稱為慣性的現象。滾動就像您正在用手指轉動大輪子一樣。這個顯示器似乎展現出顯著的質量，所以它有一種虛擬慣性，在您釋放手指後保持旋轉，但它也表現出讓它在您釋放手指後慢下來停止的摩擦。</p>
+            </div>
+            
+            <div class="concept-card">
+                <h4>物理參數的設計考量</h4>
+                <p>這個顯示涉及質量、慣性和摩擦，這些是物理參數。車輪到手指的方式。這是一種人工物理性。如果使用者將它旋轉過去他們想要的地方，那麼移動在技術上被定義錯誤，但對於具有質量的輪子感覺正常，使用者一般會將它旋轉一點。</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Summary -->
+        <div class="slide">
+            <h2>14.4 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>本章重點回顧</h3>
+                <p>在本章中，我們討論了心智模型和概念設計的作用。在接下來的三章中，我們探討與人類需求金字塔相關的設計目標。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>心智模型的重要性</h4>
+                    <p>理解理想心智模型、設計師心智模型和使用者心智模型之間的關係，是創建有效概念設計的基礎。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>概念設計的橋樑作用</h4>
+                    <p>概念設計作為連接設計師理解與使用者理解的關鍵橋樑，必須在開始詳細介面設計之前建立。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>三層概念設計</h4>
+                    <p>生態、互動和情感三個層面的概念設計，確保系統在所有人類需求層面上都能有效運作。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>設計模式與隱喻</h4>
+                    <p>適當運用設計模式和隱喻，可以幫助使用者快速理解系統運作方式，但必須謹慎避免隱喻崩潰的問題。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                成功的概念設計不僅傳達系統如何運作，更重要的是讓使用者能夠建立正確的心智模型，從而有效地使用系統並達成目標
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        showSlide(0);
+    </script>
+</body>
+</html>
