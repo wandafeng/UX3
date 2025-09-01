@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流程章節序曲</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .intertwining-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .weave-pattern {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .process-strand {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .process-strand::after {
+            content: '→';
+            position: absolute;
+            right: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #000000;
+            font-weight: bold;
+        }
+        
+        .process-strand::before {
+            content: '←';
+            position: absolute;
+            left: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #000000;
+            font-weight: bold;
+        }
+        
+        .process-strand:first-child::before {
+            display: none;
+        }
+        
+        .process-strand:last-child::after {
+            display: none;
+        }
+        
+        .studio-layout {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .studio-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .studio-feature {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .roles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .role-card {
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .role-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .ux-researcher {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .ux-designer {
+            border-color: #f39c12;
+            background: #fdf6e3;
+        }
+        
+        .visual-designer {
+            border-color: #9b59b6;
+            background: #f4ecf7;
+        }
+        
+        .product-owner {
+            border-color: #27ae60;
+            background: #eafaf1;
+        }
+        
+        .timeline-flow {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .timeline-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .timeline-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #3498db;
+            z-index: 1;
+        }
+        
+        .timeline-step {
+            background: white;
+            border: 3px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #3498db;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .concept-statement-box {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .concept-statement-box h4 {
+            color: #1565c0;
+            margin-top: 0;
+        }
+        
+        .system-overview {
+            background: #f0f4f8;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .system-problems {
+            background: #fff5f5;
+            border: 1px solid #fc8181;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .system-benefits {
+            background: #f0fff4;
+            border: 1px solid #68d391;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .exercise-box {
+            background: #f7fafc;
+            border: 2px dashed #4299e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise-box h4 {
+            color: #2b6cb0;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第五章：流程章節序曲</h1>
+            <div class="quote">
+                "UX實務的現實是，流程是由交織的生命週期活動、方法和技術組成的結構，不是在嚴格序列中執行，而是在時間中交織和重疊。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>UX流程、方法和技術如何在時間中交織</li>
+                    <li>UX設計工作室的重要性</li>
+                    <li>專案委託：專案如何開始？</li>
+                    <li>關鍵UX角色介紹</li>
+                    <li>中堡大學票務交易服務案例</li>
+                    <li>新票務亭系統：我們的貫穿範例</li>
+                    <li>如何撰寫清楚簡潔的產品概念陳述</li>
+                    <li>流程相關練習介紹</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Processes Intertwining -->
+        <div class="slide">
+            <h2>5.1 流程、方法和技術的交織</h2>
+            
+            <div class="highlight-box">
+                <h3>現實與理論的差距</h3>
+                <p>雖然我們在單獨的章節中介紹UX生命週期活動，專注於一次學習一個活動，但UX實務的現實是，流程是由交織的生命週期活動、方法和技術組成的結構，<strong>不是在嚴格序列中執行，而是在時間中交織和重疊</strong>。</p>
+            </div>
+            
+            <div class="intertwining-diagram">
+                <h3>交織過程視覺化</h3>
+                <div class="weave-pattern">
+                    <div class="process-strand">需求理解</div>
+                    <div class="process-strand">設計解決方案</div>
+                    <div class="process-strand">原型製作</div>
+                    <div class="process-strand">UX評估</div>
+                </div>
+                <p><em>生命週期活動在實務中的交織模式</em></p>
+            </div>
+            
+            <div class="example-box">
+                <h4>5.1.1 交織的範例</h4>
+                <p>考慮原型製作，這是UX設計生命週期活動中一個主要章節的特色。原型是任何想法的有形表現，需要被評估，出現在許多不同的形式和各種地方。</p>
+                <p>多種低保真度的快速原型稱為<strong>草圖</strong>被用來探索構想中的競爭設計想法（一種腦力激盪）。後來，更完整和詳細的原型將被用作UX評估的平台。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Lifecycle Activity Timing -->
+        <div class="slide">
+            <h2>5.1.2 生命週期活動時機</h2>
+            
+            <div class="highlight-box">
+                <h3>實務中的靈活性</h3>
+                <p>實務中偏離純粹生命週期活動描述的另一個領域是事情發生的時機。例如，在我們的UX研究資料收集討論（觀察和訪談使用者）中，可能看似所有使用者訪問都發生在一個連續的時間段內。</p>
+            </div>
+            
+            <div class="timeline-flow">
+                <h3>敏捷序列的典型活動</h3>
+                <div class="technique-grid">
+                    <div class="technique-card">
+                        <h4>📊 資料收集與早期分析</h4>
+                        <p>與少數早期使用者進行資料收集，開始早期資料分析、建模、綜合，甚至基於分析和新興模型進行一些設計</p>
+                    </div>
+                    
+                    <div class="technique-card">
+                        <h4>🎨 早期設計原型</h4>
+                        <p>新興設計的早期線框圖或原型，從更多使用者進行資料收集，在收集會話結束時向使用者展示新興設計想法和線框圖以獲取回饋</p>
+                    </div>
+                    
+                    <div class="technique-card">
+                        <h4>🔄 持續改進</h4>
+                        <p>用新見解更新使用者資料模型和設計，隨著對新興設計的信心增長，增加線框圖細節的保真度</p>
+                    </div>
+                    
+                    <div class="technique-card">
+                        <h4>✅ 評估與交付</h4>
+                        <p>使用更嚴謹的方法與更多使用者進行評估，更新使用者資料模型和設計與評估發現，設計製作並交付給軟體工程團隊</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: UX Design Studio -->
+        <div class="slide">
+            <h2>5.2 專用UX設計工作室 - 團隊合作的必要工具</h2>
+            
+            <div class="highlight-box">
+                <h3>5.2.1 為什麼需要UX設計工作室</h3>
+                <p>如Beyer和Buur（2002）建議，每個UX團隊都需要設置一個共享的實體工作空間，一個設計工作室，作為團隊的基地。UX設計工作室提供以下空間：</p>
+            </div>
+            
+            <div class="studio-features">
+                <div class="studio-feature">
+                    <h4>🤝 協作支援</h4>
+                    <p>支援持續協作的場所</p>
+                </div>
+                
+                <div class="studio-feature">
+                    <h4>🎯 深度沉浸</h4>
+                    <p>深入沉浸在設計問題和分析設計工藝品中</p>
+                </div>
+                
+                <div class="studio-feature">
+                    <h4>💡 構想設計</h4>
+                    <p>構想設計的專用空間</p>
+                </div>
+                
+                <div class="studio-feature">
+                    <h4>📋 工作展示</h4>
+                    <p>永久展示工作產品供討論和腦力激盪</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                其中，也許最重要的一點是關於沉浸。當你走進房間並關上門時，你需要置身於設計的世界中，而世界其他部分及其干擾消失
+            </div>
+        </div>
+
+        <!-- Slide 5: Studio Requirements -->
+        <div class="slide">
+            <h2>5.2.2 UX設計工作室需要什麼</h2>
+            
+            <div class="studio-layout">
+                <h3>良好設計工作室的配備</h3>
+                
+                <div class="technique-grid">
+                    <div class="technique-card">
+                        <h4>🚪 基本設施</h4>
+                        <ul>
+                            <li>可以關閉的門</li>
+                            <li>舒適的座位</li>
+                            <li>會議桌</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="technique-card">
+                        <h4>🛠️ 工作設備</h4>
+                        <ul>
+                            <li>攤放原型和其他設計工藝品的工作台</li>
+                            <li>群體素描用的白板</li>
+                            <li>掛海報、圖紙、圖表和設計草圖的充足牆面空間</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="technique-card">
+                        <h4>📱 技術設備</h4>
+                        <ul>
+                            <li>團隊成員可以從筆記型電腦展示工作成果的大型共享顯示設備</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="technique-card">
+                        <h4>🎯 專用工作空間特點</h4>
+                        <ul>
+                            <li>無需預約即可持續使用</li>
+                            <li>允許所有工藝品從一個工作會話保留到下一個</li>
+                            <li>滿足頻繁和即時短時間協作的不可預測需求</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Virginia Tech Example -->
+        <div class="slide">
+            <h2>5.2.3 維吉尼亞理工學院工業設計工作室：Kiva</h2>
+            
+            <div class="example-box">
+                <h4>協作構想與設計工作室範例</h4>
+                <p>我們展示一個稱為Kiva的協作構想與設計工作室範例，位於維吉尼亞理工學院工業設計系。Kiva最初由Maya Design在匹茲堡設計開發，經維吉尼亞理工學院許可使用。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>Kiva的設計特色</h3>
+                <p>Kiva是一個圓柱形空間，設計師可以在其中與外部干擾隔離進行腦力激盪和素描。內部空間足夠大，可容納座位和工作台。內表面是塗漆的金屬皮，可用作包圍白板，也可以固定磁性圖釘。</p>
+                <p>外部可以用於公告和協調活動。大型螢幕顯示器可以在外部使用。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🏛️ 物理設計</h4>
+                    <ul>
+                        <li>圓柱形隔離空間</li>
+                        <li>磁性表面白板</li>
+                        <li>內建座位和工作台</li>
+                        <li>大型外部顯示器</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 功能優勢</h4>
+                    <ul>
+                        <li>完全隔離的創意環境</li>
+                        <li>沉浸式協作體驗</li>
+                        <li>靈活的展示空間</li>
+                        <li>外部協調功能</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Project Commission -->
+        <div class="slide">
+            <h2>5.3 專案委託：專案如何開始？</h2>
+            
+            <div class="highlight-box">
+                <h3>專案的起源</h3>
+                <p>所有專案都有某種類型的開始。專案由任何數量的力量催生，包括行銷策略、管理指令、產品贊助商、合約獎勵、系統客戶、創新想法，或你自己察覺的改進現有產品或系統的需求。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ 委託文件的挑戰</h4>
+                <p>專案委託文件可能非常高層次且定義不明確。它成為UX設計團隊的首要責任，特別是與產品擁有者合作，在產品概念陳述中填補產品定義階段的空白並確定系統或產品概念陳述中的願景。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 系統導向專案</h4>
+                    <p>委託進行系統導向專案很少來自UX設計或SE團隊內部，而是作為來自上層管理的任務</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 產品概念孵化</h4>
+                    <p>新產品的概念可以以商業簡報的形式孵化，通常來自產品擁有者角色中的人員</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Key UX Roles -->
+        <div class="slide">
+            <h2>5.4 關鍵角色</h2>
+            
+            <div class="highlight-box">
+                <h3>跨功能團隊角色</h3>
+                <p>我們來談論角色，這些可以由一個或多個跨功能團隊成員擔任。在大型組織中，有些人可能專門從事特定角色。在小型組織中，一個人可能承擔這些角色中的許多。</p>
+            </div>
+            
+            <div class="roles-grid">
+                <div class="role-card ux-researcher">
+                    <h4>🔬 UX研究員</h4>
+                    <p>UX研究員執行或領導UX研究活動，如資料收集、資料分析和建模，以及許多組織中的UX需求規格。UX研究員也負責UX評估。</p>
+                </div>
+                
+                <div class="role-card ux-designer">
+                    <h4>🎨 UX設計師</h4>
+                    <p>有時稱為互動設計師，UX設計師執行或領導UX設計，如設計創造、概念設計和/或設計製作，用於使用者互動。UX設計師也可以指設計團隊的任何人。</p>
+                </div>
+                
+                <div class="role-card visual-designer">
+                    <h4>🎭 圖形或視覺設計師</h4>
+                    <p>圖形設計師通常負責視覺溝通、版面配置、品牌、風格和像素完美的視覺構圖。</p>
+                </div>
+                
+                <div class="role-card product-owner">
+                    <h4>👔 產品擁有者或經理</h4>
+                    <p>產品經理角色的人員（通常稱為PM）是所謂的功能、產品或產品組合的擁有者或首席執行官。這個角色體現了產品或系統開發的商業觀點。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Product Owner Details -->
+        <div class="slide">
+            <h2>產品擁有者角色詳解</h2>
+            
+            <div class="highlight-box">
+                <h3>產品擁有者的核心職責</h3>
+                <p>產品擁有者角色包含商業觀點，並負責指定系統成功所需的需求或能力（以敏捷方法中使用者故事的形式）。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 策略職責</h4>
+                    <ul>
+                        <li>與使用者密切接觸</li>
+                        <li>了解客戶領域內的產品背景、商業策略和競爭</li>
+                        <li>負責追求商業目標和產品成功</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 創作職責</h4>
+                    <ul>
+                        <li>在設計中維護整體願景</li>
+                        <li>負責撰寫/創建產品概念陳述</li>
+                        <li>使用者故事 - 描述所需功能的簡短敘述</li>
+                        <li>使用者人格 - 設計目標角色中假設使用者的敘述描述</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🚀 執行職責</h4>
+                    <ul>
+                        <li>與SE合作規劃實施衝刺和管理優先順序的積壓工作</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚙️ 軟體工程師</h4>
+                    <p>軟體工程師的角色是我們已經介紹的另一個關鍵跨功能角色。這個角色負責實現產品經理需求和UX規格的程式碼。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Running Example Introduction -->
+        <div class="slide">
+            <h2>5.5 介紹貫穿範例</h2>
+            
+            <div class="highlight-box">
+                <h3>學習目的的假設案例</h3>
+                <p>作為貫穿範例來說明本書中的想法，我們介紹一個假設的公共票務銷售系統，用於銷售娛樂和其他活動的票券。這個專案是消費性產品和企業系統相結合的良好範例。</p>
+            </div>
+            
+            <div class="system-overview">
+                <h3>5.5.1 現有系統：中堡大學票務交易服務</h3>
+                <p>中堡，美國中部一個小鎮，是中堡大學（MU）的所在地，這是一所州立大學，經營一個稱為中堡大學票務交易服務（MUTTS）的服務。MUTTS已成功運營數年，作為一個集中的校園票務辦公室，人們可以購買娛樂活動的票券。</p>
+                
+                <div class="system-problems">
+                    <h4>🔴 當前業務流程的弊端</h4>
+                    <ul>
+                        <li>直到最近，所有顧客都必須到一個地點，MUTTS票務辦公室，親自購買票券</li>
+                        <li>MUTTS現在與全國線上票券分銷平台Tickets4ever.com合作，但該平台可靠性低，使用者體驗不佳</li>
+                        <li>MUTTS目前的運作涉及多個不能良好協作的系統</li>
+                        <li>大學和州政府招聘政策阻礙了快速聘僱臨時票券銷售員應對週期性高需求的能力</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: System Expansion Goals -->
+        <div class="slide">
+            <h2>系統擴展的商業動機</h2>
+            
+            <div class="highlight-box">
+                <h3>擴展業務的需求</h3>
+                <p>擴展業務的願望與目前影響MUTTS和MU的其他動態相符：</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>💰 收入提升</h4>
+                    <ul>
+                        <li>MUTTS主管希望擴展創收活動</li>
+                        <li>普遍共識認為新系統應該提供更好的使用者體驗</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏛️ 學術聲望</h4>
+                    <ul>
+                        <li>為了提高其國家學術和體育聲望，大學尋求包括票券整合的綜合客製化解決方案</li>
+                        <li>目前體育活動票券由完全不同的部門管理</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎭 活動多樣化</h4>
+                    <ul>
+                        <li>包括產生重要收入的體育活動票券，MUTTS將能夠取得資源支援其擴展的其他方面</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏢 品牌統一</h4>
+                    <ul>
+                        <li>大學正在進行所有部門和活動統一品牌的戰略倡議</li>
+                        <li>大學行政部門熱衷於為MUTTS創造創意設計解決方案以支援此重新品牌努力</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Proposed New System -->
+        <div class="slide">
+            <h2>5.5.2 建議的新系統：票券亭系統</h2>
+            
+            <div class="highlight-box">
+                <h3>票券亭系統概念</h3>
+                <p>新系統的工作名稱是票券亭系統，由大學行政部門和MUTTS管理委託。已經做出高層決定，將票券亭的概念作為該專案的核心。</p>
+            </div>
+            
+            <div class="system-benefits">
+                <h4>🎯 票券亭系統的優勢</h4>
+                <ul>
+                    <li><strong>全天候服務：</strong> 提供24小時購票服務</li>
+                    <li><strong>多地點部署：</strong> 可在校園和城鎮周圍的多個地點設置</li>
+                    <li><strong>成本效益：</strong> 可能節省成本，因為亭子不需要銷售點的人員</li>
+                    <li><strong>便利性提升：</strong> 增加便利性（在許多地點）和可及性（持續開放）</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h4>專案範圍考量</h4>
+                <p>早期，專案的範圍必須在商業簡報中作為路線圖來處理。例如，設計是否涵蓋亭子維護、付款安排、與外部機構購買票券的協議安排，以及許多其他工作角色在系統生態中的問題？</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Kiosk Rationale -->
+        <div class="slide">
+            <h2>5.5.3 亭子的理由</h2>
+            
+            <div class="highlight-box">
+                <h3>為什麼選擇亭子解決方案</h3>
+                <p>MU和MUTTS的行政人員希望擴展其範圍並增加更多票務辦公室地點，但在城鎮周圍商業建築中租賃空間是昂貴的，而且他們需要的小空間類型很少可得。因此，他們決定從票券窗口轉向亭子。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🚐 運輸系統整合</h4>
+                    <p>中堡有一個可靠且使用良好的公共運輸系統，由中堡運輸公司運營。有幾個巴士站，包括校園內的圖書館和購物中心，巴士每隔幾分鐘就會往返，人群大小適合且有合理的租賃費。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💰 經濟效益</h4>
+                    <p>大多數這些地點都有亭子空間或可以以合理租賃費增加亭子。管理層預期由於亭子的增加可用性（在許多地點和持續開放）而增加銷售。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Product Concept Statement -->
+        <div class="slide">
+            <h2>5.6 產品/系統概念陳述</h2>
+            
+            <div class="highlight-box">
+                <h3>概念陳述的重要性</h3>
+                <p>這是產品擁有者和UX團隊的工作，將產品/系統概念在明確的專案任務陳述中具體化，向所有利害關係人陳述。為了簡單起見，我們使用產品概念陳述作為一般術語，無論你是在設計消費性產品還是企業系統。</p>
+            </div>
+            
+            <div class="concept-statement-box">
+                <h4>產品概念陳述的性質</h4>
+                <ul>
+                    <li><strong>簡潔：</strong> 通常100到150字長度</li>
+                    <li><strong>任務陳述：</strong> 為專案團隊、願景陳述或任務</li>
+                    <li><strong>描述願景：</strong> 專案和產品對利害關係人和外人士的願景</li>
+                    <li><strong>聚焦工具：</strong> 幫助設定焦點和發展範圍的測量標準</li>
+                    <li><strong>易於撰寫：</strong> 不容易撰寫（好的概念很重要）</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                由於陳述需要簡短和簡潔，每個詞都很重要。概念陳述不僅是書面的；它是迭代和改進的，使其盡可能清楚和具體
+            </div>
+        </div>
+
+        <!-- Slide 15: Concept Statement Guidelines -->
+        <div class="slide">
+            <h2>概念陳述的撰寫指導</h2>
+            
+            <div class="highlight-box">
+                <h3>概念陳述的內容</h3>
+                <p>一個有效的產品概念陳述至少回答以下問題：</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📝 基本問題</h4>
+                    <ul>
+                        <li>產品或系統的名稱是什麼？</li>
+                        <li>使用者是誰？</li>
+                        <li>他們將如何使用它？</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 企業系統問題</h4>
+                    <ul>
+                        <li>系統將解決什麼問題（廣泛包括業務目標）？</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 消費性產品問題</h4>
+                    <ul>
+                        <li>主要吸引點或這個產品的特色是什麼？</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🌟 願景問題</h4>
+                    <ul>
+                        <li>設計願景是什麼，情感影響目標是什麼？換句話說，產品或系統將為使用者提供什麼體驗？</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>撰寫建議</h4>
+                <ul>
+                    <li>瞄準非常廣泛的受眾，包括高階管理、行銷、董事會、股東和一般大眾</li>
+                    <li>根據需要在生命週期活動中進行改進和更新</li>
+                    <li>盡快將產品概念陳述張貼在設計工作室中。它將指導所有UX設計活動</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: Example Concept Statement -->
+        <div class="slide">
+            <h2>範例：票券亭系統的產品概念陳述</h2>
+            
+            <div class="concept-statement-box">
+                <h4>票券亭系統產品概念陳述</h4>
+                <p><strong>票券亭系統</strong>將取代舊的票券零售系統，<strong>新的MUTTS</strong>，通過在全天候分散式亭子服務向一般大眾提供全面活動資訊和購票能力。這項服務包括與當地藝術、娛樂活動的綜合活動資訊，包括音樂會、戲劇和體育活動，以及購買當地表演藝術票券和電影票券的能力。</p>
+                
+                <p>新系統包括亭子服務範圍的重要擴展，以包括票券分發到MU體育節目。運輸票券也將可得，以及與特定場地的方向和停車資訊。</p>
+                
+                <p>相對於傳統票券銷售點，票券亭系統將通過提供引人入勝和愉快的互動體驗減少等待時間並提供更廣泛的活動資訊。新系統的目標是通過提供全面活動資訊來重新創造與亭子互動的體驗，包括圖像、電影預告片和活動評論。「創新設計」的目標可以通過說「創新設計的目標是重新創造通過提供引人入勝和愉快的互動體驗與亭子互動的體驗」來詳述。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>概念陳述的特徵</h3>
+                <ul>
+                    <li><strong>迭代和改進：</strong> 你的產品概念陳述會隨著專案進展而演進</li>
+                    <li><strong>具體化：</strong> 通過說「廣泛活動資訊」使其更具體</li>
+                    <li><strong>願景驅動：</strong> 包含情感影響和使用者體驗願景</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 17: System Choice -->
+        <div class="slide">
+            <h2>5.6.1.2 為這些練習選擇產品或系統</h2>
+            
+            <div class="highlight-box">
+                <h3>學習目的的建議</h3>
+                <p>如果你是UX課程的學生，本書各章的練習將作為課程內練習進行，講師可能會建議為所使用的產品或系統。不是課程一部分的讀者應該選擇自己的產品或系統。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📚 學習導向建議</h4>
+                    <p>這應該經過一些思考，因為你將在大多數練習中使用相同選擇。避免過於大或複雜的應用程式；選擇語義和功能相對容易理解的東西。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 規模考量</h4>
+                    <p>避免過於小或過於簡單的系統，因為它們可能沒有足夠的管道或複雜性來讓UX團隊分解設計到小範圍增量中，如果需要的話。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>👥 角色識別</h4>
+                    <p>你需要能識別至少幾個使用者角色和每個角色的五或六個有所不同的使用者任務類型。尋找有趣生態的東西。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏢 實務考量</h4>
+                    <p>對於實際開發組織的從業者團隊，我們建議不要使用真實開發專案進行這些練習。引入製作真實產品的壓力到學習過程中沒有意義。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Exercise Introduction -->
+        <div class="slide">
+            <h2>5.6.1 流程相關練習介紹</h2>
+            
+            <div class="highlight-box">
+                <h3>主動學習的重要性</h3>
+                <p>在流程章節討論每個UX設計活動之後，我們經常會給你一個練習來嘗試該活動。這些練習旨在作為課程內活動，如果你的學習環境允許的話。</p>
+            </div>
+            
+            <div class="exercise-box">
+                <h4>🎯 練習5.1：你選擇的產品或系統的產品概念陳述</h4>
+                
+                <p><strong>你的第一個練習在這裡。</strong> 主動學習意味著通過實踐來學習。學習本書中描述的流程的最佳方式是進行練習。</p>
+                
+                <p><strong>目標：</strong> 獲得撰寫簡潔產品概念陳述的實踐。</p>
+                
+                <p><strong>活動：</strong> 為你選擇的產品或系統撰寫產品概念陳述。迭代和修正它。你在這裡寫的150字或更少將是整個專案中最重要的詞，所以要深思熟慮地撰寫。</p>
+                
+                <p><strong>交付成果：</strong> 提交你的產品概念陳述。</p>
+                
+                <p><strong>時程：</strong> 考慮到領域的簡單性，我們預期你可以在約30分鐘內從這個練習中得到你需要的東西。</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Exercise Guidelines -->
+        <div class="slide">
+            <h2>5.6.1.1 如何處理這些練習</h2>
+            
+            <div class="highlight-box">
+                <h3>學習目的，非產品製作</h3>
+                <p>練習是為了學習，不是為了製作產品，所以你不必完成每個細節，如果你認為已經掌握了概念。你應該能夠從一小時或更短的時間內學習大多數你需要的練習。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👥 團隊合作</h4>
+                    <p>在課堂環境中，這意味著你可以以課程內活動的形式進行練習，分解成團隊並並行工作。如果需要，你可以在下一堂課之前完成練習作為作業。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 學習焦點</h4>
+                    <p>這有另一個團隊有相似目標和問題以及有講師在場的優勢，可以作為顧問並指導。我們建議學生團隊交付成果以摘要形式準備，以便向課程其他人展示。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Segue to Process Chapters -->
+        <div class="slide">
+            <h2>5.7 序曲：歡迎來到流程章節</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 章節結構展望</h3>
+                <p>我們現在進入本書的第2部分，在那裡我們進行UX研究以理解需求。<strong>第3部分</strong>是關於設計，隨後是<strong>第4部分</strong>，關於原型製作。流程章節在<strong>第5部分</strong>中完成，關於UX評估。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 第2部分：理解需求</h4>
+                    <ul>
+                        <li>UX研究方法</li>
+                        <li>資料收集技術</li>
+                        <li>資料分析與建模</li>
+                        <li>需求規格制定</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎨 第3部分：設計解決方案</h4>
+                    <ul>
+                        <li>概念設計</li>
+                        <li>互動設計</li>
+                        <li>視覺設計</li>
+                        <li>設計規格</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 第4部分：原型製作</h4>
+                    <ul>
+                        <li>低保真度原型</li>
+                        <li>高保真度原型</li>
+                        <li>互動原型</li>
+                        <li>原型評估</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>✅ 第5部分：UX評估</h4>
+                    <ul>
+                        <li>可用性測試</li>
+                        <li>專家評估</li>
+                        <li>分析評估</li>
+                        <li>評估報告</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote">
+                流程章節為你提供了UX設計的完整生命週期視圖，從理解使用者需求到評估最終設計的效果
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">Home</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
