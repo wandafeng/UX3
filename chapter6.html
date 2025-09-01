@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX研究資料收集</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .wheel-context {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .terminology-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .term-card {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .term-card h4 {
+            color: #27ae60;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        
+        .work-domain-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .domain-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .domain-element {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .domain-element::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .domain-element:last-child::after {
+            display: none;
+        }
+        
+        .data-gathering-process {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .process-step {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .process-step h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .car-wash-diagram {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .research-timeline {
+            background: #f0f4f8;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .timeline-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .data-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .data-type {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .data-type h4 {
+            color: #1565c0;
+            margin-top: 0;
+        }
+        
+        .exercise-box {
+            background: #f7fafc;
+            border: 2px dashed #4299e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise-box h4 {
+            color: #2b6cb0;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第六章：UX研究資料收集</h1>
+            <div class="quote">
+                "UX研究的目標是理解人們使用產品和系統所做的工作，以及建立一個討論框架。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>工作、工作活動、工作實務和工作領域的概念</li>
+                    <li>撒網理解工作實務和市場</li>
+                    <li>訪問前的準備：與客戶和潛在使用者會面</li>
+                    <li>資料收集團隊的組織和使用者參與者招募</li>
+                    <li>訪問期間：如何收集UX研究資料</li>
+                    <li>觀察和訪談客戶及使用者</li>
+                    <li>尋找的資料類型和有效原始筆記的撰寫</li>
+                    <li>使用者研究的根源</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>6.1 導論</h2>
+            
+            <div class="wheel-context">
+                <h3>6.1.1 你在這裡</h3>
+                <p>我們在每個流程章節開始時都有一個「你在這裡」的章節主題圖片。在輪盤的整體UX設計生命週期中，本章關於資料收集子活動，在理解需求生命週期活動的情境中。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>6.1.2 我們是在研究現有產品/系統/工作實務還是新的（構想的）產品？</h3>
+                <p>這是我們在討論使用者研究時經常從學生那裡得到的問題。答案的本質是你實際上不是在研究產品或系統；<strong>你是在研究使用特定產品或系統情境中的工作實務</strong>。</p>
+                <p>研究人員、設計師和使用者可能會傾向於提前思考新的（構想的）系統和全新的工作實務，但我們在UX研究中所做的幾乎一切都始於現有系統和工作實務。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>範例說明</h4>
+                <p>例如，可能沒有總是存在Apple iPod，但很長時間以來一直有便攜式音樂播放器。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: About User Research -->
+        <div class="slide">
+            <h2>6.1.3 關於使用者研究</h2>
+            
+            <div class="highlight-box">
+                <h3>使用者研究是什麼</h3>
+                <p><strong>使用者研究</strong>是獲得了解使用者、使用情況、使用者工作、UX、工作情境和UX設計需求的流程的最流行術語，為UX設計做準備；然而，這個術語沒有說出完整的故事。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>更廣泛的視野</h4>
+                <p>雖然我們確實想要了解使用者，但研究使用者的較深層性質和我們稱之為領域或工作領域的使用者所做工作的更完整設定也是必要的（指使用現有系統時的使用者工作或正在設計的系統）。</p>
+            </div>
+            
+            <div class="quote">
+                因此，我們將使用UX研究，這是一個比使用者研究更廣泛的術語
+            </div>
+        </div>
+
+        <!-- Slide 4: Terminology -->
+        <div class="slide">
+            <h2>6.2 與產品和系統使用相關的術語</h2>
+            
+            <div class="highlight-box">
+                <h3>建立討論框架</h3>
+                <p>UX研究的一個重要目標是理解人們使用正在研究的系統所做的工作。為此，我們需要建立討論框架。我們首先介紹一些相關術語。</p>
+            </div>
+            
+            <div class="terminology-grid">
+                <div class="term-card">
+                    <h4>🔍 工作 (Work)</h4>
+                    <p>我們使用工作來指稱在給定問題領域內，通常具有高層次個人或商業目標的，需要使用產品或系統來完成的事情。</p>
+                </div>
+                
+                <div class="term-card">
+                    <h4>⚡ 工作活動 (Work Activity)</h4>
+                    <p>工作是一個通用術語；然而，工作活動指的是工作的特定實例，即作為一個目標一部分的廣泛相關事物集合。</p>
+                </div>
+                
+                <div class="term-card">
+                    <h4>📋 工作實務 (Work Practice)</h4>
+                    <p>工作實務是所有相關工作活動如何發生（或應該在特定情境中發生）的完整描述。</p>
+                </div>
+                
+                <div class="term-card">
+                    <h4>🌐 工作領域 (Work Domain)</h4>
+                    <p>工作領域是整個行業的更廣泛範圍，如醫療保健、雲端技術或金融。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Work Practice Details -->
+        <div class="slide">
+            <h2>6.2.4 工作實務</h2>
+            
+            <div class="highlight-box">
+                <h3>工作實務的定義</h3>
+                <p>工作實務是所有相關工作活動如何發生（或應該在特定情境中發生）的完整描述。情境可能是只有一個人的活動，也可能在整個組織內被考慮。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎵 個人層次範例</h4>
+                    <p>如果工作實務的情境是個人或單一使用者角色，那麼工作實務描述將包括該人員和技術生態系統情境的活動和特徵。例如，一個聽手機音樂的人的工作實務。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏢 組織層次範例</h4>
+                    <p>在組織情境中，工作實務將包括所有工作角色的描述，即該角色的所有活動、程序、傳統、習俗和與執行這些工作活動相關的協議，通常是該組織目標的結果。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>具體範例</h4>
+                <p>汽車製造世界中的工作實務範例，是福特汽車公司汽車部門執行其活動的完整描述。這個工作實務可能與Tesla的工作實務不同，因為單一工作實務受多個因素影響，包括使用者、組織文化以及組織所說的品牌和價值觀。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Work Domain -->
+        <div class="slide">
+            <h2>6.2.5 工作領域</h2>
+            
+            <div class="highlight-box">
+                <h3>工作領域的廣泛性</h3>
+                <p>工作領域是整個行業的更廣泛範圍，如醫療保健、雲端技術或金融。工作領域是工作性質的抽象、全方位和擴展性描述，包括工作角色、法規、技術、規範、第一原則、慣例和該區域內工作實務間的變化。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>汽車製造工作領域範例</h4>
+                <p>汽車製造的工作領域將包括所有汽車製造商的工作實務，包括福特和Tesla。Ford和Tesla可能有相當不同的組織工作實務，但都符合汽車製造這一更廣泛的共同工作領域。</p>
+                <p>連接各個組織工作實務的共同元素是該領域的技能和傳統工藝的共同連結。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Work Role -->
+        <div class="slide">
+            <h2>6.2.6 工作角色</h2>
+            
+            <div class="highlight-box">
+                <h3>工作角色的定義</h3>
+                <p>工作角色不是個人，而是由人類承擔的職位。這樣的角色由該角色在特定工作實務情境中的職責、功能和工作活動來定義。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔧 工作角色的特徵</h4>
+                    <ul>
+                        <li>由活動條款定義的角色</li>
+                        <li>能動的實體類型</li>
+                        <li>執行特定功能</li>
+                        <li>與商業目標相關</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 範例說明</h4>
+                    <p>在汽車製造世界中，工作角色的範例包括汽車設計師、裝配線工頭和產品行銷主管。在更隨意或個人的情境中，工作角色的範例可能包括從事組織、策劃、聆聽或其他管理音樂收藏工作活動的使用者。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Work Domain Relationships -->
+        <div class="slide">
+            <h2>6.3 工作領域內的工作實務</h2>
+            
+            <div class="work-domain-diagram">
+                <h3>工作領域與工作實務的關係</h3>
+                <div class="domain-flow">
+                    <div class="domain-element">法規</div>
+                    <div class="domain-element">市場趨勢</div>
+                    <div class="domain-element">技術趨勢</div>
+                </div>
+                <div class="domain-flow">
+                    <div class="domain-element">工作實務1</div>
+                    <div class="domain-element">工作實務2</div>
+                    <div class="domain-element">工作實務n</div>
+                </div>
+                <p><em>工作領域包含多個工作實務，共同受到外部因素影響</em></p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>學習工作領域的重要性</h3>
+                <p>在進行UX研究的過程中，我們想要了解相關工作領域和該領域內的一個或多個工作實務。這通常包括：</p>
+                <ul>
+                    <li><strong>A.</strong> 每個工作實務的詳細資訊：誰是使用者，他們在給定工作實務中扮演什麼角色？</li>
+                    <li><strong>B.</strong> 工作實務之間的關係：一個工作實務中的工作如何與其他工作實務的工作對比？</li>
+                    <li><strong>C.</strong> 工作領域本身：該工作領域的一般性質，外部強加的共同特徵</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Data Gathering Goals -->
+        <div class="slide">
+            <h2>6.4 為理解工作領域和實務收集資料</h2>
+            
+            <div class="highlight-box">
+                <h3>資料收集的目的</h3>
+                <p>我們在UX研究中所做的大部分工作是同時發展工作領域和工作實務的圖像。你想要收集的資料類型和獲取資料的方式將取決於你的目標。</p>
+            </div>
+            
+            <div class="data-gathering-process">
+                <h3>三個主要學習領域</h3>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <h4>📚 學習工作領域</h4>
+                        <p>做功課並內化產品或系統的工作領域。首先與客戶和主題專家(SMEs)交談，然後向使用者驗證這種理解。</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <h4>🏢 學習客戶公司/組織工作實務</h4>
+                        <p>探索你的客戶組織的工作實務，學習：商業目標、組織政策和倫理、任何現有遺留系統、產品或系統建議、客戶對產品和市場聲譽的情緒。</p>
+                    </div>
+                    
+                    <div class="process-step">
+                        <h4>🔗 學習關係</h4>
+                        <p>在工作領域中查看你的組織工作實務與其他工作實務的比較：競爭、共同目標和挑戰、商業優勢、產品和系統在其他工作實務中使用。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: UX Research Nature -->
+        <div class="slide">
+            <h2>6.5 UX研究資料收集的性質</h2>
+            
+            <div class="highlight-box">
+                <h3>UX研究的首要目標</h3>
+                <p>UX研究的首要目標是理解工作領域或特定工作實務，通過訪問現有使用者和學習他們如何工作的現有系統上下文和學習他們的工作實務需要什麼，包括他們面臨的挑戰或困難以及他們使用的任何解決方法。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>不是任務分析或行銷調查</h4>
+                <p><strong>不要將其視為任務分析或行銷調查。</strong> 你的客戶可能會說，「我們已經做過了。我們做任務分析和行銷調查。」你如何回應這個問題？簡單的答案是它們不一樣。</p>
+                <ul>
+                    <li><strong>任務分析</strong>是通過研究任務結構和任務步驟來檢查使用者任務的系統性人因技術</li>
+                    <li><strong>行銷研究</strong>是關於銷售和可以識別產品種類和客戶甚至會想要的功能，但不會導致足夠理解人們如何工作或如何為他們設計</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Cast a Broad Net -->
+        <div class="slide">
+            <h2>撒網包括工作領域</h2>
+            
+            <div class="example-box">
+                <h4>發現庫存領域的範例</h4>
+                <p>作為跟隨線索的範例，這是一個團隊進行專案時告訴的真實故事。客戶是零售銷售，訪談集中在該概念，包括服務客戶、進行銷售交易和記錄它。</p>
+                <p>在這次對話中，客戶提到了庫存，所以沒有人提到它直到這一點。我們的好民族學偵探，專注於該發現，組織了一個新的思路線。關於庫存的什麼？庫存在你的銷售點資料中扮演什麼角色？</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 撒網策略</h4>
+                    <p>每次你收集UX研究資料時，都提供了一個不同的觀點到相同工作實務。記住，我們不只是在尋找使用者資料；我們還需要理解工作領域。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 理解工作實務生態</h4>
+                    <p>理解更廣泛的工作實務連結很重要，也許不是設計團隊的直接關注焦點，但包含該工作實務的較大整體圖像的一部分。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Before the Visit -->
+        <div class="slide">
+            <h2>6.6 訪問前：準備資料收集</h2>
+            
+            <div class="highlight-box">
+                <h3>準備的重要性</h3>
+                <p>你資料收集的目標是學習你能夠關於客戶、公司、業務、領域、產品或系統和使用者的一切。這樣，你在實地訪問期間準備好並且有生產力。</p>
+            </div>
+            
+            <div class="research-timeline">
+                <h3>準備步驟</h3>
+                <div class="timeline-item">
+                    <div class="timeline-number">1</div>
+                    <div>
+                        <h4>決定資料來源</h4>
+                        <p>理解使用者工作實務和需求的第一選擇通常是實際使用當前產品或系統的使用者。第一選擇資料來源是具有主題專家能力的能幹領域專家(SME)。</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-number">2</div>
+                    <div>
+                        <h4>選擇訪問參數</h4>
+                        <p>你能做多少訪問？每次訪問應該訪談多少使用者？你應該涉及什麼樣的使用者角色和使用者？</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-number">3</div>
+                    <div>
+                        <h4>組織資料收集團隊</h4>
+                        <p>你在組織資料收集團隊中的目標是選擇具有適合此客戶和領域有效的技能的人員。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Choose Visit Parameters -->
+        <div class="slide">
+            <h2>6.6.2 選擇訪問參數</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 訪問數量考量</h4>
+                    <ul>
+                        <li>你能做多少訪問？</li>
+                        <li>每次訪問應該訪談多少使用者？</li>
+                        <li>你應該涉及什麼樣的使用者角色和使用者？</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚖️ 嚴謹性考量</h4>
+                    <p><strong>較不嚴謹的資料收集：</strong> 當你需要在參數選擇中節約時，特別是對敏捷UX環境，重要的是採取以下建議。</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>敏捷UX建議</h3>
+                <ul>
+                    <li><strong>訪談和觀察較少使用者</strong> - 選擇較少數量但更有經驗的使用者；你將學會從少數使用者中擠出大量有用資訊</li>
+                    <li><strong>每個使用者使用較少觀察和訪談會話</strong> - 只是一天的與使用者談論他們工作實務的價值可以在你對工作領域的理解中產生重大差異</li>
+                    <li><strong>在捕獲資料方面更聰明</strong> - 將你的原始筆記歸結為乾淨和整潔的本質</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: During Visit -->
+        <div class="slide">
+            <h2>6.7 訪問期間：收集使用者資料</h2>
+            
+            <div class="highlight-box">
+                <h3>6.7.1 立即設定場景</h3>
+                <ul>
+                    <li>通過與客戶和每個使用者建立融洽關係來得到良好開始</li>
+                    <li>解釋訪問的目的：學習人們如何使用或將使用產品或系統以通知設計</li>
+                    <li>解釋你的方法</li>
+                    <li>承諾個人和企業機密性</li>
+                </ul>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👀 觀察與訪談：他們做什麼對比他們說什麼</h4>
+                    <p>觀察是UX技術工具箱中的技術；可以幫助你用獨立眼光看工作活動。僅僅依靠使用者試圖描述他們所做的事情是不夠的，特別是在已經內化的工作中。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 準備初始問題</h4>
+                    <p>就像足球四分衛有時會腳本化他們的初始系列比賽，我們建議你腳本化你的初始訪談問題以獲得良好開始。要求他們告訴你並向你展示他們如何做他們的工作。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Car Wash Example -->
+        <div class="slide">
+            <h2>範例：觀察洗車工作流程</h2>
+            
+            <div class="car-wash-diagram">
+                <h3>Buster汽車溫泉入口圖</h3>
+                <div style="margin: 20px 0;">
+                    <p><em>一個實際觀察技術在現實生活環境中的範例</em></p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>觀察發現</h4>
+                <p>大部分時間洗車工作良好，但偶爾會有工作流程問題。當客戶想要清潔汽車內部時，服務員們需要使用一個安裝在入口處的大型真空吸塵器。真空吸塵需要10分鐘，在此期間沒有汽車可以通過洗車——對等待排隊進入洗車的客戶來說很糟糕。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>設計啟示</h4>
+                <p>客戶等待特別糟糕，因為洗車是通常在去其他地方途中做的事情。狹窄的通道導致入口幾乎不可能讓客戶排隊。我開始思考會解決問題的設施不同設計。你會推薦什麼？</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Black+Decker Example -->
+        <div class="slide">
+            <h2>範例：Black+Decker SnakeLight的影子研究價值</h2>
+            
+            <div class="example-box">
+                <h4>UX研究的創新發現</h4>
+                <p>在1980年代中期，Black+Decker考慮進入手電筒市場，但公司不想加入普通消費裝置的擁擠領域。為了獲得新想法，設計師們渴望了解真正的手電筒使用者並記錄他們的客戶旅程。</p>
+                
+                <p>他們觀察人們在真實使用情境中使用手電筒，發現需要一個從未在通常腦力激盪期間被提及的功能，或在客戶焦點小組中：<strong>超過一半觀察的人在汽車引擎蓋下、廚房水槽下和壁櫥及閣樓中說他們需要雙手自由做任務</strong>。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>設計成功</h3>
+                <p>所以他們設計的手電筒讓使用者改變其形狀，讓它靠自己站在工作台或其他表面上，如廚房水槽下。它顯示Black+Decker SnakeLight在使用情境中。它非常靈活，甚至看起來有點像蛇。</p>
+                <p><strong>結果：</strong> SnakeLight在Black+Decker歷史上擁有最大的生產量，儘管比市場上其他手電筒更大、更重、更昂貴。</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Data Collection Tips -->
+        <div class="slide">
+            <h2>6.7.4 成功資料收集的提示</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🤝 與使用者合作</h4>
+                    <p>幫助參與者理解你必須深入了解他們的使用方式，並證明他們對產品或系統的感受。為具體的使用情況和他們感受的問題試探。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>👂 做個好聽眾</h4>
+                    <p>讓使用者談論並用具體問題試探。不要期望每個使用者對工作領域有相同觀點，問關於差異的問題並找到結合他們觀點的方法以獲得真相。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🕵️ 做個好偵探</h4>
+                    <p>做一個有效的資料偵探；跟隨線索並發現，偏離腳本，提取，挑逗，收集線索。聽用戶說需要的內容。即使這不是你團隊的工作來推導需求和需求從UX研究資料，使用者會建議他們想在系統中看到的東西。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 當你能時抓住細節</h4>
+                    <p>當細節發生時捕獲細節，並嘗試記住它以後。保持靈活。準備好適應、修改、探索和分支出去。避免引入你自己的觀點。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Things to Look For -->
+        <div class="slide">
+            <h2>6.7.5 尋找的具體事物</h2>
+            
+            <div class="data-types-grid">
+                <div class="data-type">
+                    <h4>👥 使用者工作角色</h4>
+                    <p>使用者工作角色不是個人，而是由具有某個工作頭銜或工作責任的人員工作職責定義的工作職責。</p>
+                </div>
+                
+                <div class="data-type">
+                    <h4>🎭 使用者人物資訊</h4>
+                    <p>使用者人物是UX設計目標，幫助設計師專注於特定使用者特徵而不是試圖為所有使用者或甚至一般使用者設計。</p>
+                </div>
+                
+                <div class="data-type">
+                    <h4>📝 使用者故事輸入</h4>
+                    <p>使用者故事（敘述功能描述）被用作驅動和通知敏捷UX設計的需求。對使用者故事撰寫的輸入包括關於以下內容的陳述。</p>
+                </div>
+                
+                <div class="data-type">
+                    <h4>🔄 工作流程資訊</h4>
+                    <p>資訊在工作完成時如何流動？你如何在自動修理店儲存客戶的汽車數據檢查流程中的關鍵工作流程？</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Research Roots -->
+        <div class="slide">
+            <h2>6.8 使用者研究的根源</h2>
+            
+            <div class="highlight-box">
+                <h3>6.8.1 活動理論中的根源</h3>
+                <p>我們對那些開創、發展和推廣使用者研究背後概念和技術的人們表示極大感謝。早期基礎可以追溯到活動理論，一個基於蘇聯心理邏輯活動理論的理論描述框架，由斯堪地納維亞工作活動理論研究人員在1980年代中期適應。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🧠 理論基礎</h4>
+                    <p>目標是將學習動機人們（被視為系統中的複雜人類而不是資訊處理者或系統組件）拿取行動來理解、解釋個人特徵和他們社會和文化環境的能力。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🌍 民族學根源</h4>
+                    <p>情境調查的第二個重要基礎是民族學，一個植根於人類學的調查領域。人類學家花費大量時間生活和研究特定人群，通常在第一人民的文化社會環境中。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                目標是研究和記錄他們日常生活和存在的詳細內容
+            </div>
+        </div>
+
+        <!-- Slide 20: Exercise -->
+        <div class="slide">
+            <h2>練習6.2：為你選擇的產品或系統進行UX研究資料收集</h2>
+            
+            <div class="exercise-box">
+                <h4>🎯 目標</h4>
+                <p>在執行UX研究資料收集方面獲得實踐。</p>
+                
+                <h4>📋 活動</h4>
+                <p>這個練習的最佳條件是作為團隊工作並有真實客戶。如果你在有團隊但沒有真實客戶的情況下工作，將你的團隊成員分為使用者和訪談者並扮演角色。</p>
+                
+                <h4>📦 交付成果</h4>
+                <p>至少幾頁原始UX研究資料筆記，手寫或打字。包括一些有趣的範例（從你註釋中的獨特的東西）從你的筆記分享。</p>
+                
+                <h4>⏰ 時程</h4>
+                <p>假設相對簡單的領域，我們預期你可以在幾小時內從這個練習中學習到你需要的東西。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>學習要點</h3>
+                <p>在下一章中，我們涵蓋了UX研究的資料收集方面。在下一章中我們繼續討論如何分析這些資料。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">Home</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
