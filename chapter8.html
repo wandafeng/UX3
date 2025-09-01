@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第八章：UX研究資料建模I：使用者、流程、物件、實體與資訊模型</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .model-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .model-flow {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .model-step {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            min-width: 150px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .definition-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .definition-box h4 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+        .flow-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid #3498db;
+        }
+        
+        .persona-card {
+            background: #fff;
+            border: 2px solid #9b59b6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .persona-card h4 {
+            color: #8e44ad;
+            margin-top: 0;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .lifecycle-position {
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第八章：UX研究資料建模I</h1>
+            <h2 style="text-align: center; border: none; font-size: 1.8em; color: #2980b9;">使用者、流程、物件、實體與資訊模型</h2>
+            
+            <div class="quote">
+                "建模是一種合成技術，用於透過創建結構化的人工製品或表示法，從原始UX研究資料中提取意義以形成UX設計"
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <p>本章涵蓋使用者、工作流程、物件、實體和資訊UX研究資料模型的內容，包括使用者工作角色模型、使用者人物誌模型、流程（工作）模型、物件模型、實體工作環境模型，以及資訊架構模型。</p>
+            </div>
+            
+            <div class="lifecycle-position">
+                <h3>您在UX生命週期中的位置</h3>
+                <p>您位於理解需求生命週期活動的脈絡中，在整體Wheel UX生命週期中建構UX研究資料模型</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>8.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>8.1.1 您目前所在的位置</h3>
+                <p>本章涵蓋使用者、工作流程、物件、實體和資訊UX研究資料模型。我們以每個流程章節開始的「您在這裡」圖片開始，展示章節主題在The Wheel整體UX設計生命週期模板的脈絡。</p>
+            </div>
+            
+            <div class="definition-box">
+                <h4>8.1.2 什麼是UX研究資料模型，以及它們如何被使用？</h4>
+                <p>建模是一種合成技術，用於透過創建結構化的人工製品或表示法，從原始UX研究資料中提取意義以形成UX設計。每個模型提供不同的觀點進入工作實踐的整體圖像，以合成構成盲人摸象問題的不同觀點。</p>
+                <p>模型使用抽象將事物濃縮到精髓，並將UX研究資料轉化為設計的可操作項目。最重要的是，模型提供設計工作的沉浸式總覽。</p>
+            </div>
+            
+            <div class="model-diagram">
+                <h3>作為UX設計合成技術的資料模型</h3>
+                <div class="model-flow">
+                    <div class="model-step">整理原始UX研究資料的混亂情況</div>
+                    <div class="model-step">透過設定特定維度增加清晰度</div>
+                    <div class="model-step">協助設計師專注於重要的設計需求方面</div>
+                    <div class="model-step">協助設計師發現資料間的關係</div>
+                    <div class="model-step">匯集組織運作的故事</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Building Models Through Synthesis -->
+        <div class="slide">
+            <h2>8.1.3 透過合成建立資料模型</h2>
+            
+            <div class="highlight-box">
+                <h3>建模過程</h3>
+                <p>當您將原始UX研究資料萃取為工作活動筆記時，或者在那之後不久，您將建立本章和下一章的適當資料模型，以及第7.3節和其他輸入中工作活動筆記的下一章合成。使用本章和第九章的模型描述作為指導，您很少需要為每個專案建構所有這些模型。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>8.1.4 資料模型種類</h4>
+                    <p>在本章中，我們按照重要性和使用頻率的大致順序呈現模型：</p>
+                    <ul>
+                        <li>最常用的需要模型——在幾乎每個專案中，您應該製作使用者工作角色模型和流程模型</li>
+                        <li>如果有廣泛的使用者特徵範圍，考慮製作使用者人物誌</li>
+                        <li>如果有大量不同的使用者任務，用任務結構模型組織它們</li>
+                        <li>如果某些使用者任務有點複雜，用任務序列模型描述它們</li>
+                        <li>如果工作實踐以物件為中心，用物件模型解釋它</li>
+                        <li>如果工作實踐受實體布局影響，用實體工作環境模型描述它</li>
+                        <li>如果使用者需要儲存、檢索、顯示和操作的資料和資訊複雜，用資訊架構模型表示它</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>8.1.5 建模可以滲透UX研究過程</h4>
+                    <p>當您成為高效的UX研究員時，您將在UX研究的所有階段看到建模機會。建模甚至可以在您進入實地UX研究之前開始。從專案任務開始，基本模型相關資訊是您學習的最早內容之一。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: User Work Role Model -->
+        <div class="slide">
+            <h2>8.2 使用者工作角色模型</h2>
+            
+            <div class="highlight-box">
+                <h3>工作角色模型的重要性</h3>
+                <p>工作角色模型是最重要的模型之一，每個專案都需要一個。這個模型在其基礎上是使用者工作角色、子角色和相關使用者類別及其特徵的簡單表示。盡早在UX研究中識別關鍵使用者（或遊戲）角色是必要的。</p>
+            </div>
+            
+            <div class="definition-box">
+                <h4>8.2.1 什麼是使用者工作角色？</h4>
+                <p>使用者工作角色不是一個人，而是由具有特定職位名稱或責任的人的職責、功能和工作活動定義的工作分配，例如客戶或資料庫管理員。</p>
+                <p>職位名稱本身並不一定為使用者工作角色取好名稱；相反，使用區分工作類型的名稱。例如，對於Middleburg大學售票交易服務（MUTTS），現有系統中售票員角色由幫助客戶購買票券的人填補。該角色中的人執行與事件經理完全不同的任務，事件經理在幕後將娛樂活動資訊輸入系統，以便票券可以被提供和購買。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>MUTTS系統中的工作角色範例</h4>
+                <p>由於角色是由工作定義的，不同的人可以履行同一工作角色。例如，銀行的多個人可以擔任銀行出納員的單一工作角色。在MUTTS發現的早期UX研究角色中，我們包括：</p>
+                <ul>
+                    <li>活動經理：與活動推廣者協商活動資訊和由MUTTS售票處銷售的票券</li>
+                    <li>廣告經理：與外部廣告商協商安排通過MUTTS展示廣告</li>
+                    <li>財務管理員：負責會計和信用卡問題</li>
+                    <li>維護技術員：維護MUTTS售票處電腦、網站、票券印表機和網路連接</li>
+                    <li>資料庫管理員：負責資料庫的可靠性和資料完整性</li>
+                    <li>行政監督員：監督整個MU服務部門</li>
+                    <li>辦公室經理：負責整個MUTTS運營的日常管理</li>
+                    <li>助理辦公室經理：協助辦公室經理</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: Work Roles Transcend Job Duties -->
+        <div class="slide">
+            <h2>8.2.2 工作角色超越職務範圍</h2>
+            
+            <div class="highlight-box">
+                <h3>工作角色的廣泛定義</h3>
+                <p>如第6.2節所見，在UX中我們使用術語工作、工作活動、工作實踐和工作領域來表示比職責定義的角色更廣泛的含義。工作在此脈絡中，包含所有人們在使用產品、系統、裝置或其他技術時所做的事情，以及人們適用於UX設計的廣泛人類活動範圍。</p>
+                <p>工作是人們或使用者在使用產品、系統、裝置或其他技術時所做的任何事情，包括工作和遊戲之外的活動。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>8.2.3 子角色</h4>
+                    <p>對某些工作角色，區分由工作角色中不同任務子集訓練和授權執行的不同子角色可能有用。例如，銀行出納員角色的子角色可能包括處理國際貨幣兌換和電匯轉帳以及執行日常檢查交易。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>8.2.4 中介工作角色</h4>
+                    <p>工作角色可以：</p>
+                    <ul>
+                        <li>涉及直接系統使用或不涉及</li>
+                        <li>對組織而言是內部或外部的，只要角色在組織工作實踐中參與</li>
+                    </ul>
+                    <p>為不直接使用系統但由直接使用系統的角色中的人協助的工作角色服務的使用者被稱為中介使用者，因為他們與系統的互動是由直接使用者中介的。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>MUTTS工作角色範例</h4>
+                <p>已經提到的兩個工作角色在MUTTS（舊系統）中是：</p>
+                <ul>
+                    <li><strong>票券買方</strong>：與票券賣方互動以瞭解活動資訊並購買票券，是一個中介工作角色</li>
+                    <li><strong>票券賣方</strong>：為票券買方服務並使用系統查找和購買票券，是一個直接工作角色</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 6: User Class Definitions -->
+        <div class="slide">
+            <h2>8.2.5 使用者類別定義</h2>
+            
+            <div class="definition-box">
+                <h4>使用者類別的概念</h4>
+                <p>工作角色或子角色的使用者類別是由打算執行該角色的潛在使用者社群相關特徵描述定義的。每個工作角色或子角色將至少有一個使用者類別。</p>
+                <p>使用者類別定義可以根據特徵定義，例如人口統計學、技能、知識和特殊需求。某些專門的使用者類別，例如足球媽媽、千禧世代、男性或年長公民，可能受行銷指導。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>8.2.5.1 知識和技能特徵</h4>
+                    <p>與知識和技能相關的使用者類別特徵包括：</p>
+                    <ul>
+                        <li>執行給定工作角色預期的背景、經驗、培訓、教育或技能</li>
+                        <li>電腦的一般知識和對特定系統的知識</li>
+                        <li>對工作領域的知識，即對應用程式設計試圖解決的各種操作、程序和語義的了解</li>
+                    </ul>
+                    <p>例如，醫學博士可能是在與磁共振成像（MRI）系統相關的領域知識方面的專家，但在該領域的相關電腦應用程式方面可能只有新手的間歇性知識。相比之下，醫院的管理員對MRI系統可能沒有整體領域知識，但可能對電腦應用程式的日常使用有更完整的知識。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>8.2.5.2 生理特徵</h4>
+                    <p>與生理特徵和無障礙問題相關的使用者類別特徵包括：</p>
+                    <ul>
+                        <li>與美國殘障法案相關的障礙、限制和其他考慮</li>
+                        <li>年齡。如果預期年長成人擔任給定工作角色，那麼他們可能有已知特徵需要在設計中適應（例如，他們可能容易受到隨年齡自然而來的感官和運動限制影響）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: User Personas -->
+        <div class="slide">
+            <h2>8.3 使用者人物誌</h2>
+            
+            <div class="definition-box">
+                <h4>人物誌的定義</h4>
+                <p>人物誌或使用者人物誌是假設但具體角色的敘事描述，作為特定工作角色中使用者的UX設計目標。人物誌是一種使設計師對使用者真實的技術，表示實際使用者、典型使用者或平均使用者。它是一個現實但「假設的原型」人物的描述，必須由設計實現。它是一個有名字、生活和個性的個體，允許設計師將設計焦點限制在非常具體的東西上。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>8.3.1 為什麼需要人物誌？</h3>
+                <p>人物誌對設計師的價值在於，面對多個競爭可能的使用者類型時，它允許他們專注於一個設計目標。一旦創建了適當的最佳使用者人物誌，關於人物誌的問題如「這個其他使用者怎麼辦？」至少在設計討論中可以輕鬆回答，透過用人物誌命名，「嗯，那個使用者不是Charlie。」</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>8.3.2 人物誌的UX研究資料</h4>
+                    <p>在UX研究合成期間，任何說到使用者作為一個人、包括個人習慣以及該人如何使用產品或系統的工作活動筆記，是考慮在使用者人物誌模型中合成的好候選者。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>8.3.3 創建人物誌的流程預覽</h4>
+                    <p>從UX研究資料開始，您首先為每個使用者角色創建多個候選人物誌。每個人物誌是關於是給定使用者角色的特定個體的描述，包括名字、生活和個性，以及關於他們如何使用新產品或系統的檔案。</p>
+                    <p>創建人物誌最困難的部分是為設計選擇正確的人物誌。在第13.3.3.2節描述的過程中，您將選擇這些人物誌之一作為主要人物誌，為設計製作特定的單一最佳設計目標，使人物誌對其他人而言足夠。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Persona Examples -->
+        <div class="slide">
+            <h2>人物誌範例與工作活動筆記</h2>
+            
+            <div class="example-box">
+                <h4>售票亭系統人物誌範例</h4>
+                <p>售票亭系統學生子角色人物誌的範例可能是Jane，一位主修生物的大二學生，是代表性MU在校學生的嚴肅MU運動迷，有季票觀看MU足球比賽。Jane是作為主要人物誌的候選者，因為她代表最廣泛的MU學生群體。Jane的男朋友Jeff是一位對藝術感興趣的音樂主修學生。</p>
+            </div>
+            
+            <div class="persona-card">
+                <h4>適合使用者人物誌輸入的工作活動筆記範例</h4>
+                <p>以下是一些適合作為售票亭系統使用者人物誌輸入的工作活動筆記範例：</p>
+                <ul>
+                    <li>我通常在校園另一邊的實驗室長時間工作</li>
+                    <li>我喜歡古典音樂會，特別是來自當地藝術家的</li>
+                    <li>我喜歡Middleburg的社群感</li>
+                    <li>有時我需要買一套相鄰座位的票券，因為我喜歡和朋友一起坐</li>
+                    <li>我喜歡買MU足球比賽票券成群，這樣我可以和朋友一起坐</li>
+                    <li>如果我找到想去的活動票券，我會在買票券前打電話給朋友</li>
+                    <li>在Middleburg，我可能只會去會場買票券；否則，我會在線購買</li>
+                    <li>如果我與MU有關聯，我會使用售票亭，並且他們發送電子郵件告知我</li>
+                    <li>在大城市，我會花更多時間通勤，所以如果Metro車站有售票亭，我會更有可能使用它</li>
+                    <li>我需要售票亭使用零售商店的自助結帳，並且選擇帶有電影劇院信用卡的票券，所以我對這種互動非常熟悉</li>
+                    <li>身分盜竊和信用卡詐欺對我來說是巨大的關注</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Flow Model -->
+        <div class="slide">
+            <h2>8.4 流程模型</h2>
+            
+            <div class="definition-box">
+                <h4>8.4.1 什麼是流程模型？</h4>
+                <p>流程模型在其基礎上是資訊、工作產品和物件如何在使用者工作角色和系統組件之間流動的簡單圖形表示，作為使用者行動的結果。例如，什麼是與搜尋、購買和下載歌曲或音樂片段到個人裝置相關的工作流程？</p>
+                <p>流程模型是工作領域、其組件和它們之間相互關聯的鳥瞰圖。它是使用者在工作的每個角色或其他系統實體如何互動和溝通以完成工作的高層操作視圖。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>8.4.2 流程模型的核心重要性</h3>
+                <p>由於流程模型是系統如何適應企業工作流程的統一表示，理解它並將其建立為可能是重要的。與使用者工作角色模型一起，流程模型是中心沉浸部分（深入思考和分析手頭問題的形式），在您的UX設計工作室中。</p>
+                <p>即使您早期的工作流程概念化可能不完整且不完全準確，您可以隨著工作領域、系統和使用者的清晰圖像慢慢出現，將其精煉。如果必要，您應該回到使用者那裡詢問他們驗證流程模型的準確性和完整性。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>8.4.3 如何製作流程模型</h4>
+                    <p>在UX生命週期中非常早期開始：</p>
+                    <ul>
+                        <li>將演化流程模型圖繪製為節點和弧線的圖表</li>
+                        <li>以繪製人物圖示開始，用工作角色標記，作為節點。包括組織外部角色</li>
+                        <li>為其他實體添加節點，例如可以流入和流出與工作實踐相關的任何資料庫</li>
+                        <li>繪製帶箭頭弧線，表示流程、溝通和執行企業節點間工作所需的協調</li>
+                        <li>標記弧線描述什麼（例如，資訊、物件、資訊）正在流動以及通過什麼媒介</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>流程模型的實務考量</h4>
+                    <p>在UX研究合成中，當您遇到描述工作如何流動的工作活動筆記時，將它們提取作為流程模型的輸入或直接合併到演化流程模型中。</p>
+                    <p>流程模型也包括當它是流程的一部分時的非UI軟體功能（例如，工資單程式必須在列印然後發出薪資支票之前運行）。如果您製作網站中如何使用的流程模型，不要將其用作訪問頁面的流程圖；相反，它應該表示資訊和指令如何在網站、頁面、後端內容和使用者間流動以執行工作活動。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Flow Model Examples -->
+        <div class="slide">
+            <h2>MUTTS流程模型範例</h2>
+            
+            <div class="flow-diagram">
+                <h3>MUTTS系統的簡單早期流程模型</h3>
+                <p>售票買方和售票賣方角色間基於票券購買活動的中心，基於在資料蒐集中進行的草圖和在UX研究合成中遇到的相關工作活動筆記。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>MUTTS流程互動範例</h4>
+                <p>票券買方和票券賣方間的互動可能從關於可用活動的問題開始。票券賣方然後發送適合的請求到活動資料庫，資訊在回應中流回給票券賣方，然後票券賣方告知票券買方。在建立票券買方所需活動的一個或更多此類互動後，票券購買請求從票券買方流動到票券賣方和活動資料庫。交易通過付款完成，請求然後流動到票券印表機。印製的實體票券流動到票券賣方（然後給）票券買方。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>擴展MUTTS流程模型</h4>
+                <p>當更多與票券購買過程流程相關的工作活動筆記在UX研究合成期間出現時，我們可以擴展和精煉MUTTS流程模型。例如，我們增加了一個線上票券來源Tickets4ever.com，與MUTTS合作夥伴。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>注意流程模型的複雜性</h4>
+                <p>最終，MUTTS的流程模型發展成相當完整的圖表。雖然這顯然相當完整，但它也太複雜以整體考慮。選定部分的設計將專注於此圖表的相關塊。</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Artifact Model -->
+        <div class="slide">
+            <h2>8.5 物件模型</h2>
+            
+            <div class="definition-box">
+                <h4>物件模型的定義</h4>
+                <p>物件（工作物件）是一個對象，通常是有形的，在系統或企業工作流程中扮演角色（例如，從餐廳印出的收據）。不是所有工作實踐都以物件為中心，但如果是，那麼工作物件是在工作實踐中從一個工作角色傳遞到另一個角色的最重要實體。</p>
+                <p>使用者製作、操作和分享的物件是他們工作實踐的一部分。現在是時候利用您在資料蒐集期間收集的物件（例如，文書工作）並將它們納入簡單的物件模型了。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>8.5.1 物件模型包含什麼？</h3>
+                <p>此時，您的物件模型可能只是標記物件的收集加上關於它們的一些筆記。物件範例包括：</p>
+                <ul>
+                    <li>工作實踐表格</li>
+                    <li>草圖</li>
+                    <li>道具</li>
+                    <li>備忘錄</li>
+                    <li>重要電子郵件訊息</li>
+                    <li>通信模板</li>
+                    <li>產品變更訂單</li>
+                    <li>訂單表格</li>
+                    <li>收據</li>
+                    <li>紙張或電子表格</li>
+                    <li>模板</li>
+                    <li>使用者創建、檢索、使用或引用的任務中實體或電子實體</li>
+                    <li>（有許可的）工作場所和正在執行工作的照片</li>
+                    <li>在工作中發揮角色的其他對象</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Artifact Model Examples -->
+        <div class="slide">
+            <h2>物件模型範例</h2>
+            
+            <div class="example-box">
+                <h4>當地餐廳工作物件範例</h4>
+                <p>我們使用者體驗類別中的一個專案團隊設計了一個系統，以支援在當地餐廳接受和填寫食物訂單更有效的工作流程，但為手持式平板電腦的一部分擴展鏈。作為他們資料蒐集的一部分，他們蒐集了一套文書工作物件，包括手動創建的訂單表格、客人檢查和收據。</p>
+            </div>
+            
+            <div class="flow-diagram">
+                <h3>餐廳物件在流程模型中的組合</h3>
+                <p>物件與餐廳的流程模型相關聯是容易想的。遇到的第一個物件是等候工作人員角色提供給客戶工作角色的人在等候工作人員角色中的功能表。</p>
+                <p>其他通常的餐廳工作物件包括等候工作人員寫原始訂單的訂單表格和客人檢查，可以是同一物件。最後，可能有常規收據，如果使用信用卡，信用卡簽名表格和信用卡收據。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>8.5.2 建構物件模型</h3>
+                <p>物件是有形和視覺的使用者工作實踐提醒，每個人都可以走動、思考、註釋筆記和洞察，並談論，由它們本身，是沉浸的中心和UX合成的焦點。</p>
+                <p>物件真正重要的是它們如何在整體流程中講述故事。無縫地支援流程的給定物件如何？它是否導致故障？它是兩個系統或角色間的轉接點？在這方面，物件是流程模型的基本組成部分。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Physical Work Environment Model -->
+        <div class="slide">
+            <h2>8.6 實體工作環境模型</h2>
+            
+            <div class="definition-box">
+                <h4>實體模型的目的</h4>
+                <p>實體模型是工作位置、人員、設備、硬體、生態、溝通、裝置和作為工作實踐一部分的實體物件布局的圖像表示。實體安排中的流程可能影響工作的結果。</p>
+                <p>例如，在金融機構中交易室內桌子的位置對於發生透過手語和其他言語溝通間交易者的資訊交換重要，因為它們的位置能夠影響工作活動的結果。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>實體模型要素</h4>
+                    <p>將您在資料蒐集訪問期間製作的任何相關筆記、草圖、圖表和照片合併到演化實體模型中。要包括的其他東西：</p>
+                    <ul>
+                        <li>樓層平面圖（無需精確比例）</li>
+                        <li>人員和重要對象位置及互動期間的移動</li>
+                        <li>位置：家具、辦公設備（電話、電腦、複印機、傳真機、印表機、掃描器）、溝通連接、工作站、聯絡客戶和公眾的點</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>8.6.1 包括環境因素（當適當時）</h4>
+                    <p>在設計實體工作環境時，也要考慮可以影響工作活動並將它們作為註釋添加的工作場所的實體特性。例如，鋼廠樓層關於安全關注、噪音、塵土和熱溫度—工作者難以思考或工作的條件。</p>
+                    <p>系統使用終端機在工廠樓層意味著骯髒條件且沒有持有手冊或藍圖的地方。這可能導致設計，其中音訊的使用可能是問題，需要更突出的視覺設計元素進行警告，如閃爍燈。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>MUTTS實體模型範例</h4>
+                <p>在圖8.7中，我們顯示MUTTS的實體模型。工作流程中心是票券櫃台，包含多達三名現役售票賣方終端機。在後牆上，相對於售票賣方，是信用卡和MU護照卡滑動站。這個中央售票區被經理辦公室和助理經理的行政辦公室包圍。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Information Architecture Model -->
+        <div class="slide">
+            <h2>8.7 資訊架構模型</h2>
+            
+            <div class="definition-box">
+                <h4>資訊架構的定義</h4>
+                <p>資訊架構是組織、儲存、檢索、顯示、操作和分享資訊的資訊結構的完整技術描述和設計，包括標記、搜尋和導航資訊的設計。使用者使用什麼資訊並與其互動作為他們工作的一部分，它如何結構？如果這種資訊複雜，用資訊架構模型表示它。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>資訊架構的應用範圍</h3>
+                <p>資訊架構在領域簡單的消費者產品脈絡中通常相當簡單，但在企業系統中可能非常複雜。在資料庫是工作流程或資料定義中心的專案，以及資料關係對理解工作至關重要的地方，資訊架構可能是理解早期必不可少的。</p>
+                <p>簡單的資訊結構可以表示為資訊對象清單及其屬性。例如，事件是MUTTS和售票亭系統中的重要對象，它們可能有屬性，如事件名稱、事件類型和事件描述。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>售票亭系統資訊架構建模範例</h4>
+                <p>考慮售票亭系統資料庫中關於事件的資訊。一般事件記錄可能有如下屬性：</p>
+                <ul>
+                    <li>事件名稱</li>
+                    <li>事件類型</li>
+                    <li>事件描述</li>
+                    <li>事件發生日期範圍</li>
+                    <li>票券成本：座位類型和成本、保留狀態</li>
+                    <li>場地：位置、容量、場地方向</li>
+                    <li>影片預告</li>
+                    <li>照片</li>
+                    <li>評論</li>
+                </ul>
+                <p>事件和票券買方間也可能有多對多關係，包括這些屬性：</p>
+                <ul>
+                    <li>預訂日期</li>
+                    <li>座位號碼</li>
+                    <li>票券成本（如付費）</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 15: Exercise Section -->
+        <div class="slide">
+            <h2>練習8.1-8.4：建構各種UX資料模型</h2>
+            
+            <div class="highlight-box">
+                <h3>練習8.1：識別您的產品或系統的使用者工作角色</h3>
+                <p><strong>目標：</strong>從您的工作活動筆記中識別工作角色的實踐練習。</p>
+                <p><strong>活動：</strong>目前為止，您應該對系統的工作角色相當確定。使用您的使用者相關工作活動筆記，識別並列出您系統的主要工作角色。為每個角色，添加描述角色和該角色中人們預期執行任務類型的解釋筆記。</p>
+                <p><strong>交付項目：</strong>您為系統識別的工作角色書面清單，每個有角色解釋和該角色中執行任務類型的簡短高層描述。</p>
+                <p><strong>時程：</strong>約30分鐘應足以從此作業中獲得最多。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>練習8.2：為您的產品或系統定義使用者類別</h4>
+                    <p><strong>目標：</strong>為工作角色定義使用者類別的實踐練習，類似前一個範例。</p>
+                    <p><strong>活動：</strong>取您使用者相關UX研究資料筆記，創建一些使用者類別定義，配合您在練習8.1中識別的工作角色。描述每個使用者類別的特徵。</p>
+                    <p><strong>交付項目：</strong>一些使用者類別定義配合已識別工作角色。</p>
+                    <p><strong>時程：</strong>約30到45分鐘應足以從此作業中獲得最多。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>練習8.3：為您的產品或系統早期勾畫使用者人物誌</h4>
+                    <p><strong>目標：</strong>在寫人物誌獲得一些經驗。</p>
+                    <p><strong>活動：</strong>選擇您產品或系統內重要工作角色。它至少是一個使用者類別對此工作角色廣泛，與來自一般公眾的使用者人口。使用您使用者相關UX研究資料，創建人物誌，給它一個名字，並提供照片配合它。寫人物誌描述的文字。</p>
+                    <p><strong>時程：</strong>約一小時應足以完成此練習。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: More Exercises -->
+        <div class="slide">
+            <h2>練習8.4：為您的產品或系統創建流程模型</h2>
+            
+            <div class="highlight-box">
+                <h3>目標和活動</h3>
+                <p><strong>目標：</strong>為您的組織工作實踐製作初步流程模型草圖的實踐練習。</p>
+                <p><strong>活動：</strong>為您的目標系統，在與我們為MUTTS的流程模型草圖相同樣式中勾畫流程模型圖，顯示工作角色、資訊流程、資訊儲存庫、交易等。在您原始UX研究資料中，構建流程、資訊儲存庫、資訊來源和工作物件的表示，以及它們間工作所需的協調。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>開始步驟</h4>
+                    <p>首先將您的工作角色表示為標記節點，然後添加任何其他資料庫節點，以此類推。</p>
+                    <p>使用標記弧線顯示流程，包括所有溝通、直接對話、電子郵件、信件、備忘錄、會議等。顯示執行企業工作所需的所有協調。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>交付項目與時程</h4>
+                    <p><strong>交付項目：</strong>為您目標產品或系統現有工作過程說明高層流程模型的一頁圖表。</p>
+                    <p><strong>時程：</strong>給定相對簡單的領域，我們預期您可以在約一小時內完成此練習。</p>
+                    <p><strong>注意：</strong>如果您沒有來自您有限資料蒐集練習的足夠UX研究資料來進行此工作，查找其他可比較的類似商業實踐以進行此工作。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Key Concepts Summary -->
+        <div class="slide">
+            <h2>關鍵概念總結</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>模型建構原則</h4>
+                    <ul>
+                        <li>建模是合成技術，用於從原始UX研究資料中萃取意義</li>
+                        <li>每個模型提供不同觀點進入工作實踐的整體圖像</li>
+                        <li>模型使用抽象將事物濃縮到精髓</li>
+                        <li>模型提供設計工作的沉浸式總覽</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>核心模型類型</h4>
+                    <ul>
+                        <li><strong>使用者工作角色模型：</strong>每個專案的基礎模型</li>
+                        <li><strong>流程模型：</strong>展示工作流程和資訊流動</li>
+                        <li><strong>使用者人物誌：</strong>具體化設計目標</li>
+                        <li><strong>物件模型：</strong>工作實踐中的有形元素</li>
+                        <li><strong>實體環境模型：</strong>空間和布局考慮</li>
+                        <li><strong>資訊架構模型：</strong>資料結構和關係</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>模型選擇策略</h3>
+                <p>您很少需要為每個專案建構所有這些模型。根據第7.3.8節的建議，選擇最能幫助您理解工作實踐的模型，並專注於對工作實踐理解最有用的模型。在實務中，我們通常只對不太理解的領域建立幾個模型，為大多數脈絡建立模型。</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Model Integration -->
+        <div class="slide">
+            <h2>模型整合與關係</h2>
+            
+            <div class="flow-diagram">
+                <h3>模型間的相互關係</h3>
+                <p>不同的UX研究資料模型並不是孤立的，它們在工作實踐的整體理解中相互支援和補強</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>模型間的連結</h4>
+                    <ul>
+                        <li><strong>工作角色模型</strong>為流程模型提供關鍵行動者</li>
+                        <li><strong>人物誌</strong>將抽象的工作角色具象化</li>
+                        <li><strong>流程模型</strong>展示工作角色間如何互動</li>
+                        <li><strong>物件模型</strong>識別流程中的關鍵元素</li>
+                        <li><strong>實體模型</strong>提供流程的空間脈絡</li>
+                        <li><strong>資訊架構模型</strong>支援流程中的資料需求</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>整合使用建議</h4>
+                    <ul>
+                        <li>將模型作為整體工作實踐理解的不同透鏡</li>
+                        <li>在模型間尋找一致性和矛盾</li>
+                        <li>使用一個模型的洞察來改進其他模型</li>
+                        <li>保持模型間的相互參照和更新</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>避免過度建模</h4>
+                <p>記住，模型是達到目的的手段，不是目的本身。專注於建構能夠支援您設計決策和改善使用者體驗的模型。過度詳細的建模可能會消耗過多時間而沒有相應的價值產出。</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Best Practices -->
+        <div class="slide">
+            <h2>模型建構最佳實務</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>建模過程管理</h4>
+                    <ul>
+                        <li>從簡單開始，逐步細化</li>
+                        <li>定期與利害關係人驗證模型</li>
+                        <li>保持模型的可視性和可近性</li>
+                        <li>將模型作為活文件持續更新</li>
+                        <li>記錄建模決策和假設</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>品質控制</h4>
+                    <ul>
+                        <li>確保模型基於真實使用者資料</li>
+                        <li>避免基於假設或刻板印象建模</li>
+                        <li>檢驗模型的內部一致性</li>
+                        <li>測試模型是否能支援設計決策</li>
+                        <li>評估模型的實用性和可操作性</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>團隊合作考慮</h3>
+                <p>模型建構是團隊活動。不同團隊成員可能對同一工作實踐有不同觀點，這些差異應該被討論和解決。使用模型作為團隊對話的基礎，而不是個人創作的終產品。確保所有相關團隊成員都能理解和使用這些模型。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>迭代改進策略</h4>
+                <p>將初始模型視為假設，透過與使用者的進一步接觸來驗證和精煉。當您獲得更多洞察時，不要害怕大幅修改或重新建構模型。好的模型會隨著理解的深化而演化。</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Summary -->
+        <div class="slide">
+            <h2>8.8 本章總結</h2>
+            
+            <div class="highlight-box">
+                <h3>核心學習成果</h3>
+                <p>在本章中，我們已開始使用者角色、工作流程、工作物件和物件模型的基本合成活動，以及工作實踐實體環境和資訊性質的模型，因為它滲透工作的結構。我們將在下一章結束對工作其他方面的建模，例如任務。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>已掌握的模型類型</h4>
+                    <ul>
+                        <li><strong>使用者工作角色模型：</strong>識別和定義關鍵使用者角色</li>
+                        <li><strong>使用者人物誌模型：</strong>創建具體的設計目標</li>
+                        <li><strong>流程模型：</strong>理解工作流程和資訊流動</li>
+                        <li><strong>物件模型：</strong>識別工作實踐中的有形元素</li>
+                        <li><strong>實體工作環境模型：</strong>理解空間和實體脈絡</li>
+                        <li><strong>資訊架構模型：</strong>組織複雜資訊結構</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>後續發展方向</h4>
+                    <p>下一章將繼續探討其他重要的UX研究資料模型，包括任務相關模型和更複雜的互動模型。本章建立的基礎模型將為後續更深入的分析和設計工作提供堅實支撐。</p>
+                    <p>這些模型不僅是分析工具，更是設計過程中的重要參考，幫助確保最終的UX設計能夠真正滿足使用者在實際工作脈絡中的需求。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                透過系統性建構這些資料模型，我們將原始研究資料轉化為可操作的設計洞察，為創造優質使用者體驗奠定基礎
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

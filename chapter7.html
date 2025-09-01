@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第七章：UX研究資料分析</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .process-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .process-step {
+            background: #3498db;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .process-step::after {
+            content: '↓';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .process-step:last-child::after {
+            display: none;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .waad-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .waad-structure {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+        }
+        
+        .code-example {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第七章：UX研究資料分析</h1>
+            <div class="quote">
+                "萃取您UX研究的精髓，將原始資料筆記組成基本工作活動筆記"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>從原始資料筆記萃取UX研究精髓</li>
+                    <li>合成UX研究資料以獲得洞察和理解</li>
+                    <li>有效建模的策略</li>
+                    <li>UX研究資料的不完整性質</li>
+                    <li>多重重疊觀點的處理</li>
+                    <li>資料模型和工作活動親和圖（WAAD）的合成選擇</li>
+                    <li>建構WAAD以組織UX研究資料</li>
+                </ul>
+            </div>
+            <div class="waad-diagram">
+                <h3>您在UX生命週期中的位置</h3>
+                <p>本章位於理解需求活動中，是整體Wheel UX生命週期的脈絡</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>7.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>7.1.1 您目前所在的位置</h3>
+                <p>我們透過"您在這裡"的圖片開始這個流程章節，展示章節主題在The Wheel整體UX設計生命週期模板的脈絡。在理解需求UX設計生命週期活動中，本章關於您在第六章蒐集的UX研究資料分析，進一步推動您理解工作實踐和工作脈絡的目標，為您即將設計的新產品或系統服務。</p>
+            </div>
+            
+            <div class="process-diagram">
+                <h3>UX研究資料分析流程預覽</h3>
+                <div class="process-flow">
+                    <div class="process-step">第六章：蒐集資料</div>
+                    <div class="process-step">第7.2節：萃取原始資料</div>
+                    <div class="process-step">第7.3-7.4節：合成資料</div>
+                    <div class="process-step">第八章和第九章：建立模型</div>
+                    <div class="process-step">第十章：萃取需求</div>
+                    <div class="process-step">使用者故事和需求</div>
+                    <div class="process-step">第三部分：UX設計</div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>7.1.2 UX研究分析的目標</h3>
+                <p>UX研究分析的目標是萃取、澄清、組織和合成原始UX研究資料，將其轉化為易於理解的形式，符合透過使用者工作實踐鏡頭設計產品或系統需求的廣泛目標。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Distill Research Data -->
+        <div class="slide">
+            <h2>7.2 透過組成工作活動筆記萃取UX研究資料精髓</h2>
+            
+            <div class="highlight-box">
+                <h3>從原始資料到工作活動筆記</h3>
+                <p>從第六章資料蒐集而來的原始UX研究資料筆記組開始，我們需要將一個或多個原始筆記組成為工作活動筆記。如第6.7.9節所述，有經驗的UX資料收集者理解工作活動筆記的性質，可以跳過大部分UX研究資料擷取，直接進入最終或接近最終的工作活動筆記。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 工作活動筆記特性</h4>
+                    <ul>
+                        <li>清晰明確</li>
+                        <li>簡潔扼要</li>
+                        <li>完整資訊</li>
+                        <li>模組化設計</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 建議格式</h4>
+                    <p>雖然過程可以在紙上便利貼進行，我們建議在電腦可讀形式中組成筆記，無論是文字處理器、試算表還是直接進入資料庫系統。這有利於分享、操作和列印需要。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Elemental Work Activity Notes -->
+        <div class="slide">
+            <h2>7.2.1 使每個工作活動筆記成為基本要素</h2>
+            
+            <div class="highlight-box">
+                <h3>基本要素的定義</h3>
+                <p>筆記是基本的，如果它指涉或關聯到確切一個簡單的基本概念、想法、事實或主題。需要注意的重要點是，即使我們嘗試一次捕捉一個概念或主題，通過保持工作活動筆記純粹基本，UX研究資料的內在重疊性質要求我們認識到給定主題仍可能跨越多個觀點。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>售票亭系統範例</h4>
+                <div class="code-example">
+                    原始資料：<br>
+                    "從售票視窗獲得關於活動的足夠資訊太困難了。我希望能夠找到我自己的活動，而不是依賴售票員進行瀏覽和搜索。"
+                </div>
+                <p>可以分解為至少兩個基本工作活動筆記：</p>
+                <div class="code-example">
+                    基本筆記1：從售票視窗獲得關於活動的足夠資訊太困難了。<br>
+                    基本筆記2：我希望能夠找到我自己的活動，而不是依賴售票員進行瀏覽和搜索。
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>為什麼基本要素很重要？</h4>
+                <p>多年前，當我們開始在課堂上教授撰寫脈絡化使用者UX研究資料筆記時，第一步是直接從原始資料筆記移動到流程的其餘部分。學生使用原始或輕度編輯的資料筆記作為分析和合成活動的輸入，但這並不奏效。筆記過於冗長和分散，因為它們是直接來自使用者的引述，涵蓋多個主題且無序。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Clear and Concise Notes -->
+        <div class="slide">
+            <h2>7.2.2-7.2.3 澄清和簡化工作活動筆記</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 澄清每個工作活動筆記</h4>
+                    <ul>
+                        <li>讓筆記容易閱讀和一目了然地理解</li>
+                        <li>做出重點，傳達所討論問題的實質</li>
+                        <li>避免模糊術語</li>
+                        <li>解決歧義性</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>✂️ 簡化每個工作活動筆記</h4>
+                    <ul>
+                        <li>過濾掉所有雜音、冗詞和非必要措辭</li>
+                        <li>重新表達、濃縮和萃取，將其煮沸到精髓</li>
+                        <li>使每個工作活動筆記簡短和切中要點</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>售票亭系統簡化範例</h4>
+                <div class="code-example">
+                    原始使用者評論：<br>
+                    "在售票視窗很難獲得關於活動的足夠資訊。我總是覺得其他好活動是我可以選擇的，但我只是不知道哪些是可用的。但售票員通常不願意或無法幫助太多，特別是當售票視窗很忙的時候。"
+                </div>
+                
+                <div class="code-example">
+                    簡化後的工作活動筆記：<br>
+                    "我希望能夠找到我自己的活動，而不是依賴售票員進行瀏覽和搜索。"
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Complete and Modular Notes -->
+        <div class="slide">
+            <h2>7.2.4-7.2.5 完整性和模組化</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📄 使工作活動筆記完整</h4>
+                    <ul>
+                        <li>在簡潔的努力中，不要犧牲完整性</li>
+                        <li>保留對使用者意圖的原始意義和真實</li>
+                        <li>填補缺失的資訊</li>
+                        <li>適當時包含理由</li>
+                        <li>如果確定有幫助，一般化工作活動筆記</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🧩 使工作活動筆記模組化</h4>
+                    <p>模組化在此脈絡中意味著每個筆記有足夠的資訊獨立存在。它是一個每個人都可以獨立於所有其他人理解的筆記，允許其被重新排列、替換、結合或獨立於其他人移動。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>包含理由的筆記範例</h4>
+                <div class="code-example">
+                    基本筆記：我不要求列印我的售票交易確認，因為我害怕其他人可能會找到它並使用我的信用卡號碼。
+                </div>
+                <p>如果在筆記中有兩個理由表達想法或概念，將筆記基本化，分成兩個筆記。重複任何上下文（例如，理由），因為這兩個筆記最終可能出現在不同的地方。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>避免未解決的不定代詞</h4>
+                <p>確保每個工作活動筆記不包含未解決的代詞引用，如他、她、他們、它們、這個或它，除非引用在同一筆記中被識別。陳述工作角色，一個人代表的是什麼，而不是使用代詞。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Synthesis Introduction -->
+        <div class="slide">
+            <h2>7.3 合成UX研究資料以獲得洞察和理解</h2>
+            
+            <div class="highlight-box">
+                <h3>合成的重要性</h3>
+                <p>一旦我們製作這些研究資料有用，最終能夠影響UX設計。這需要將資料合成到我們將在本節描述的模型中。合成是UX技術工具箱中最重要的工具之一。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 合成目標</h4>
+                    <ul>
+                        <li>結合來自多個來源的原始UX研究資料</li>
+                        <li>識別關於使用者工作實踐和工作領域的統一和基礎主題</li>
+                        <li>創建UX設計需求的整合理解</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 合成開始發揮作用</h4>
+                    <p>在建構WAAD（第7.4節）和UX研究資料模型以及推導使用者故事和需求時，您正在進行合成——即創建和發現藝術品、表示和關係，從而將原始UX研究資料轉化為UX設計需求的理解。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Multiple Overlapping Perspectives -->
+        <div class="slide">
+            <h2>7.3.2 UX研究資料呈現多重重疊觀點</h2>
+            
+            <div class="highlight-box">
+                <h3>重疊觀點的來源</h3>
+                <p>原始工作活動資料或萃取的基本工作活動筆記描述同一現象在工作實踐中的多重且經常重疊的觀點。例如，關於Middleburg大學售票交易服務尋找描述可用娛樂選項任務的筆記，為買方在匆忙時間要有壓力提供工作角色定義、任務模型、社會模型、分解或障礙期間序列模型的洞察，以及可能在WAAD中出現的條目。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>觀點重疊的實際應用</h4>
+                <p>在此脈絡中，觀點的重疊使得與合成的良好連接成為可能，這是關於將不同觀點結合形成豐富、整合的圖像。有時，即使工作實踐的內容，工作筆記也可能透過合成吸收到模型中，它也可以在WAAD中出現，其中它可以代表不同的，或甚至是冗餘的工作實踐觀點。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Data Incompleteness -->
+        <div class="slide">
+            <h2>7.3.3-7.3.4 UX研究資料不完整性與建模支援</h2>
+            
+            <div class="warning-box">
+                <h4>⚠️ 資料不完整的現實</h4>
+                <p>在資料蒐集中，我們使用詢問和觀察來學習這個工作實踐和工作領域，捕捉我們透過UX研究過程學到的東西為原始UX研究筆記和草圖。因為這個資料蒐集不涵蓋工作的所有方面——只有我們能夠透過UX研究過程蒐集的那些——所以我們的原始資料是不完整的。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 建模支援完整性</h4>
+                    <p>我們在合成章節中創建這個工作各方面的模型，而且有隱含需要至少一定程度的完整性。我們透過建模的性質得到幫助，因為它自然地強制完整性。模型顯示問題空間任何維度中缺失的資訊，透過我們完成合成時，我們應該對工作有完整的理解。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 合成過程中的完整性檢查</h4>
+                    <p>事實上，這是UX研究分析和合成成功的石蕊試驗。建模顯示缺失資訊在問題空間的任何維度，到我們完成合成時，我們應該對工作有完整的理解（在理論中）。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Elemental Parts Synthesis -->
+        <div class="slide">
+            <h2>7.3.6 合成工作活動筆記的基本部分</h2>
+            
+            <div class="highlight-box">
+                <h3>基本部分識別</h3>
+                <p>在第7.2.1節中，工作活動筆記的目標是基本的，每個關於確切一個簡單基本概念的。由於大多數UX概念的本質是相互關聯的，然而，我們無法期望創建真正基本的工作活動筆記。然而，工作活動筆記足夠集中，因此您可以輕鬆識別要合成的基本部分。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>基本部分範例</h4>
+                <div class="code-example">
+                    工作活動筆記：[作為售票買方] 我想要能夠瀏覽和搜索自己的活動。
+                </div>
+                <p>我們將"作為售票買方"放在方括號中，因為它不太可能是使用者會說的，但讓我們假設UX實踐者添加了這個使用者工作角色資訊。我們可以分解出這些基本部分：</p>
+                <ul>
+                    <li>以兩個使用者任務表達的功能性——瀏覽和搜索</li>
+                    <li>售票買方，與這些任務相關聯的使用者工作角色</li>
+                    <li>活動，瀏覽和搜索任務的對象</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Synthesis Sites -->
+        <div class="slide">
+            <h2>7.3.7 選擇合成地點</h2>
+            
+            <div class="highlight-box">
+                <h3>合成選擇的考量</h3>
+                <p>工作活動筆記合成是關於做選擇。模型和WAAD是包含在工作活動筆記中的資訊合成地點的潛在選擇。在做這些選擇時涉及的問題是工作活動筆記被合成是否對於所代表的工作實踐方面實質性或材料性地有貢獻。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📍 合成地點選擇原則</h4>
+                    <p>對於每個工作活動筆記，不同的資料模型選擇由UX實踐者提供重疊觀點來解釋和理解該工作活動筆記所講述的故事。在一般中，單一工作活動筆記可以描述使用者角色、使用者類別、人物誌、任務結構、任務序列、流程模型、社會方面。這些都是UX團隊必須做的合成選擇，取決於每個模型對理解整體工作實踐的用途。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 實用性考量</h4>
+                    <p>一般來說，一個工作活動筆記可以對使用者工作角色、使用者類別、人物誌、任務結構、任務序列、流程模型、社會方面等多個模型有貢獻。這些都是UX團隊必須做的合成選擇，取決於每個模型對整體工作實踐理解的貢獻。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: WAAD Introduction -->
+        <div class="slide">
+            <h2>7.5 建構工作活動親和圖以組織UX研究</h2>
+            
+            <div class="highlight-box">
+                <h3>WAAD的定義和重要性</h3>
+                <p>我們將工作活動筆記組織我們的UX研究資料，特別是關於質性和開放式回饋的筆記，組織到我們的親和圖變體中，即WAAD。WAAD識別工作實踐中的抽象主題和這些主題之間的關係。作為範例，這些主題的一些可能是關於在我們正在研究的工作實踐中操作的各種類型使用者。</p>
+            </div>
+            
+            <div class="waad-diagram">
+                <h3>WAAD建構過程</h3>
+                <div class="waad-structure">
+                    <h4>階層式組織</h4>
+                    <p>WAAD為使用者的工作脈絡提供視覺化幫助，並幫助從個別使用者工作活動的實例一般化到工作實踐或領域的廣泛表現。WAAD服務於廣泛專案規模、複雜性和嚴格性需求的資料組織需求。</p>
+                </div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 親和圖技術</h4>
+                    <p>親和圖是一個由下而上的階層式技術，用於組織和分組大量不同的質性資料，以突出其中的問題和洞察的視覺顯示。該技術來自Jiro Kawakita，一位日本人類學家，作為從現場帶來焦點大量資料的手段。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 建構方法</h4>
+                    <p>WAAD為建立WAAD以組織來自UX研究的工作活動筆記的技術，透過相似性和主題突出常見工作模式和設計需求。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: WAAD Building Process -->
+        <div class="slide">
+            <h2>7.5.1-7.5.2 親和圖建構和分組過程</h2>
+            
+            <div class="process-diagram">
+                <h3>WAAD建構流程</h3>
+                <div class="process-flow">
+                    <div class="process-step">以卡片大小格式或手寫工作活動筆記印出</div>
+                    <div class="process-step">階層式分類清單</div>
+                    <div class="process-step">卡片分類</div>
+                    <div class="process-step">系統應該支援的行動列印在卡片上</div>
+                    <div class="process-step">概念/心智對映</div>
+                    <div class="process-step">親和圖</div>
+                </div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔄 分室化WAAD</h4>
+                    <p>如果我們專案的複雜性需要它，我們可以建立WAAD來組織來自UX研究的工作活動筆記資料。在許多情況下，沒有足夠的工作活動筆記來證明WAAD的複雜正式過程是合理的；我們被鼓勵直接在建立資料模型和撰寫需求中使用工作活動筆記。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 按使用者工作角色分組</h4>
+                    <p>如果複雜性證明，我們從最高層級開始，將WAAD分為多個單獨的WAAD，每個使用者工作角色一個。這種分離允許分析師和設計師一次專注於一個工作角色的設計。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Growing WAAD Groups -->
+        <div class="slide">
+            <h2>7.5.3-7.5.4 成長WAAD群組和標籤</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🌱 自下而上的成長過程</h4>
+                    <ul>
+                        <li>依次考慮每個輸入工作活動筆記</li>
+                        <li>決定哪個使用者工作角色最適合，或開始新的工作角色群組</li>
+                        <li>如果輸入工作活動筆記適合此工作角色下現有主題，則添加到該群組</li>
+                        <li>調整群組標籤以涵蓋新筆記</li>
+                        <li>如果筆記要被發布不適合任何現有群組的主題</li>
+                        <li>在相關角色下用此工作活動筆記開始新群組</li>
+                        <li>添加主題標籤以識別此新群組的主題</li>
+                        <li>以此方式繼續，成長和演化工作活動筆記群組</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏷️ 群組標籤原則</h4>
+                    <p>每個群組標籤必須描述將整個群組結合在一起的親和性。精確的群組標籤對於捕捉群組的本質、形態或意義很重要。高度描述性的群組標籤取代您的筆記，因為它提供關於群組的完整資訊。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>標籤成長範例</h4>
+                <p>圖7.4中的紫色標籤顯示在售票亭系統親和圖建構過程中在演化群組內添加的術語。群組標籤開始為"安全關注"。關於隱私和信任的筆記被添加到此群組，因為這些概念與安全關注有親和性。</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Large Groups and Hierarchies -->
+        <div class="slide">
+            <h2>7.5.5-7.5.6 分割大群組和建立階層</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>✂️ 分割大群組</h4>
+                    <p>隨著群組變得過於龐大，主題過於廣泛而無用，通過分割群組來減少範圍。保持改進和重新組織群組和標籤。群組和其標籤的順序和組織應被視為靈活和可變的。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 繼續組織成階層</h4>
+                    <p>圖7.5顯示我們為MUTTS建立的整體WAAD的一大部分。這也是WAAD的文字表現範例。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>組織結構考量</h4>
+                <p>返回售票亭系統的運行範例，我們提供從數百個真實UX研究工作活動筆記中選出的工作活動筆記範例，以及從過程中出現的範例系統類別。我們展示筆記如何被組織到WAAD的階層類別中。這也是WAAD文字表現的範例。</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Technology Support -->
+        <div class="slide">
+            <h2>7.5.7 使用技術支援WAAD建構</h2>
+            
+            <div class="highlight-box">
+                <h3>技術輔助工具</h3>
+                <p>非常大的牆面空間對於進行WAAD建構的團隊效果很好，使用紙張條。對於經常進行WAAD建構的團隊，有更高技術的WAAD建構工具。圖7.7顯示維吉尼亞理工大學的團隊使用親和圖軟體在高解析度大螢幕顯示器上作為紙本工作活動筆記轉移的替代方案。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>💻 數位工具優勢</h4>
+                    <ul>
+                        <li>便於在筆記本電腦上移動工作活動筆記</li>
+                        <li>觸控和拖拽功能</li>
+                        <li>電腦可讀表現的協調工作</li>
+                        <li>便於管理WAAD內容</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 建議配置</h4>
+                    <p>擁有WAAD建構應用程式與大觸控螢幕協調工作來管理電腦可讀表現中的WAAD內容會是很好的。如果可行，在您的預算和時程中，將使用者、客戶和其他利害關係人帶來引導他們通過您的WAAD以分享您的發現並獲得回饋。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: WAAD Example -->
+        <div class="slide">
+            <h2>售票亭系統工作活動筆記組織範例</h2>
+            
+            <div class="example-box">
+                <h4>實際WAAD結構展示</h4>
+                <p>以下是售票亭系統的工作活動筆記在簡單WAAD結構中的設置：</p>
+                
+                <div class="waad-structure">
+                    <h4>• 互動設計</h4>
+                    <p>&nbsp;&nbsp;• 交易流程</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;• 售票亭應該提醒人們在交易結束時取票和信用卡</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;• 擁有確認頁面顯示我在付款前買什麼很重要</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;• 提供退出交易的方式很重要</p>
+                </div>
+                
+                <div class="waad-structure">
+                    <h4>• 品牌</h4>
+                    <p>&nbsp;&nbsp;• 售票亭外觀</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;• 售票亭必須以專業方式呈現；它需要看起來正式</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;• 如果（售票亭）不應該看起來像免費小冊子的持有者</p>
+                </div>
+                
+                <div class="waad-structure">
+                    <h4>• 使用者售票購物行為</h4>
+                    <p>&nbsp;&nbsp;• 使用售票亭的可能性</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;• 我會使用售票亭如果它與Middleburg大學有關聯並且MU發送電子郵件告知</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Exercise and Practice -->
+        <div class="slide">
+            <h2>練習7.1-7.2：工作活動筆記組成和WAAD建構</h2>
+            
+            <div class="highlight-box">
+                <h3>練習7.1：為您的產品或系統組成工作活動筆記</h3>
+                <p><strong>目標：</strong>從您的UX研究資料中組成工作活動筆記的實際練習。</p>
+                <p><strong>活動：</strong>如果您單獨工作，是時候進行比薩啤酒UX研究分析派對和您的朋友了。指定團隊領導者和一個人作為筆記記錄員。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 練習步驟</h4>
+                    <ul>
+                        <li>團隊領導者帶領群組透過原始資料，組成飛行工作活動筆記</li>
+                        <li>確保過濾掉所有不必要的措辭、冗詞和雜音</li>
+                        <li>當工作活動筆記被叫出時，記錄員將它們輸入文件</li>
+                        <li>團隊中每個人都應該一起工作，確保個別工作活動筆記從上下文依賴中消歧</li>
+                        <li>團隊應該至少有十幾個從原始UX研究資料組成的工作活動筆記</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⏱️ 時程建議</h4>
+                    <p><strong>預期時間：</strong>根據我們這些活動的經驗，一小時應該足夠。</p>
+                    <p><strong>交付項目：</strong>突出分享幾個您最有趣的工作活動筆記。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: WAAD Building Exercise -->
+        <div class="slide">
+            <h2>練習7.2：為您的系統建構WAAD</h2>
+            
+            <div class="highlight-box">
+                <h3>目標</h3>
+                <p>透過類別獲得建構WAAD以組織您的工作活動筆記的實際練習。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🛠️ 建構活動</h4>
+                    <ul>
+                        <li>如果您單獨工作，您可能必須請朋友來幫忙比薩，再一次</li>
+                        <li>使用在前一個練習中創建的工作活動筆記</li>
+                        <li>遵循我們在本章中描述的WAAD建構程序</li>
+                        <li>拍攝您的工作過程和產品的數位照片</li>
+                        <li>將它們用磁鐵掛在冰箱上</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 交付項目</h4>
+                    <p><strong>成果：</strong>盡可能多的完整WAAD為您的系統，加上您拍攝的數位照片。</p>
+                    <p><strong>時程：</strong>這是較耗時的練習之一；預期需要數小時。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Summary -->
+        <div class="slide">
+            <h2>7.6 本章總結</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 核心學習要點</h3>
+                <ul>
+                    <li><strong>資料萃取：</strong>學會從原始UX研究資料中提取基本、清晰、簡潔、完整且模組化的工作活動筆記</li>
+                    <li><strong>合成技能：</strong>掌握將多重觀點整合為連貫洞察的合成方法</li>
+                    <li><strong>WAAD建構：</strong>運用親和圖技術組織和分析大量質性資料</li>
+                    <li><strong>階層思維：</strong>建立從個別筆記到群組標籤的階層式組織能力</li>
+                    <li><strong>實務應用：</strong>將理論概念轉化為實際可操作的UX研究分析流程</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                在本章中，我們討論了如何分析UX研究資料。在下一章中，我們討論透過合成模型穿越工作實踐空間，每個提供不同觀點進入這個空間。
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📈 下一步發展</h4>
+                    <p>本章為後續模型建構章節（第八章和第九章）奠定了基礎，這些模型將作為設計資訊者來創建使用者故事和需求以驅動UX設計。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔗 與整體流程的連結</h4>
+                    <p>資料分析是UX設計生命週期中從研究到設計的關鍵橋樑，確保設計決策建立在紮實的使用者洞察基礎上。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
