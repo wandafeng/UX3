@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設計情境：理解嚴謹性、範圍、複雜性與系統性質</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .complexity-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .complexity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            max-width: 600px;
+            margin: 30px auto;
+            height: 350px;
+        }
+        
+        .quadrant {
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .quadrant h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 1em;
+        }
+        
+        .quadrant-simple-simple {
+            background: #d5f4e6;
+            border-color: #27ae60;
+        }
+        
+        .quadrant-complex-simple {
+            background: #fdf2e9;
+            border-color: #f39c12;
+        }
+        
+        .quadrant-simple-complex {
+            background: #ebf3fd;
+            border-color: #3498db;
+        }
+        
+        .quadrant-complex-complex {
+            background: #fadbd8;
+            border-color: #e74c3c;
+        }
+        
+        .axis-label {
+            position: absolute;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .axis-x {
+            bottom: -75px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .axis-y {
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            font-size: 13px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .rigor-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #e8f5e8, #f39c12, #e74c3c);
+            border-radius: 25px;
+            padding: 15px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .rigor-label {
+            background: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            color: #2c3e50;
+            border: 2px solid #3498db;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .scope-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .scope-card {
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        
+        .scope-large {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .scope-small {
+            border-color: #27ae60;
+            background: #f0f9f4;
+        }
+        
+        .product-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .product-type-card {
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .consumer-product {
+            background: #e8f5e8;
+            border-color: #27ae60;
+        }
+        
+        .enterprise-system {
+            background: #fdf2e9;
+            border-color: #f39c12;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第三章：設計情境 - 理解嚴謹性、範圍、複雜性與系統性質</h1>
+            <div class="quote">
+                "每個設計情境都需要你做出選擇。你的工作是調適UX生命週期活動、方法和技術以符合特定專案條件。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>專案中嚴謹性的需求</li>
+                    <li>複雜性與風險規避對嚴謹性需求的影響</li>
+                    <li>產品交付範圍</li>
+                    <li>消費性產品與企業系統的差異</li>
+                    <li>系統複雜性空間的理解</li>
+                    <li>嚴謹性程度的選擇原則</li>
+                    <li>快速方法的應用時機</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>3.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>設計情境的重要性</h3>
+                <p>如同第2.4節所述，每個設計情境都需要你做出選擇。你的工作是調適UX生命週期活動、方法和技術以符合特定專案條件。大多數高層流程選擇取決於專案參數，如<strong>嚴謹性、範圍、複雜性</strong>，以及你是在設計消費性產品還是企業系統。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>複雜性影響嚴謹性需求</h3>
+                <p>你無法為設計所有系統定義一套方法，因為系統和產品類型存在廣譜，風險和對應的嚴謹性需求有廣泛範圍。在本章和接下來的幾個小節中，我們將探討這個廣譜內的一些可能性。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: System Complexity Space -->
+        <div class="slide">
+            <h2>3.2.1 系統複雜性空間</h2>
+            
+            <div class="complexity-diagram">
+                <h3>系統複雜性空間：互動複雜性對應領域複雜性</h3>
+                <div style="position: relative; margin: 60px 100px;">
+                    <div class="complexity-grid">
+                        <div class="quadrant quadrant-simple-complex">
+                            <h4>簡單互動<br>複雜領域</h4>
+                            <p>圖書館系統<br>稅務軟體</p>
+                        </div>
+                        <div class="quadrant quadrant-complex-complex">
+                            <h4>複雜互動<br>複雜領域</h4>
+                            <p>空中交通管制<br>無人機武器系統</p>
+                        </div>
+                        <div class="quadrant quadrant-simple-simple">
+                            <h4>簡單互動<br>簡單領域</h4>
+                            <p>購買花網站<br>音樂應用</p>
+                        </div>
+                        <div class="quadrant quadrant-complex-simple">
+                            <h4>複雜互動<br>簡單領域</h4>
+                            <p>UID/UI flow<br>GUI Design</p>
+                        </div>
+                    </div>
+                    <div class="axis-label axis-x">工作領域複雜性</div>
+                    <div class="axis-label axis-y">互動複雜性</div>
+                </div>
+            </div>
+            
+            <div class="quote">
+                系統複雜性空間幫助我們理解不同類型系統對UX設計方法的不同需求
+            </div>
+        </div>
+
+        <!-- Slide 4: Interaction Complexity -->
+        <div class="slide">
+            <h2>3.2.1.2 互動複雜性</h2>
+            
+            <div class="highlight-box">
+                <h3>互動複雜性定義</h3>
+                <p>互動複雜性在垂直軸上表示，關於使用者行動的複雜性或精細程度，包括在系統內完成任務所需的認知行動難度。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🟢 低互動複雜性</h4>
+                    <p>對應於支援較簡單任務的系統，如從網站訂購花。互動相對直接。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔴 高互動複雜性</h4>
+                    <p>通常與較大和更困難的任務相關，往往需要特殊技能或訓練，如使用Figma設計介面。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>互動複雜性範例</h4>
+                <p><strong>低複雜性：</strong> 網路購物 - 瀏覽、選擇、結帳</p>
+                <p><strong>中等複雜性：</strong> 照片編輯軟體的基本功能</p>
+                <p><strong>高複雜性：</strong> 專業圖像處理軟體的進階功能</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Domain Complexity -->
+        <div class="slide">
+            <h2>3.2.1.3 領域複雜性</h2>
+            
+            <div class="highlight-box">
+                <h3>領域複雜性定義</h3>
+                <p>在水平軸上，我們顯示<strong>工作領域複雜性</strong>，關於對應工作領域的複雜性和技術性程度，或可能是深奧的性質。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🟢 低領域複雜性</h4>
+                    <p>系統工作方式在其生態環境中相對簡單。例如：購買花朵網站和簡單的個人日曆管理應用程式。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔴 高領域複雜性</h4>
+                    <p>往往是高度專業化和協作的，在複雜工作流程中有多個相依性和溝通通道，以及合規規則和例外情況。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>高領域複雜性範例</h4>
+                <p><strong>地質學系統：</strong> 全球氣象預報和用於地震帶斷層分析的系統</p>
+                <p><strong>醫療系統：</strong> 完整健康照護系統</p>
+                <p><strong>航空系統：</strong> 空中交通管制系統</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Four Quadrants -->
+        <div class="slide">
+            <h2>3.2.1.4 系統複雜性空間象限</h2>
+            
+            <h3>🟢 簡單互動，簡單工作領域</h3>
+            <div class="example-box">
+                <p>最簡單的象限位於圖3.1的左下角，互動和工作領域都是最不複雜的。這個象限包含較小的網站、某些互動應用程式和許多消費性產品。</p>
+                <p><strong>範例：</strong> 訂購花朵的網站 - 互動簡單，工作領域相對簡單</p>
+            </div>
+            
+            <h3>🔴 複雜互動，複雜工作領域</h3>
+            <div class="warning-box">
+                <h4>最高風險象限</h4>
+                <p>最複雜的象限位於圖3.1的右上角，互動和工作領域都高度複雜。用於決定飛機降落順序的空中交通管制系統就是一個範例，具有龐大的工作角色和使用者類型。</p>
+                <p><strong>最高嚴謹性需求：</strong> 你有最大的法規遵循要求，使用錯誤的重要性最高，失敗成本無法接受。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Rigor Definition -->
+        <div class="slide">
+            <h2>3.2 UX方法或流程中的嚴謹性</h2>
+            
+            <div class="highlight-box">
+                <h3>嚴謹性定義</h3>
+                <p>我們使用<strong>嚴謹性</strong>一詞指的是你執行UX設計生命週期活動、方法或技術的所有步驟時的正式性、徹底性、精確性和準確性程度。</p>
+            </div>
+            
+            <div class="rigor-scale">
+                <div class="rigor-label">低嚴謹性</div>
+                <div class="rigor-label">中等嚴謹性</div>
+                <div class="rigor-label">高嚴謹性</div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔧 完整性</h4>
+                    <p>完整性意味著方法的徹底性，涵蓋每一步驟並收集所有UX研究和評估資料。這種對細節的關注幫助設計師觸及所有基礎並填補所有空白。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💎 純淨性</h4>
+                    <p>純淨性意味著在你的資料中盡可能準確。特別是不允許新的虛假資料滲入。對於高純淨度UX資料，設計師的見解或猜測應該被標記為與實際使用者輸入區別。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Risk Aversion -->
+        <div class="slide">
+            <h2>3.2.3 風險規避影響嚴謹性需求</h2>
+            
+            <div class="highlight-box">
+                <h3>風險定義</h3>
+                <p><strong>風險</strong>是事情出錯的危險或可能性——功能或需求被遺漏或結果不符合使用者需求，或不符合法律或安全約束。選擇UX設計生命週期活動和方法嚴謹性水平的重要目標相關因素是<strong>風險規避</strong>。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>⚠️ 高風險情況</h4>
+                    <ul>
+                        <li>任務關鍵系統（如空中交通管制）</li>
+                        <li>軍用武器控制</li>
+                        <li>醫療設備操作</li>
+                        <li>你有合約義務的高嚴謹性</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🛡️ 創新阻力</h4>
+                    <p>在這個象限的大型複雜系統中，長期設計穩定性非常重要，你可能會遇到創新阻力。激進的設計並不總是受歡迎的，因為非常適應設計師致力於習慣行為。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>企業系統風險考量</h4>
+                <p>大企業的企業系統安裝困難且維護成本高，但對於勞動力使用同樣具有挑戰性。當風險如此高時，為什麼企業系統的使用者體驗如此糟糕？</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Data Loss Risk -->
+        <div class="slide">
+            <h2>3.2.3.1 資料遺失風險</h2>
+            
+            <div class="highlight-box">
+                <h3>避免風險所需的嚴謹性類型</h3>
+                <p>避免風險所需的最重要嚴謹性類型之一是收集和維護UX資料的嚴謹性。如果你的UX資料被壓縮、摘要、縮寫或簡化，你將面臨完整性損失和資料遺失風險。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>資料遺失的後果</h4>
+                <p>你可以通過錄製（音頻或視頻）使用者訪談和觀察的每個細節來幫助減少資料遺失，但這是繁瑣且成本高昂的轉錄記錄，結果是大量文本需要篩選以分離重要內容和不重要的冗詞；這個過程幾乎永遠不會完成。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>實務平衡</h4>
+                <p><strong>UX研究人員的做法：</strong> 經常做筆記來總結要點。</br>雖然這在技術上引入了完整性損失，但並不一定會降低資料的品質或有用性。</br>原始資料需要抽象化來去除不相關細節並突出重要內容。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Legal Safety Compliance -->
+        <div class="slide">
+            <h2>3.2.3.2 法律、安全與合規約束風險</h2>
+            
+            <div class="highlight-box">
+                <h3>高風險系統的約束</h3>
+                <p>空中交通管制系統、醫療照護和醫療記錄系統以及金融系統等系統對公共安全有法律要求，必須非常謹慎對待的風險。設計金融業產品是一個需要遵守複雜聯邦法規的流程。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🏥 醫療系統</h4>
+                    <p>醫療設備和系統需要嚴格的法規遵循，任何錯誤都可能危及生命。需要最高水平的UX嚴謹性。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💰 金融系統</h4>
+                    <p>金融業產品需要遵守複雜的聯邦法規，你的生命週期活動和方法需要納入足夠的嚴謹性來確保系統滿足所有合規檢查。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>合規要求影響</h4>
+                <p>這些法律約束直接影響UX設計流程的每個階段，從需求收集到最終評估，都必須建立可追溯的文件記錄和嚴格的驗證程序。</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Development Stage -->
+        <div class="slide">
+            <h2>3.2.4 專案內開發階段影響嚴謹性需求</h2>
+            
+            <div class="highlight-box">
+                <h3>階段性嚴謹性需求</h3>
+                <p>專案內開發階段是確定嚴謹性需求的另一個決定因素。根據其他專案參數，嚴謹性水平的適當性和對應的UX方法和技術選擇將隨著專案在不同開發階段演變而改變。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🌅 早期階段</h4>
+                    <p><strong>高嚴謹性UX研究</strong> - 獲得最多使用者、使用和領域知識，但可能很少強調早期階段的嚴謹性評估。</p>
+                    <p>設計仍在演進中，在早期概念設計時，你可能選擇快速設計演練。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🌆 後期階段</h4>
+                    <p>為了改進現在穩定的設計，你可能會轉向UX檢查或低保真度原型，最終轉向基於實驗室的嚴謹評估，使用高保真度原型。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>階段演進範例</h4>
+                <p><strong>早期：</strong> 輕量、快速的評估方法</p>
+                <p><strong>中期：</strong> 增加資料品質和保留數量，提高嚴謹性</p>
+                <p><strong>後期：</strong> 高度嚴謹的實驗室評估</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Project Resources -->
+        <div class="slide">
+            <h2>3.2.5 專案資源影響提供嚴謹性的能力</h2>
+            
+            <div class="highlight-box">
+                <h3>資源限制現實</h3>
+                <p><strong>高嚴謹性需要金錢和時間。</strong> 精簡預算和緊迫時程是限制你能夠提供嚴謹性水平的實際現實。另一個重要的資源類型是人力。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👥 人力資源</h4>
+                    <p>你有多少人、專案團隊角色能填補什麼、UX技能、經驗和他們帶來專案的訓練？</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 經驗影響</h4>
+                    <p>有豐富經驗和成熟度的UX專業人士可能需要較少正式方面的嚴謹方法，如徹底的UX研究來獲得細節目標和目標。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>資源最佳化策略</h4>
+                <p><strong>有經驗的團隊：</strong> 可以使用較不嚴謹但仍有效的方法</p>
+                <p><strong>新手團隊：</strong> 需要更結構化、更嚴謹的流程指導</p>
+                <p><strong>已經內化知識：</strong> 可以使用直覺和磨練的直覺完成任務</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Team Experience -->
+        <div class="slide">
+            <h2>3.2.6 UX團隊經驗影響嚴謹性需求</h2>
+            
+            <div class="highlight-box">
+                <h3>經驗與嚴謹性的關係</h3>
+                <p>高度經驗豐富的團隊在他們的流程中需要較少嚴謹性，因為他們已經內化了流程，更多嚴謹性不會增加價值。如果你的UX團隊對領域和/或UX流程不熟悉，顯然你必須使用更多嚴謹性並緩慢仔細地進行，直到你對你的UX技能感到有信心。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🌟 高經驗團隊</h4>
+                    <ul>
+                        <li>已內化流程和直覺</li>
+                        <li>可以使用較不正式的方法</li>
+                        <li>依賴磨練的專業判斷</li>
+                        <li>能快速識別關鍵問題</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🌱 新手團隊</h4>
+                    <ul>
+                        <li>需要詳細的流程指導</li>
+                        <li>受益於高度結構化方法</li>
+                        <li>需要更多時間學習和實作</li>
+                        <li>依賴明確的方法論</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Rapid Methods -->
+        <div class="slide">
+            <h2>3.3 生命週期活動、方法和技術中的快速性</h2>
+            
+            <div class="highlight-box">
+                <h3>不是每個專案都需要嚴謹的UX方法</h3>
+                <p>對於許多專案，特別是涉及消費性產品的專案，以及經常涉及企業系統的專案，<strong>高嚴謹性是不必要的、不值得成本的，或者在有限專案資源下根本不可能</strong>。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>UX實務的成熟</h3>
+                <p>隨著時間推移，我們對UX的嚴謹性需求已經減少。作為結果，我們在大多數情況下已經變得更善於我們的技藝。我們之前需要更嚴謹。現在每個生命週期活動的標準方法是實用的中庸嚴謹性和一些明顯的效率方式組合。</p>
+            </div>
+            
+            <div class="rigor-scale">
+                <div class="rigor-label">快速方法</div>
+                <div class="rigor-label">標準方法</div>
+                <div class="rigor-label">高嚴謹方法</div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Rapid Methods Natural -->
+        <div class="slide">
+            <h2>3.3.3 快速方法是自然結果</h2>
+            
+            <div class="highlight-box">
+                <h3>效率與效果的平衡</h3>
+                <p>當不需要高嚴謹性時，你可以通過縮短標準嚴謹方法和技術、採取捷徑、跳過不必要步驟和僅維護最重要資料來減少生命週期成本和時間，或者你可以使用本質上不太嚴謹的快速替代方法。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🚀 快速性原則：盡你所能快速工作</h4>
+                    <p>所有生命週期活動、方法和技術選擇的基本原則是：<strong>在專案目標和對嚴謹性需求施加的約束下，盡可能快速進行</strong>。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 敏捷設計師思維</h4>
+                    <p>即使你需要嚴謹方法，你也應該做出自然的智慧選擇，不要浪費時間或資源做對你後續不會有貢獻的事情。我們將始終有機會及時解決問題。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                作為敏捷設計師的生活方式。我們知道這永遠不可能是完美的，所以我們總是會盡我們最大的努力和後續知識，我們將始終有機會修正問題
+            </div>
+        </div>
+
+        <!-- Slide 16: Scope of Delivery -->
+        <div class="slide">
+            <h2>3.4 交付範圍</h2>
+            
+            <div class="highlight-box">
+                <h3>範圍定義</h3>
+                <p>我們使用<strong>範圍</strong>一詞指的是目標系統或產品在每次迭代或衝刺中如何敏捷實作被分塊。UX的作用是將設計以給定大小的塊交付給軟體工程人員，以及他們的作用是將功能軟體作為塊交付給客戶和使用者。</p>
+            </div>
+            
+            <div class="scope-comparison">
+                <div class="scope-card scope-large">
+                    <h4>🏢 大範圍</h4>
+                    <p><strong>大範圍：</strong> 首先設計整棟房子，然後一次性建造所有內容後再交付給客戶</p>
+                    <ul>
+                        <li>整體系統設計</li>
+                        <li>完整功能交付</li>
+                        <li>長期開發週期</li>
+                    </ul>
+                </div>
+                
+                <div class="scope-card scope-small">
+                    <h4>🏠 小範圍</h4>
+                    <p><strong>小範圍：</strong> 首先設計一個房間，建造它，交付給客戶查看和提供回饋</p>
+                    <ul>
+                        <li>漸進式功能交付</li>
+                        <li>快速回饋循環</li>
+                        <li>敏捷開發方法</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Large vs Small Scope -->
+        <div class="slide">
+            <h2>3.4.1 大範圍與小範圍建房範例</h2>
+            
+            <div class="example-box">
+                <h4>大範圍與小範圍的權衡</h4>
+                <p>以下是範圍如何在設計和建造房屋的簡單術語中發揮設計和建造房屋的方法：</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🏗️ 大範圍方法</h4>
+                    <ul>
+                        <li><strong>設計：</strong> 首先設計整棟房子</li>
+                        <li><strong>建造：</strong> 一次性建造所有內容</li>
+                        <li><strong>交付：</strong> 完成後交付給客戶</li>
+                    </ul>
+                    <p><strong>優點：</strong> 整體架構一致</p>
+                    <p><strong>缺點：</strong> 風險高、回饋晚</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏠 小範圍方法</h4>
+                    <ul>
+                        <li><strong>設計：</strong> 首先設計一個房間</li>
+                        <li><strong>建造：</strong> 建造這個房間</li>
+                        <li><strong>交付：</strong> 讓客戶查看並提供回饋</li>
+                        <li><strong>迭代：</strong> 根據回饋改進並繼續</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>實務考量</h3>
+                <p>當然，整棟房子必須在建造開始前設計，但有趣的是思考如果有足夠資源進行真正敏捷的房屋建造流程，會有什麼樣的驚人結構。</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Consumer vs Enterprise -->
+        <div class="slide">
+            <h2>3.5 消費性產品對比企業系統</h2>
+            
+            <div class="highlight-box">
+                <h3>產品類型影響設計方法</h3>
+                <p>影響你的UX設計方法的另一個因素是你是在處理<strong>消費性產品</strong>還是<strong>企業系統</strong>。顯然，你不會使用相同的方法來設計音樂應用程式和龐大的企業資源管理系統。</p>
+            </div>
+            
+            <div class="product-type-grid">
+                <div class="product-type-card consumer-product">
+                    <h4>🎵 消費性產品</h4>
+                    <p>我們使用<strong>消費性產品</strong>一詞來描述個人物品，如音樂裝置或軟體應用程式，使用者為私人使用而購買。</p>
+                    <p><strong>特徵：</strong></p>
+                    <ul>
+                        <li>多使用者參與（分享音樂）</li>
+                        <li>多活動（購買、組織、播放音樂）</li>
+                        <li>多系統（手機、平板、雲端）</li>
+                    </ul>
+                </div>
+                
+                <div class="product-type-card enterprise-system">
+                    <h4>🏢 企業系統</h4>
+                    <p>我們使用<strong>企業系統</strong>一詞指涉及多使用者和行為者跨多活動的系統，通常在組織環境中。</p>
+                    <p><strong>特徵：</strong></p>
+                    <ul>
+                        <li>促進組織內業務目標</li>
+                        <li>多使用者角色</li>
+                        <li>複雜工作流程</li>
+                        <li>跨部門協作</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Enterprise System Challenges -->
+        <div class="slide">
+            <h2>企業系統的特殊挑戰</h2>
+            
+            <div class="warning-box">
+                <h4>企業系統的複雜性</h4>
+                <p>企業系統的工作實務涉及跨多活動的多使用者和行為者，通常在組織環境中。這個組織的目標是促進該組織的業務目標。組織包含許多不同的系統使用角色，每個都為完成總體工作的部分做出貢獻。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 設計挑戰</h4>
+                    <ul>
+                        <li>使用者角色眾多且複雜</li>
+                        <li>工作流程跨部門</li>
+                        <li>合規要求嚴格</li>
+                        <li>整合需求複雜</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 設計考量</h4>
+                    <ul>
+                        <li>需要深入的組織研究</li>
+                        <li>多利害關係人協調</li>
+                        <li>長期維護考量</li>
+                        <li>變更管理策略</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>企業系統範例</h4>
+                <p><strong>企業資源規劃系統：</strong> 整合財務、人力資源、供應鏈等多個業務流程</p>
+                <p><strong>客戶關係管理系統：</strong> 支援銷售、行銷、客服等團隊協作</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Summary -->
+        <div class="slide">
+            <h2>3.6 小結</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 關鍵要點回顧</h3>
+                <ul>
+                    <li><strong>系統複雜性空間：</strong> 互動複雜性與領域複雜性的四個象限</li>
+                    <li><strong>嚴謹性需求：</strong> 基於風險、合規要求和專案階段而變化</li>
+                    <li><strong>團隊經驗影響：</strong> 有經驗團隊可使用較不嚴謹方法</li>
+                    <li><strong>快速方法：</strong> 在適當情況下使用以提高效率</li>
+                    <li><strong>範圍考量：</strong> 大範圍與小範圍的設計策略差異</li>
+                    <li><strong>產品類型：</strong> 消費性產品與企業系統需要不同方法</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                在下一章中，我們將介紹敏捷UX設計的漏斗模型，深入探討範圍維度並討論對變化具有韌性和回應性的UX流程
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔄 設計情境的價值</h3>
+                <p>理解設計情境幫助UX設計師選擇最適合的方法和嚴謹性水平，在品質、成本和時間之間找到最佳平衡，確保專案成功交付。</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: Key Takeaways -->
+        <div class="slide">
+            <h2>重要概念總結</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 嚴謹性選擇原則</h4>
+                    <ul>
+                        <li>基於風險水平調整</li>
+                        <li>考慮法規合規要求</li>
+                        <li>匹配團隊經驗水平</li>
+                        <li>平衡資源約束</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 複雜性評估</h4>
+                    <ul>
+                        <li>評估互動複雜性</li>
+                        <li>分析領域複雜性</li>
+                        <li>識別系統象限</li>
+                        <li>選擇適當方法</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🚀 效率最佳化</h4>
+                    <ul>
+                        <li>快速方法的適用場景</li>
+                        <li>避免過度嚴謹</li>
+                        <li>聚焦關鍵活動</li>
+                        <li>持續改進流程</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎨 情境適應</h4>
+                    <ul>
+                        <li>消費性產品策略</li>
+                        <li>企業系統考量</li>
+                        <li>範圍規劃技巧</li>
+                        <li>利害關係人管理</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>💡 實務建議</h3>
+                <p>成功的UX設計師需要能夠快速評估設計情境，並靈活調適方法論以符合專案的具體需求。這種適應能力是區分新手與專家的關鍵技能。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">21</span>
+    </div>
+
+    <a href="index.html" class="home-link">Home</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
