@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第13章：生成式設計：構想、草圖繪製與批判</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .concept-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .concept-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .concept-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .process-flow {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .flow-step {
+            background: #3498db;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            position: relative;
+            min-width: 120px;
+        }
+        
+        .flow-step::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .flow-step:last-child::after {
+            display: none;
+        }
+        
+        .ideation-techniques {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .persona-diagram {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .sketching-principles {
+            background: #fff9c4;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .critiquing-guidelines {
+            background: #fce4ec;
+            border: 2px solid #e91e63;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第13章：生成式設計：構想、草圖繪製與批判</h1>
+            <div class="quote">
+                「起初創造了宇宙。這讓很多人非常憤怒，並被廣泛認為是一個糟糕的舉動。」<br>
+                —— 道格拉斯·亞當斯，《宇宙盡頭的餐廳》
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點</strong></p>
+                <p>通過沉浸為設計做準備，綜合的作用，構想作為設計的建構模塊，構想相關概念，構想催化劑，構想技術，草圖繪製，批判，以及參與規則。</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>13.1 引言</h2>
+            
+            <div class="highlight-box">
+                <h3>13.1.1 您現在的位置</h3>
+                <p>我們以每個流程章節的「您現在的位置」圖片開始，該圖片顯示章節主題在輪盤UX設計生命週期模板背景下的位置。在本章中，我們進入UX設計流程，從生成式設計開始。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>設計活動特性</h4>
+                    <p>相較於第二部分的UX研究，設計較少程序化，更具創造性。UX研究關注觀察和理解，而設計則關注橫向思考和產生新想法以使事情變得更好。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>創造性與程序性的平衡</h4>
+                    <p>雖然UX研究是關於觀察和理解現有事物，設計則是關於橫向思考和產生新想法以使事情變得更好。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Immersion -->
+        <div class="slide">
+            <h2>13.1.2 為生成式設計做準備：沉浸</h2>
+            
+            <div class="highlight-box">
+                <h3>沉浸的必要性</h3>
+                <p>設計師與UX研究人員一樣，需要沉浸——一種深入思考和分析的形式——來理解問題並在不同方面之間建立連接。為了為構想奠定基礎，將自己沉浸在設計支持環境中，例如您的UX工作室。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>沉浸環境建立</h4>
+                    <p>用所有您指出、討論和批評的工件、想法表示、圖像、視覺和觸覺道具、玩具、筆記、海報、草圖、圖表、情緒板填滿您的牆壁、架子和工作台。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>重新認識研究資料</h4>
+                    <p>沉浸首先是重新熟悉我們在UX研究期間創建的所有模型和輸入，這是參與產生新想法和概念活動的先決條件。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>UX工作室的作用</h4>
+                    <p>UX工作室是一個很好的地方來容納您的沉浸環境。工件觸發想法並將工作領域中各種實體之間的連接和關係帶到表面。設計師可以通過走向工作室牆上的相應模型來刷新對工作領域的理解。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Role of Synthesis -->
+        <div class="slide">
+            <h2>13.1.3 綜合的作用</h2>
+            
+            <div class="highlight-box">
+                <h3>設計中的綜合</h3>
+                <p>在其主要層面上，設計是一種基於綜合的問題解決方法，一種在設計情況下實現完整故事的方式，需要處理多個輸入並得出結論。設計師必須滿足各種技術、商業和文化約束並實現各種滿意目標。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>綜合的定義</h4>
+                    <p>綜合與創造力和創新密切相關，創造先前在UX研究數據中不存在的設計想法。這就是為什麼創造性設計的早期階段被稱為生成式設計。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>突破性想法</h4>
+                    <p>設計綜合是突破性想法的縮影，能夠將斷開的想法拼湊起來，並創造新的和有意義的東西。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>連接UX研究與設計</h4>
+                    <p>設計綜合在某種意義上，是連接UX研究和UX設計的橋樑。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Generative Design Overview -->
+        <div class="slide">
+            <h2>13.1.4 生成式設計概述：構想、草圖繪製與批判的交織</h2>
+            
+            <div class="process-flow">
+                <h3>生成式設計活動流程</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step">構想</div>
+                    <div class="flow-step">草圖繪製</div>
+                    <div class="flow-step">批判</div>
+                </div>
+                <p>設計師在緊密耦合的迭代循環中執行生成式設計，以探索設計想法</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>構想</h4>
+                    <p>產生想法的活動，是一種認知技術，用於創造各種創新的設計可能性。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>草圖繪製</h4>
+                    <p>將這些想法外化為具體表示的活動。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>批判</h4>
+                    <p>評估新興設計想法以識別得失的分析活動。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Ideas as Building Blocks -->
+        <div class="slide">
+            <h2>13.2 構想：設計的建構模塊</h2>
+            
+            <div class="highlight-box">
+                <h3>構想的定義</h3>
+                <p>在此背景下，構想或設計構想是一個可視化的設計提案，可以包含對新生態、互動、行為響應和系統或產品內能力的願景。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>構想的來源</h4>
+                    <p>構想由人類思維創造或借鑒自然觀察；它們由專注活動或意外催化劑觸發。例如，查看流程模型中的故障可以觸發關於如何規避或減輕它的構想。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>靈感時刻</h4>
+                    <p>有時構想會作為突然出現的時刻出現，在意想不到的地方和意想不到的時間湧現，我們甚至可能在不積極尋求它們時發生。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>構想的特性</h4>
+                    <p>無論其來源如何，構想本質上是微妙的，必須培養以成長。它們應該在出現時立即被捕獲，否則可能永遠失去；它們也必須得到培養。沒有開放性環境或文化，構想可能被過早判斷扼殺。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Ideation -->
+        <div class="slide">
+            <h2>13.3 構想</h2>
+            
+            <div class="quote">
+                「如果屋頂不漏水，建築師就沒有足夠的創意。」<br>
+                —— 弗蘭克·勞埃德·萊特
+            </div>
+            
+            <div class="highlight-box">
+                <h3>13.3.1 構想中的創造力</h3>
+                <p>構想是設計創造中最重要的生成方面；它是創造行為的前沿。構想是為生態、互動和情感設計創造各種創新提案的過程。這是一個高度創造性和有趣的階段。設計團隊的多樣性有助於構想，因為它帶來了不同的觀點。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>構想資訊提供者</h4>
+                    <p>構想資訊提供者通過指向設計要求和UX研究數據模型中要考慮的資訊來為設計提供資訊。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>構想催化劑</h4>
+                    <p>構想催化劑是面向設計的靈感閃光，能夠促進創意設計構想的產生。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>構想技術</h4>
+                    <p>構想技術是設計師用來促進構想產生和培養的技能。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Personas in Design -->
+        <div class="slide">
+            <h2>13.3.3 構想資訊提供者</h2>
+            
+            <div class="persona-diagram">
+                <h4>使用人物角色進行設計</h4>
+                <p>從讓您的設計彷彿為Rachel這樣的主要人物角色開始。然後，隨著她的更多故事被講述，團隊成員會講述關於Rachel如何處理特定使用情況的故事。隨著關於她的越來越多的故事被講述，Rachel變得更真實，更有用作為不斷演變的要求的溫度計。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>使用者工作角色</h4>
+                    <p>使用者工作角色幫助識別設計應該支持的使用者類型和工作，以及在整體生態中劃分子系統的方式。例如，票務購買者工作角色和活動經理工作角色幫助設計師思考兩個不同的設計和能力。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>人物角色的最佳應用</h4>
+                    <p>人物角色在設計情況下效果最佳，其中工作領域廣泛且不受約束（即左側系統複雜性空間的專案）。當人物角色用於設計消費產品或此類情況下的系統時，它們有助於說明工作的細微差別和各種工作角色個人生活中的活動。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Information Architecture -->
+        <div class="slide">
+            <h2>資訊架構模型與流程模型</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>13.3.3.6 資訊架構模型</h4>
+                    <p>資訊物件是內部存儲、結構化或簡單的資訊文章或數據片段，用作工作物件。資訊物件通常是數據實體，對工作流程運行至關重要；它們被組織、共享、標記、導航、搜索和瀏覽、訪問和顯示、修改和操作，並在網路生態中存檔。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>13.3.3.4 任務結構與序列模型</h4>
+                    <p>在第9.2和9.3節中，我們描述了任務結構和任務排序的模型。在這些模型中尋找交互設計流程的構想。支援序列中不同任務的不同方式是什麼？設計支援序列中斷的最佳交互設計模式是什麼？</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>設計考慮要素</h4>
+                <p>尋找當前工作實踐中需要管理的設計中所有資訊物件。當這些資訊物件在設想的生態中移動時，它們被各種工作角色中的人訪問和操作。</p>
+                <p>生態中某個資訊物件將被訪問和顯示的不同點是什麼？這就是您開始定義和規劃資訊結構為生態的地方。這被稱為普及資訊架構，它提供跨設備、使用者和網路生態其他部分的持續資訊可用性。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Ideation Catalysts -->
+        <div class="slide">
+            <h2>13.3.4 構想催化劑</h2>
+            
+            <div class="highlight-box">
+                <h3>設計催化劑的定義</h3>
+                <p>設計催化劑是存在或發生的東西，能引導設計師產生新的設計構想。構想催化劑不一定是設計師可以故意規劃或創造的東西，但某些東西確實存在並且可能自發發生，可能來自腦力激盪或故事講述。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>魔鬼氈的故事</h4>
+                <p>Georges de Mestral是一位瑞士工程師，1941年在與狗散步後檢查困在毛衣上的芒刺。芒刺是設計催化劑。它們就這樣發生了，這產生了設計構想。有時構想會作為一種噪音，一種引導或指導創造力的催化劑出現。這絕對涉及洞察、直覺、經驗和識別「它」發生時的自然能力，為偉大的發明家、如托馬斯·愛迪生以及偉大的思想家、如阿爾伯特·愛因斯坦等偉大發明家提供重要輸入。</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Ideation Techniques -->
+        <div class="slide">
+            <h2>13.3.5 構想技術</h2>
+            
+            <div class="ideation-techniques">
+                <div class="technique-card">
+                    <h4>框架與重新框架</h4>
+                    <p>代表一種設計技術，沿著特定維度提出設計問題以激發超意識解決方案的思考。它是一種沿著特定維度查看工作領域的技術，使其易於談論該維度的問題。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>抽象化</h4>
+                    <p>去除工作活動和數據構造細節的過程，專注於問題的不可分割的核心構造，以識別工作中真正進行的事情。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>魔法棒技術</h4>
+                    <p>暫時擱置已知約束的構想技術。這種技術有助於橫向思考並產生想法。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>參與式設計</h4>
+                    <p>一個民主過程，為UX設計積極涉及所有利害關係人，以幫助確保結果滿足他們的需求並且可用。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Sketching Fundamentals -->
+        <div class="slide">
+            <h2>13.4 草圖繪製</h2>
+            
+            <div class="sketching-principles">
+                <h3>草圖繪製的基本原則</h3>
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>草圖繪製的特性</h4>
+                        <p>每個人都可以草圖繪製；您不必具有藝術性。大多數構想通過草圖比通過文字更有效地傳達。草圖快速且便宜創造；它們不會抑制早期探索。</p>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <h4>設計對話</h4>
+                        <p>草圖是關於用戶體驗的對話，而不是產品。一個草圖不是您看到的工件，而是關於設計的對話。您的草圖代表您對設計的想法。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>13.4.1.2 草圖繪製是關於使用者體驗的對話</h3>
+                <p>草圖不是藝術。草圖繪製不是將筆放在紙上的繪畫行為，也不是關於藝術能力的。草圖不是關於製作產品的逼真繪畫或圖片。草圖是對話。草圖不是您看的工件，而是關於設計的對話。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Sketching Characteristics -->
+        <div class="slide">
+            <h2>草圖繪製的核心特徵</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>13.4.1.1 草圖繪製對於構想和設計至關重要</h4>
+                    <p>草圖繪製是設計中不可或缺的一部分。Nilsson和Ottersten（1998）將草圖繪製描述為用於腦力激盪和討論的基本視覺語言。設計是一個創造和探索的過程，草圖繪製是探索的視覺媒介。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>13.4.1.3 草圖繪製是體現認知以輔助發明</h4>
+                    <p>設計師在草圖繪製時進行發明。草圖不僅僅是表現您思考的方式；製作草圖的行為是思考過程的一部分。實際上，草圖本身不如製作它的過程重要。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>未完成的外觀邀請探索</h4>
+                <p>草圖的低解析度和持續性質表明它是一個正在製作中的概念，而不是完成的設計。它需要看起來是一次性的且便宜製作的。草圖故意模糊和抽象，為關於設計其他方面的想像留出空間。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Physical Mockups -->
+        <div class="slide">
+            <h2>13.4.3 實體模型作為體現草圖</h2>
+            
+            <div class="highlight-box">
+                <h3>實體模型的價值</h3>
+                <p>就像草圖是用於發明的二維載體一樣，用於構想的實體設備或產品的實體模型是三維草圖。實體模型作為草圖，與所有草圖一樣，製作快速，高度可處置，並且由就地材料製成，以創造用於探索設計願景和替代方案的有形道具。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>實體模型特性</h4>
+                    <p>實體模型是體現草圖，因為它甚至更具有設計構想的實體表現形式，它是觸摸、握持和體驗使用的有形工件。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>製作建議</h4>
+                    <p>建議在構想工作室備有草圖繪製用品，如素描本、白板、黑板、軟木板、便利貼標籤、膠帶和標記筆。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Critiquing -->
+        <div class="slide">
+            <h2>13.5 批判</h2>
+            
+            <div class="critiquing-guidelines">
+                <h3>批判的核心目標</h3>
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>設計評估</h4>
+                        <p>批判是評估設計構想以識別優勢、劣勢和約束以及權衡的活動。在高層次上，批判的目標是分析設計是否滿足設計目標、與生態良好配合、支援與其他設備所需的交互、提供良好可用性、喚起正面情感影響並為使用者帶來意義。</p>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <h4>評估方法</h4>
+                        <p>這種生成設計的評估部分永遠不是正式的；沒有既定的方法。它是許多替代方案的快速、熱情和自由輪換的比較，以及進一步替代方案的靈感。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Rules of Engagement -->
+        <div class="slide">
+            <h2>13.6 構想、草圖繪製和批判的參與規則</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>13.6.1 表現自己</h4>
+                    <p>過程應該是民主的，這表示以下內容：每個構想都有平等價值，過程是自我進行的，沒有個人擁有構想的所有權，所有構想都屬於團體。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>13.6.2 注意您所處的模式</h4>
+                    <p>如果您將構想與批判分開，將在任何給定時間混合模式，並且不混合模式，您將得到更好的構想並做出更好的判斷。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>13.6.3 反覆探索</h4>
+                    <p>尋找最佳設計構想需要探索大量可能性和候選設計。探索構想的最佳工具是構想、草圖繪製和批判，結合廣泛迭代。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Historical Context -->
+        <div class="slide">
+            <h2>13.7 相關歷史</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>13.7.1 參與式設計相關歷史</h4>
+                    <p>系統設計中的使用者參與概念源於工作活動理論。最初在俄羅斯和德國蓬勃發展，在1980年代在斯堪的納維亞蓬勃發展，與工作場所民主運動密切相關。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>13.7.2 體現與有形互動相關歷史</h4>
+                    <p>有形互動是工業設計中的關鍵焦點領域，涉及設計供人類握持、感受和操作的物件和產品。體現互動關於與涉及使用者身體的技術進行自然且有意義方式的互動。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>PICTIVE方法</h4>
+                <p>Muller的參與式設計願景體現在他的PICTIVE方法中，該方法是一般概念，專門為UX設計而定製。PICTIVE的主要目標是克服職場機會的限制，讓工作受影響者影響工作實踐。</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Embodied Interaction -->
+        <div class="slide">
+            <h2>體現與有形互動</h2>
+            
+            <div class="highlight-box">
+                <h3>體現互動的概念</h3>
+                <p>簡而言之，體現意味著「有身體」。因此，從字面意思來看，體現互動是關於與周圍技術進行身體互動。Dourish（2001）解釋，然而，體現不僅指實體現實，而是指「實體和社會現象在真實時間和真實空間中作為我們經驗世界的一部分展開，在我們身邊和周圍」。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>設計考量</h4>
+                    <p>將物理性、有形互動和體現融入設計意味著將互動結構編織以不僅包括視窗、圖示和選單的數位領域，還包括事物可以被觸摸、抓取、轉動、持有和以其他方式使用非認知感覺操作的物理世界。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>設計建議</h4>
+                    <p>在設計體現互動時，構想如何合併眼睛、手和身體的其他物理方面以補充設計師過去考慮的純認知動作並利用使用者思維和身體的優勢，因為他們在問題解決中相互增強。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Best Practices -->
+        <div class="slide">
+            <h2>生成式設計最佳實踐</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>建立沉浸環境</h4>
+                    <p>使用UX研究模型、社會流程、工件和物理模型都是可視的，這使它們成為組織一些構想會議的理想選擇，專注於這些模型中的每一個，使每個成為設計思考和構想的焦點。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>運用構想技術</h4>
+                    <p>例如，問自己如果您有魔法棒，您會創造什麼樣的設計。查看抽象工作活動，看看哪些構想被觸發。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>團隊合作與創意交流</h4>
+                    <p>在場景中交談，讓客戶和使用者處於中間，講述他們體驗和團隊關於設計解決方案想法的故事。讓您的構想輸出盡可能視覺化和有形化。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>IDEO的深度潛水方法</h4>
+                <p>在IDEO的「深度潛水」方法中，一個跨學科團隊在完全沉浸中工作，不考慮級別或職位。在他們的模式中，「開悟的實驗與錯誤勝過規劃的孤獨天才」。他們的設計過程在著名的ABC新聞夜線文件中得到了說明。</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Summary -->
+        <div class="slide">
+            <h2>13.8 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>本章重點回顧</h3>
+                <p>在本章中，我們討論了構想、草圖繪製和批判的生成設計活動。在下一章中，我們查看通過有助於為使用者創建有效心智模型的概念設計來傳達這些設計構想的方法。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>核心學習要點</h4>
+                    <p>沉浸為創意奠定基礎，綜合連接研究與設計，構想產生創新可能性，草圖繪製外化想法，批判評估並改進設計。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>實踐建議</h4>
+                    <p>成功的生成式設計需要平衡創造力與判斷力，鼓勵開放探索同時保持設計目標的焦點。建立支持性環境並採用適當的技術來促進創意流程。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>未來展望</h4>
+                    <p>隨著設計工具和技術的發展，生成式設計的方法也在不斷演進，但其核心原則——創造性探索、快速原型製作和迭代改進——將繼續指導優秀的設計實踐。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        showSlide(0);
+    </script>
+</body>
+</html>

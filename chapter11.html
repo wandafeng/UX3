@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第11章：UX設計的本質</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .concept-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .concept-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .concept-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .pyramid {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .pyramid-diagram {
+            width: 400px;
+            height: 300px;
+            margin: 20px auto;
+            position: relative;
+            background: linear-gradient(to bottom, #3498db 0%, #2980b9 100%);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .pyramid-level {
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .design-stages {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .stages-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .stage-circle {
+            width: 120px;
+            height: 120px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            position: relative;
+        }
+        
+        .stage-circle::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            font-size: 24px;
+            color: #3498db;
+        }
+        
+        .stage-circle:last-child::after {
+            display: none;
+        }
+        
+        .design-views {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .view-card {
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .narrow-view {
+            background: #fdf2e9;
+            border-color: #f39c12;
+        }
+        
+        .broad-view {
+            background: #e8f5e8;
+            border-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第11章：UX設計的本質</h1>
+            <div class="quote">
+                "設計是人類原始的技能，從在環境中製作工具開始。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>設計的定義與本質</li>
+                    <li>從理解需求（UX研究）到設計的思維轉換</li>
+                    <li>設計的普遍性與跨領域關係</li>
+                    <li>範圍的模糊性</li>
+                    <li>設計的目標：滿足人類需求</li>
+                    <li>人類需求金字塔</li>
+                    <li>設計階段</li>
+                    <li>設計創建的整體生命週期</li>
+                    <li>敏捷UX漏斗的設計生命週期</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is Design -->
+        <div class="slide">
+            <h2>11.1.2 什麼是設計？</h2>
+            
+            <div class="highlight-box">
+                <h3>設計的起源</h3>
+                <p>設計的主題——什麼是設計，以及如何進行設計——已經在許多不同的領域中被研究過一段時間。設計也許是人類最原始的技能，從在環境中製作工具開始。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🎨 設計的廣泛應用</h4>
+                    <p>設計研究在時間的推移中保持其相關性，體現在各種觀點、實踐和趨勢中。平面或視覺設計師可能從情感、愉悅和藝術的角度思考設計。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🔍 可用性分析師觀點</h4>
+                    <p>可用性分析師可能從診斷性的角度思考設計。顧問和設計機構可能從銷售角度看設計——誰將為此付費，以及如何為此做預算。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>📐 形式與功能</h4>
+                    <p>另一個常見觀點是設計關乎形式（產品的外觀）和功能（產品的目的）。除了這些觀點外，本書專注於兩種思考設計的方式。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Two Ways Design is Used -->
+        <div class="slide">
+            <h2>11.1.2.1 「設計」一詞的兩種使用方式</h2>
+            
+            <div class="design-views">
+                <div class="view-card">
+                    <h4>🎯 設計作為名詞</h4>
+                    <p><strong>設計作為名詞</strong>是指產品或系統的概念或計劃。這是一個關於組織、構成或元素結構的抽象構造。</p>
+                    <ul>
+                        <li>產品的概念化</li>
+                        <li>系統的組織結構</li>
+                        <li>抽象的構造概念</li>
+                    </ul>
+                </div>
+                
+                <div class="view-card">
+                    <h4>⚡ 設計作為動詞</h4>
+                    <p><strong>設計作為動詞</strong>指的是創建新設計和設計想法的行為，這些想法在之前並不存在——尋找已知問題和解決方案的解決方案。</p>
+                    <ul>
+                        <li>創造新的設計想法</li>
+                        <li>解決已知問題</li>
+                        <li>實際的創作過程</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>📱 實際應用範例</h4>
+                <p>例如，iPhone上的「捏合縮放」是一個元素（設計作為名詞），通過一個過程（設計作為動詞）生成而來。圖11.2顯示了這兩種設計使用方式之間的簡單關係。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Design Synthesis -->
+        <div class="slide">
+            <h2>11.1.3 設計綜合：從分析跨越到設計</h2>
+            
+            <div class="warning-box">
+                <h4>⚠️ 設計的隱含特性</h4>
+                <p>Beyer和Holtzblatt（1997）提醒我們「設計不在數據中明確表達。數據引導、約束並建議方向」，設計可以「回應」數據（第218頁）。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>從分析到設計的轉換</h3>
+                <p>換句話說，設計不僅僅是翻譯練習；它不是關於學習現有工作實踐並使用技術工具重新創建它。需要在思維方式上進行轉換，專注於創造新的解決方案。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🎭 魔法時刻</h4>
+                    <p>Wood（1998）稱從分析到設計的轉換為魔法發生的步驟。Kolko（2011）敦促我們將這種魔法帶到光明中。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🔄 UX技術綜合</h4>
+                    <p>當我們需要這種魔法來幫助我們跨越到新設計想法的生成時，這時我們需要從UX技術工具箱中調用綜合。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🎯 綜合的目標</h4>
+                    <p>在這裡，設計綜合的目標不同於創造力和創新。它是我們結合已知事物來激發新設計和設計想法創造的地方。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Universality of Design -->
+        <div class="slide">
+            <h2>11.1.4 設計的普遍性與與其他領域的關係</h2>
+            
+            <div class="highlight-box">
+                <h3>設計的普遍性</h3>
+                <p>設計是普遍的；它關乎創造事物（產品、服務、體驗），目標是幫助人類滿足需求。設計是許多其他創意領域的核心活動。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>👗 時尚設計</h4>
+                    <p>時尚關乎服裝設計，在功能層面是保護人類免受環境影響。但它遠不止於此，服裝設計師使用顏色、織物和形狀創造無限變化的時尚體驗。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🏭 工業設計</h4>
+                    <p>在所有設計領域中，工業設計可能最接近我們在UX中所做的。在過去的二十年中，它已經從技術修改發展為智慧型手機的體驗。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🎨 共同核心活動</h4>
+                    <p>無論領域如何，所有設計學科詞彙量可能不同，但它們都是關於理解、創造、原型製作和評估的核心活動。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Design Thinking -->
+        <div class="slide">
+            <h2>11.1.5 設計思維</h2>
+            
+            <div class="highlight-box">
+                <h3>設計思維的影響</h3>
+                <p>設計的影響甚至擴散到商業流程。設計思維（Brown, 2008; Kolko, 2015a）是一種讓組織思考設計的商業思維方式，將設計原則和實踐應用於企業和商業流程。</p>
+            </div>
+            
+            <div class="quote">
+                設計不僅僅是生命週期中的一個框；它是一個獨立的學科，有其自己的設計思維方式。設計師被要求創造新的願景，尋求深刻而滿足的用戶體驗
+            </div>
+            
+            <div class="example-box">
+                <h4>🍎 Apple的設計理念</h4>
+                <p>設計思維是市場導向的。當我購買新iPhone時，標籤上沒有寫著「Apple製造」；它聲稱「Apple設計」！</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Architecture Relationship -->
+        <div class="slide">
+            <h2>11.1.6 設計與建築的關係</h2>
+            
+            <div class="highlight-box">
+                <h3>建築作為設計靈感</h3>
+                <p>建築是一個以設計為首要的領域，是UX的靈感來源。建築是一門專注於設計空間以支持人類及其需求、維持甚至美化生活和工作的學科。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🌟 偉大建築的潛力</h4>
+                    <p>偉大的建築設計不僅提供庇護，還有潛力激發充滿活力的社區並誘發強烈的情感反應。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>⚡ 動態能量體驗</h4>
+                    <p>參觀彭博大樓的人說他們體驗到高能量和快節奏的感覺。這是因為空間中的每個元素都經過建築師精心設計，以喚起動態和連接的體驗。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>🏢 彭博總部案例</h4>
+                <p>人們在空間中移動的恆定運動，以及數字顯示屏顯示的最新金融指標、天氣和突發新聞，創造了一種能量感，當你走過中央中庭時。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Interdisciplinary Nature -->
+        <div class="slide">
+            <h2>11.1.7 設計的跨學科性質</h2>
+            
+            <div class="highlight-box">
+                <h3>UX團隊的技能需求</h3>
+                <p>在第1章中，我們說用戶體驗是用戶從工件中感受到的所有效果的總和——用戶在與工件接觸和溝通過程中看到、做到、聽到、感受到的一切以及所有行為。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🔍 問題解決專長</h4>
+                    <p>問題解決、分析和推理方面的專長</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>⚙️ 約束解決專長</h4>
+                    <p>約束解決和優化方面的專長</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>📊 產品開發專長</h4>
+                    <p>產品開發方面的專長，包括估算、預算和時間軸</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>💡 主題專長</h4>
+                    <p>工作領域和設計平台的主題專長</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🔧 技術專長</h4>
+                    <p>特定技術方面的設計專長</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🎨 藝術文化專長</h4>
+                    <p>藝術、文化、人文學科和社會科學方面的專長</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Scope Ambiguity -->
+        <div class="slide">
+            <h2>11.1.8 範圍的模糊性</h2>
+            
+            <div class="warning-box">
+                <h4>⚠️ 設計範圍的困惑</h4>
+                <p>潛在的混淆源於設計過程範圍的模糊性。一方面，我們說整個UX設計過程是設計生命週期，稱其為UX設計生命週期過程。</p>
+            </div>
+            
+            <div class="design-views">
+                <div class="view-card broad-view">
+                    <h4>🌐 廣義解釋</h4>
+                    <p>在廣義解釋中，設計指的是整個UX設計生命週期過程。簡單來說，整個UX過程就是一個設計過程。</p>
+                </div>
+                
+                <div class="view-card narrow-view">
+                    <h4>🎯 狹義解釋</h4>
+                    <p>在狹義解釋中，設計指的是UX生命週期內的單個活動。這種狹義觀點也允許我們將設計與其他生命週期活動區分開來。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>💡 實用性考量</h4>
+                <p>我們通過遵循該領域的慣例並在兩種含義下使用設計來迴避模糊性陷阱，希望上下文能提供清晰度。兩種術語解釋都是有用的，但我們缺乏詞彙來區分它們。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Purpose of Design -->
+        <div class="slide">
+            <h2>11.2 設計的目標：滿足人類需求</h2>
+            
+            <div class="highlight-box">
+                <h3>11.2.1 人類需求金字塔</h3>
+                <p>設計的目標最終是關於它為用戶在工作實踐背景下所做的事情。它包括幫助、支持、能力、服務，甚至系統為用戶提供的樂趣。</p>
+            </div>
+            
+            <div class="pyramid">
+                <h3>人類需求金字塔</h3>
+                <div class="pyramid-diagram">
+                    <div class="pyramid-level">情感需求</div>
+                    <div class="pyramid-level">互動需求</div>
+                    <div class="pyramid-level">生態需求</div>
+                </div>
+                <p><em>構成UX設計目標的人類需求金字塔</em></p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🌱 生態需求</h4>
+                    <p>人類用戶需要能夠參與並在工作（或遊戲）領域的生態系統中茁壯成長。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🤝 互動需求</h4>
+                    <p>人類用戶需要能夠在領域生態系統中執行所需的任務。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>💖 情感需求</h4>
+                    <p>人類用戶需要在使用產品時在情感和文化上感到滿足和豐富，包括與產品形成長期情感關係的需要。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Design Stages -->
+        <div class="slide">
+            <h2>11.3 設計階段</h2>
+            
+            <div class="highlight-box">
+                <h3>設計的重要性</h3>
+                <p>設計也許是最重要的生命週期活動，也是具有最廣泛視野的活動。通常，您在設計解決方案生命週期活動中所做的事情會隨著專案和產品的發展和成熟而隨時間發生巨大變化。</p>
+            </div>
+            
+            <div class="design-stages">
+                <h3>設計階段流程</h3>
+                <div class="stages-flow">
+                    <div class="stage-circle">生成式設計</div>
+                    <div class="stage-circle">概念設計</div>
+                    <div class="stage-circle">中間設計</div>
+                    <div class="stage-circle">設計製作</div>
+                </div>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>💡 生成式設計</h4>
+                    <p>構想、草圖（非常低保真度的原型製作）和批判用於生成新的設計想法。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🎯 概念設計</h4>
+                    <p>構建心智模型、系統模型、故事板、低保真度原型以用於概念設計候選項。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🔧 中間設計</h4>
+                    <p>開發生態（第15章）、互動（第16章）和情感設計（第17章）以供最有前途的候選項使用。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>📐 設計製作</h4>
+                    <p>為實施新興設計選擇指定詳細的設計計劃。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Design Iteration -->
+        <div class="slide">
+            <h2>11.4 設計階段中的迭代</h2>
+            
+            <div class="highlight-box">
+                <h3>迭代的實際意義</h3>
+                <p>作為實際問題，整體UX生命週期中的設計解決方案框展開為一系列迭代子生命週期或活動。觀察者會注意到，在圖11.7中，漸進的迭代循環系列可以被認為是螺旋生命週期概念（Boehm, 1988）。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>🔄 迭代決策點</h4>
+                <p><strong>決定設計目標：</strong>此步驟的重點是就所有後續設計迭代的目標達成一致。要回答的問題是：這是創建支持現有工作實踐的解決方案，還是創建將從根本上改變工作實踐的解決方案？</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🎨 生成式設計迭代</h4>
+                    <p>此設計創建階段的重點是盡可能多地生成設計想法和建議。迭代探索這些設計可能性是一項快速、結構鬆散的活動。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🏗️ 概念設計迭代</h4>
+                    <p>此迭代包括充實從生成式設計階段產生的需求金字塔每一層的高級設計主題或隱喻的細節。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>⚙️ 中間設計迭代</h4>
+                    <p>中間設計的目的是從多個概念設計候選項中整理出生態、互動和情感設計最可行的候選項，然後繼續充實每個候選項的細節。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Conceptual Design -->
+        <div class="slide">
+            <h2>11.4.3 概念設計迭代</h2>
+            
+            <div class="highlight-box">
+                <h3>概念設計的細節展開</h3>
+                <p>此迭代包括充實從生成式設計階段產生的需求金字塔每一層的高級設計主題或隱喻的細節。這個迭代通常需要更長時間，但範圍仍然相當大。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🌟 隱喻與概念</h4>
+                    <p>每個設備生態系統的隱喻、設計概念</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>📝 故事板與原型</h4>
+                    <p>故事板、早期線框圖和原型</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🎯 關鍵持份者評估</h4>
+                    <p>通過講故事和批判與關鍵持份者的評估</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>🎫 售票亭系統範例</h4>
+                <p>例如，對於售票亭系統，至少探索了兩個概念設計候選項以供進一步考慮。一個是傳統的導航概念，用戶從可用類別中向下鑽取。基於第一屏選擇，用戶被顯示進一步的選項和詳細信息以進行導航。第二個概念設計是使用圖16.2中描述的三面板想法。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Intermediate Design -->
+        <div class="slide">
+            <h2>11.4.4 中間設計迭代</h2>
+            
+            <div class="highlight-box">
+                <h3>中間設計的目標</h3>
+                <p>中間設計的目的是從多個概念設計候選項中整理出生態、互動和情感設計最可行的候選項，然後繼續充實每個候選項的細節。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>📋 詳細設計候選項</h4>
+                    <p>概念成熟和詳細的擴展</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>📖 圖解情境</h4>
+                    <p>圖解情境、故事板、線框圖、模式板</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>✅ 概念驗證評估</h4>
+                    <p>通過與關鍵持份者的概念驗證評估</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>🎨 視覺傳達設計</h4>
+                <p>傳達中間設計情感衝擊的最佳方式是通過模式板、樣本屏幕的視覺效果、排版調色板和聲音庫。作為此階段的一部分，將設計呈現給跨職能持份者以獲得關於可行性、平台約束等的反饋。</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Design Production -->
+        <div class="slide">
+            <h2>11.4.5 詳細設計迭代</h2>
+            
+            <div class="highlight-box">
+                <h3>設計製作階段</h3>
+                <p>詳細設計迭代，通常稱為設計製作，是您迭代設計細節並最終確定屏幕和佈局細節的地方。這也是您在移交給SE角色之前進行任何必要的更改的地方。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>📐 設計規格</h4>
+                    <p>帶註釋的線框圖、視覺組件、高保真度原型</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🔄 形成性評估</h4>
+                    <p>與用戶的形成性評估</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🎯 最終完善</h4>
+                    <p>包括視覺組件（像素完美的圖形外觀模型）、物體、顏色、尺寸、形狀、字體、間距和位置</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ 實施注意事項</h4>
+                <p>此階段的原型通常是詳細的帶註釋線框圖和/或高保真度互動模型。它們包括所有用戶介面對象和數據元素，用更高保真度和帶註釋的標注文本表示。</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Software Engineering Implementation -->
+        <div class="slide">
+            <h2>11.4.6 軟體工程實施</h2>
+            
+            <div class="highlight-box">
+                <h3>SE實施階段</h3>
+                <p>在此階段，SE同行開始實施。在實踐中，可能會發現延遲突破的約束或不可預見的技術限制，這可能會踢回設計規格給UX團隊。根據問題的嚴重性，UX設計師可能需要進行更改並回到較早的迭代階段。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>🔧 實施挑戰</h4>
+                <p>對於深度系統級問題，UX團隊可能必須回到概念設計決策以進行調整。此階段最常見的變化往往是在詳細設計級別，需要小的調整。</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: UX Fidelity Verification -->
+        <div class="slide">
+            <h2>11.4.7 UX保真度驗證階段</h2>
+            
+            <div class="highlight-box">
+                <h3>最終實施檢查</h3>
+                <p>在SE角色完成實施後，UX角色檢查最終實施，以確保SE忠實地實施了他們在移交中獲得的UX設計。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>✅ 設計一致性檢查</h4>
+                    <p>確保實施符合原始設計規格</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🎯 品質保證</h4>
+                    <p>驗證用戶體驗的完整性</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>📋 最終調整</h4>
+                    <p>必要時進行最後的細節調整</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Agile UX Funnel -->
+        <div class="slide">
+            <h2>11.5 敏捷UX漏斗的設計生命週期</h2>
+            
+            <div class="highlight-box">
+                <h3>設計創建子生命週期如何融入敏捷UX漏斗</h3>
+                <p>我們在第4章中討論的敏捷UX漏斗概念如何適應這個設計創建子生命週期？在圖11.12中，我們展示了設計子生命週期的另一個變化：漏斗每個切片中的迭代。</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🔍 漏斗設計特點</h4>
+                    <p>為漏斗中的每個功能切片設計需要對圖11.1中的步驟進行迭代。因此，在早期漏斗切片中工作對產品或系統有全局視角，因此有更大的（系統級）範圍。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>⏰ 時間分配</h4>
+                    <p>這意味著在生成式設計和概念設計階段花費更多時間，因為這些迭代的決策將對漏斗後期切片產生重大影響。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Summary -->
+        <div class="slide">
+            <h2>11.6 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 本章重點回顧</h3>
+                <ul>
+                    <li><strong>設計的本質：</strong>理解設計作為名詞和動詞的雙重含義</li>
+                    <li><strong>設計綜合：</strong>從分析跳躍到創造性設計解決方案的關鍵過程</li>
+                    <li><strong>跨學科性：</strong>設計在各個領域的普遍應用與跨學科特性</li>
+                    <li><strong>人類需求：</strong>生態、互動和情感三個層次的需求金字塔</li>
+                    <li><strong>設計階段：</strong>從生成式設計到最終實施的完整流程</li>
+                    <li><strong>迭代改進：</strong>通過反覆迭代不斷完善設計方案</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                在本章中，我們討論了設計的本質。在下一章中，我們將深入探討設計努力的更廣泛目標
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔄 下一步</h3>
+                <p>下一章將探討如何將這些設計原則應用於實際的UX專案中，包括如何在敏捷環境中平衡創造性和系統性的設計方法。</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Key Concepts Summary -->
+        <div class="slide">
+            <h2>重要概念總結</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>🎨 設計雙重性</h4>
+                    <ul>
+                        <li>設計作為名詞：產品概念</li>
+                        <li>設計作為動詞：創造過程</li>
+                        <li>兩者相互依存</li>
+                        <li>實際應用中需靈活運用</li>
+                    </ul>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🔄 設計綜合策略</h4>
+                    <ul>
+                        <li>從分析跳躍到創造</li>
+                        <li>結合已知激發創新</li>
+                        <li>利用UX技術工具箱</li>
+                        <li>平衡魔法與方法</li>
+                    </ul>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🏗️ 跨學科整合</h4>
+                    <ul>
+                        <li>借鑒建築設計智慧</li>
+                        <li>整合多領域專長</li>
+                        <li>培養全面技能組合</li>
+                        <li>促進團隊協作</li>
+                    </ul>
+                </div>
+                
+                <div class="concept-card">
+                    <h4>🎯 實務平衡</h4>
+                    <ul>
+                        <li>理論與實務結合</li>
+                        <li>範圍靈活調整</li>
+                        <li>時程現實規劃</li>
+                        <li>品質與效率並重</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>💡 實務建議</h3>
+                <p>成功的UX設計實施需要理解設計的多面向本質，建立強大的跨學科技能基礎，並在創造性思維與系統性方法之間找到平衡。設計不僅是技術工具的應用，更是對人類需求深度理解基礎上的創新解決方案創造過程。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

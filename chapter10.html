@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第十章：使用者故事與UX設計需求</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .user-story-format {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        
+        .requirement-format {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.0em;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .definition-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .definition-box h4 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+        .structure-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .flow-step::after {
+            content: '↓';
+            display: block;
+            color: #3498db;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        
+        .flow-step:last-child::after {
+            display: none;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .lifecycle-position {
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .process-flow {
+            background: #f5f5f5;
+            border: 2px solid #9932cc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第十章：使用者故事與UX設計需求</h1>
+            
+            <div class="quote">
+                "使用者故事是當今世界中UX設計需求和軟體工程實施需求的標準方法"
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>UX設計需求概念</li>
+                    <li>使用者故事作為表達UX設計需求的敏捷方式</li>
+                    <li>使用者故事定義</li>
+                    <li>使用者故事結構</li>
+                    <li>撰寫使用者故事</li>
+                    <li>罕見情況下需要的UX設計需求</li>
+                    <li>組成需求陳述</li>
+                    <li>與使用者和利害關係人驗證使用者故事和需求</li>
+                </ul>
+            </div>
+            
+            <div class="lifecycle-position">
+                <h3>您在UX生命週期中的位置</h3>
+                <p>您在使用者故事和UX需求章節中，位於理解需求活動的脈絡中，在整體Wheel UX生命週期中</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>10.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>10.1.1 您目前所在的位置</h3>
+                <p>我們以每個流程章節開始的「您在這裡」圖片開始本章，顯示章節主題在The Wheel整體UX設計生命週期模板的脈絡。UX研究的目標是發現和學習關於需要為UX設計的想要和需要。在本章中，我們合成關於這些想要和需要的資訊為使用者故事和設計需求，以驅動目標產品或系統的設計。</p>
+            </div>
+            
+            <div class="definition-box">
+                <h4>10.1.2 使用者故事和需求的困難現實</h4>
+                <p>在本書前一版中，我們嘗試獨立於其他UX設計問題討論使用者故事和需求。我們希望這會幫助讀者理解基本概念，但它也隱瞞了其現實的複雜性。使用者故事和需求並非在UX研究結束時產生，而是在整個開發過程中不斷演進的。</p>
+            </div>
+            
+            <div class="flow-diagram">
+                <div class="flow-step">UX研究資料收集</div>
+                <div class="flow-step">資料分析與建模</div>
+                <div class="flow-step">使用者故事撰寫</div>
+                <div class="flow-step">需求陳述組成</div>
+                <div class="flow-step">與利害關係人驗證</div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Completeness Not Feasible -->
+        <div class="slide">
+            <h2>10.1.3-10.1.4 需求完整性與敏捷轉變</h2>
+            
+            <div class="warning-box">
+                <h4>10.1.3 需求完整性不可行</h4>
+                <p>在傳統瀑布方法建立系統時，對完整性和需求規格化有很大強調。專門角色會花費大量時間和努力詳細說明設計活動之前預想系統的每個方面。實際上，這很少成功，因為團隊理解、技術能力、客戶需求或其他方面在需求指定時間和系統建立之間不可避免會改變。</p>
+                <p>作為回應，敏捷方法採用較不完整且更非正式的方法，我們為預想系統提出需求作為使用者故事，有時作為一般需求。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>10.1.4 從模型和工作活動親和圖獲取使用者故事和需求</h3>
+                <p>開始尋找需求的最簡單方法之一是從工作活動親和圖（WAAD）中的筆記開始；然而，由於這些幾乎總是不完整，它們不能是需求的唯一來源。我們還需要包含更完整的資料模型作為輸入。</p>
+                <p>每個任務在HTI中需要被需求涵蓋。任務序列模型中的每個流程和流程模型中的每個流程必須在需求中處理。來自其他輸入的需求和能力仍然可以由使用者驗證和優先處理。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: User Stories -->
+        <div class="slide">
+            <h2>10.2 使用者故事</h2>
+            
+            <div class="definition-box">
+                <h4>10.2.1 什麼是使用者故事？</h4>
+                <p>使用者故事是以短敘述表達的小範圍UX設計需求，以使用者聲音描述特定工作角色中使用者所需的功能或能力，以及為什麼需要它的理由，用作敏捷UX設計需求。</p>
+                <p>根據Gothelf和Seiden（2016），使用者故事是一種非常小範圍的需求，指定「表達為使用者利益的最小工作單位」。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>使用者故事特性</h3>
+                <p>使用者故事具有以下特性：</p>
+                <ul>
+                    <li>涉及使用者輸入</li>
+                    <li>從使用者和使用觀點陳述</li>
+                    <li>因敏捷軟體組件而受歡迎</li>
+                    <li>現在是業界事實標準</li>
+                    <li>是向使用者提供有意義能力塊的方式</li>
+                </ul>
+            </div>
+            
+            <div class="user-story-format">
+                <strong>使用者故事標準格式：</strong><br><br>
+                作為 <相關使用者工作角色>，我希望能夠 <所需的小範圍能力> 在 <產品或系統使用中>，所以 <添加價值此能力將提供的理由>。
+            </div>
+        </div>
+
+        <!-- Slide 5: User Story Characteristics -->
+        <div class="slide">
+            <h2>10.2.1.1-10.2.1.2 使用者故事特性</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>10.2.1.1 僅來自使用者的故事無法產生完整需求</h4>
+                    <p>使用者故事來自原始UX研究資料，其中使用者表達他們對功能和UX特性的需求和渴望。然而，早期就明顯，使用者未受訓產生需求，不太可能呈現完整的問題集。我們期望從使用者得到的與我們從任務中得到的相同，但使用者故事的輸入必須來自許多來源。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>10.2.1.2 清理和增強使用者故事</h4>
+                    <p>在一天結束時，UX分析師的工作是確保使用來驅動UX設計的使用者故事的品質和相對完整性。作為UX分析師，我們必須：</p>
+                    <ul>
+                        <li>編輯現有使用者故事使其有效</li>
+                        <li>將來自許多來源的輸入編輯為使用者故事格式</li>
+                        <li>撰寫額外使用者故事以填補缺口</li>
+                        <li>涵蓋使用者故事中所有在合約和專案定義文件中交付的需求</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>重要提醒</h4>
+                <p>無論誰撰寫使用者故事，它們必須捕捉設計需求並將需求分為小範圍項目。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Writing User Stories -->
+        <div class="slide">
+            <h2>10.2.2 撰寫使用者故事</h2>
+            
+            <div class="highlight-box">
+                <h3>10.2.2.1 使用者故事的近似格式</h3>
+                <p>開始從客戶、使用者或適當代理輸入，識別預想系統的最高優先級區域以專注。查看工作活動筆記、WAAD和您合成的其他模型，其目標區域。查看反映問題的筆記，使用者對現有產品或系統有困難，以及新功能需求。</p>
+                <p>由於規模小和範圍，每個使用者故事應適合一張3×5索引卡。我們使用以下格式表示使用者故事：</p>
+            </div>
+            
+            <div class="user-story-format">
+                作為 &lt;相關使用者工作角色&gt;我希望能夠 &lt;所需的小範圍能力在產品或系統使用中&gt;，所以 &lt;添加價值此能力將提供的理由&gt;。
+            </div>
+            
+            <div class="example-box">
+                <h4>售票亭系統使用者故事範例</h4>
+                <div class="user-story-format" style="background: #fff; border: 1px solid #ccc; text-align: left;">
+                    考慮此工作活動筆記：<br>
+                    "對於體育活動，我希望選項購買多張相鄰座位的票券，以便我可以和朋友坐在一起。"<br><br>
+                    下一步到使用者故事是簡短的：<br><br>
+                    <strong>作為學生票券買方，當購買體育活動票券時，我希望選項獲得多個相鄰座位，以便我可以和朋友坐在一起。</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: User Story Examples -->
+        <div class="slide">
+            <h2>使用者故事範例與推廣</h2>
+            
+            <div class="example-box">
+                <h4>從原始UX研究資料識別使用者故事輸入</h4>
+                <p>考慮這些相關工作活動筆記：</p>
+                <div class="quote" style="text-align: left; background: #f9f9f9;">
+                    "我希望看到評論和其他來自已經看過表演的人的回饋。"<br>
+                    "[設計想法] 考慮包括人們添加評論和評價評論的能力。"
+                </div>
+                <p>第一個是明顯的使用者故事輸入候選者。第二個，由UX研究資料收集者添加為相關思想，是可能轉化為使用者故事形式的設計想法，儘管設計想法並非直接來自使用者，但如果對過程有價值，它確實在使用者訪談脈絡中出現，應該被捕捉。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>10.2.3 從使用者故事推廣需求以一般化UX研究資料</h4>
+                <p>原始資料筆記中的使用者陳述可能相當狹窄和特定。有時您需要從這些陳述或洞察推廣以獲得更一般和更有用的情況，如我們在前面關於溜冰的範例中所做的。</p>
+                
+                <div class="user-story-format" style="background: #fff; border: 1px solid #ccc; text-align: left;">
+                    原始筆記：<br>
+                    "我有時想找到與我自己個人興趣有關的活動。例如，我真的喜歡溜冰並想看看附近地區有什麼類型的娛樂活動具有任何類型的溜冰。"<br><br>
+                    
+                    推廣的使用者故事：<br>
+                    <strong>作為票券買方我希望能夠按活動類型或描述關鍵詞搜尋活動，以便我可以找到我喜歡的娛樂類型。</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: User Story Structure -->
+        <div class="slide">
+            <h2>10.2.4 使用者故事結構</h2>
+            
+            <div class="structure-diagram">
+                <h3>使用者故事結構：為UX設計組織使用者故事集合</h3>
+                <p>在專案中，您可能需要透過將相關功能或相關任務的相關集合分組，組織大量不同使用者故事，我們稱之為使用者故事結構。由於UX使用者故事是關於使用者能力的故事，它們與使用者任務密切相關，您可以使用類似HTI的結構組織它們。這使我們考慮相關功能一起開發使用者故事結構。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>找尋和購買活動票券的使用者故事分組範例</h4>
+                <p>考慮票券買方工作角色的部分任務和使用者故事結構，如圖10.2所示。圖10.2中左下方的框包含與搜尋活動使用者任務相關的使用者故事組，您可以購買票券：</p>
+                
+                <div class="technique-grid">
+                    <div class="technique-card">
+                        <h4>搜尋類別</h4>
+                        <p><strong>使用者故事83：</strong><br>
+                        作為票券買方我希望能夠按價格、藝術家、場地或日期搜尋活動，因為我希望在搜尋中最大彈性。</p>
+                    </div>
+                    <div class="technique-card">
+                        <h4>搜尋功能</h4>
+                        <p><strong>使用者故事104：</strong><br>
+                        作為票券買方我希望Google風格搜尋，我輸入，例如，樂隊名稱，因為我不希望被特殊格式約束。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: UX Design Requirements -->
+        <div class="slide">
+            <h2>10.3 UX設計需求</h2>
+            
+            <div class="definition-box">
+                <h4>UX設計需求概述</h4>
+                <p>為完整性，我們現在揮手簡要描述UX設計需求規格。如我們在第4.2節所說，在舊瀑布過程廣泛使用時，傳統上需要表達系統中需要的内容為正式需求文件，通常從系統中心觀點清楚表達。</p>
+                <p>然而，即使在SE世界中，需求規格的重要性正在減少，主要是因為它們無法運作。在增加認知，詳細的正式需求無法完成、100%正確或防止在生命週期中改變。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>10.3.1 需求作為設計目標，不是約束</h3>
+                <p>在轉向需求機制之前，我們提供另一種思考需求的方法，即設計目標。昔日UX思維是關於需求，那就是設計目標。需求以前是不變和絕對的：「你應該提供這些功能，你應該以我們說的方式做」。這種獨裁的需求觀念沒有為創造性設計解決方案和適應改變留下空間。</p>
+                <p>今天的UX思維更多關於將需求視為不是約束而是有自由解釋如何設計應該達成這些目標的設計目標。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Requirements from Models -->
+        <div class="slide">
+            <h2>10.3.2-10.3.3 從模型獲取需求</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>10.3.2 查看WAAD和其他UX研究資料模型以開始需求</h4>
+                    <p>我們總是查看WAAD，在第7.5節建立，以輸入一般需求。一次通過WAAD一個工作活動筆記。如果任何WAAD筆記最適合解釋為需求輸入，則捕捉它們。</p>
+                    <p>需求也可以來自所有其他模型。例如，HTI中的每個任務需要被需求涵蓋。任務序列模型中每個必須在設想系統中支援，使其為需求。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>10.3.3 需求陳述</h4>
+                    <p>建議的需求陳述格式顯示在圖10.3中，反映在工作活動筆記或模型中表達的想要或需求。</p>
+                    <div class="requirement-format">
+                        主要功能或需求結構內類別名稱<br>
+                        二級功能或類別名稱<br>
+                        需求<br>
+                        理由（如有用）：理由陳述（需求理由）<br>
+                        筆記（可選）：額外註釋，如有用
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Requirement Examples -->
+        <div class="slide">
+            <h2>需求陳述範例</h2>
+            
+            <div class="example-box">
+                <h4>從售票亭系統工作活動筆記撰寫需求陳述</h4>
+                <p>考慮來自售票亭系統的UX研究工作活動筆記：</p>
+                <div class="quote" style="text-align: left;">
+                    "使用者應該獲得列印票券作為購買交易的一部分。"
+                </div>
+                <p>沒有這種即時回饋，使用者可能對必須信任他們會得到所付費的東西感到不舒服。此筆記可以直接轉化為圖10.4的高層設計需求陳述：</p>
+                
+                <div class="requirement-format">
+                    票券購買序列<br>
+                    有形使用者回饋<br><br>
+                    
+                    <strong>售票亭應該產生列印票券作為票券購買交易的一部分。</strong><br><br>
+                    
+                    筆記：此需求有嚴重硬體和系統含義。票券印表機必須高度可靠且必須接受定期維護。
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: More Requirement Examples -->
+        <div class="slide">
+            <h2>更多需求陳述範例</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>安全與隱私需求</h4>
+                    <div class="requirement-format">
+                        安全<br>
+                        票券買方交易隱私<br><br>
+                        
+                        <strong>應保護票券買方交易的安全和隱私。</strong><br><br>
+                        
+                        筆記：在設計中，考慮超時功能以清除客戶間螢幕。
+                    </div>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>商業決策需求</h4>
+                    <div class="requirement-format">
+                        商業問題，決策：<br>
+                        售票亭位置<br><br>
+                        
+                        <strong>應提供位於售票處附近的售票亭。</strong><br><br>
+                        
+                        筆記：此需求在售票處太忙或關閉時為使用者服務。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>從基本資料筆記一般化需求</h4>
+                <p>如果基本資料筆記非常特定，您可能必須抽象它以表達一般需求。考慮以下原始資料筆記：</p>
+                <div class="quote" style="text-align: left;">
+                    "通常，我在活動地點購買票券就在活動之前。對於特殊活動，我可能在線購買。然後我通常必須在完全不同的位置不同售票亭獲得票券。如果我可以在一個售票亭購買所有這些不同票券，那會給我一站購物所有活動。"
+                </div>
+                <p>這是關於將活動視為廣泛娛樂活動並擁有足夠廣泛票券覆蓋範圍，以便售票亭可以成為「活動內容」一站購物位置，因此擴展「活動內容」包括，例如，餐廳預訂和運輸票券與活動結合。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Unexpected Requirements -->
+        <div class="slide">
+            <h2>可能意外的售票亭系統需求</h2>
+            
+            <div class="example-box">
+                <h4>意外需求範例</h4>
+                <div class="warning-box">
+                    <p><strong>資料筆記：</strong>雖然行銷人員可能不想將售票亭放在售票處附近，對於到達那裡發現售票處太忙或關閉的人會非常有幫助。</p>
+                    <p>此筆記（關於在售票處附近定位售票亭）可能揭示意外需求，因為您可能不會想到它。可能的結果需求陳述顯示在圖10.7中。</p>
+                </div>
+                
+                <div class="requirement-format">
+                    商業問題，決策：<br>
+                    支援活動類型和票券<br><br>
+                    
+                    <strong>應為與娛樂活動相關的廣泛需求範圍提供票券和預訂。</strong><br><br>
+                    
+                    範例：這應包括活動票券以及運輸和餐廳預訂。
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>10.3.4 組織需求陳述</h3>
+                <p>您需要設計管理和追蹤需求陳述的方法。對於不需要最大嚴格性的專案，簡單縮排清單就足夠作為追蹤我們將為其設計系統能力的有效方法。對於更大專案或需要更嚴格性的情況，您可以建構需求陳述的階層結構，這是按類別的需求陳述階層文件。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Validation Process -->
+        <div class="slide">
+            <h2>10.4 將使用者故事和需求帶回客戶和使用者驗證</h2>
+            
+            <div class="highlight-box">
+                <h3>驗證的重要性</h3>
+                <p>在使用者故事或需求被蒐集和組織為階層結構後，現在是將它們帶回使用者和其他利害關係人確保它們是正確的好時機。非結構化使用者故事和需求集合為您、您的客戶或客戶，以及您的使用者提供鏡頭，透過它您可以思考和討論相關故事和需求組，在各種抽象層次。這是您獲得輸入並在進入設計之前糾正誤解機會的重要步驟。</p>
+            </div>
+            
+            <div class="process-flow">
+                <h3>驗證過程步驟</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step">引導他們通過需求確保正確</div>
+                    <div class="flow-step">幫助您確認對使用者和需求理解是準確和相對完整</div>
+                    <div class="flow-step">因為這些需求本質上遠超UX關注並影響SE，好時候協調SE和系統工程團隊</div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>驗證的實務考量</h4>
+                <p>因為這些需求本質上遠超UX關注並影響SE、硬體和系統，現在是協調SE和系統工程團隊、提升需求影響其領域意識並促進術語和理解一致性的好時機。</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Synthesis Process -->
+        <div class="slide">
+            <h2>10.5 回顧朝向合成和理解UX設計需求「大象」的進展</h2>
+            
+            <div class="highlight-box">
+                <h3>合成的目標</h3>
+                <p>UX研究在第二部分章節的目標是完全理解要設計的產品或系統設計需求。理解設計需求是大任務，取決於理解使用者和其工作實務在工作領域內。</p>
+                <p>您也可以從一個觀點獲得完整圖像。每個UX研究活動，如資料蒐集、資料萃取、WAAD建立、資料建模和需求撰寫，揭示理解設計需求的不同觀點。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>合成技術的運用</h4>
+                    <p>不同輸入的合成是UX技術工具箱的技術。一般而言，合成用於結合不同輸入、事實和觀察部分，形成對整體概念特徵和理解的結論。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>UX研究中的合成</h4>
+                    <p>在UX研究中，我們使用合成找到我們建構模型和表示間的連接，將片段組合形成整個大象。我們合成不同方式篩選資料的片段，意味著隱藏關係和對工作實務和產品或系統工作領域設計需求洞察。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                這是浸泡發生的地方。現在我們已經執行第二部分這本書中每個UX研究活動，現在是退後一步審查我們朝向合成和理解設計需求大象的進展
+            </div>
+        </div>
+
+        <!-- Slide 16: Understanding Assessment -->
+        <div class="slide">
+            <h2>理解評估檢核清單</h2>
+            
+            <div class="highlight-box">
+                <h3>作為一種石蕊試驗，我們提交以下問題：</h3>
+                <ul>
+                    <li>我們對使用者、其目標、任務、情感影響因素、社會動態是否有完整理解；工作和工作實務、工作角色，包括分解、差距、挑戰和機會？</li>
+                    <li>我們是否理解工作實務生態和與領域中其他人的對比？</li>
+                    <li>我們是否理解商業領域的更廣泛趨勢？</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h4>如果答案不全是「是」</h4>
+                <p>如果答案不全是肯定的，設計師需要用適當模型或人工製品充實理解，如WAAD或甚至使用者故事和需求。如果您的理解需要充實，在適當答案不滿足您的理解需要時，您將會有模型能力的最大回報來補強對設計需求更好理解。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>進入第三部分的準備</h4>
+                <p>恭喜完成第二部分UX研究。我們現在進入本書第三部分設計，接着第四部分，關於原型。流程章節在第五部分完成，關於UX評估。</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Exercise -->
+        <div class="slide">
+            <h2>練習10.1-10.2：撰寫使用者故事與需求陳述</h2>
+            
+            <div class="example-box">
+                <h4>練習10.1：為您的產品或系統撰寫使用者故事</h4>
+                <p><strong>目標：</strong>使用第10.2.2.1節建議格式撰寫一些可信使用者故事。</p>
+                <p><strong>活動：</strong>如果您單獨工作，現在是時候為比薩啤酒UX研究分析派對與朋友（見第5.6.1.2節）。</p>
+                <ul>
+                    <li>無論您如何組成團隊，指定團隊領導和作為筆記記錄者的人</li>
+                    <li>確保過濾掉所有不必要措辭、冗詞和雜音</li>
+                    <li>當工作活動筆記被叫出時，記錄者將它們輸入到使用者故事和需求表格中</li>
+                    <li>團隊所有人應一起工作確保個別工作活動筆記從上下文依賴中消歧</li>
+                </ul>
+                <p><strong>交付項目：</strong>一些使用者故事分享和討論。<br>
+                <strong>時程：</strong>約一小時應足夠時間完成此練習。</p>
+            </div>
+            
+            <div class="technique-card">
+                <h4>練習10.2：為您的產品或系統撰寫UX設計需求陳述</h4>
+                <p><strong>目標：</strong>使用第10.3.3節建議格式撰寫一些可信UX設計需求陳述。</p>
+                <p><strong>交付項目：</strong>一個任務序列，撰寫為基本用例模型。<br>
+                <strong>時程：</strong>約30分鐘應足夠時間完成此作業。</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Best Practices -->
+        <div class="slide">
+            <h2>使用者故事與需求最佳實務</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>使用者故事撰寫原則</h4>
+                    <ul>
+                        <li>保持故事規模小且專注</li>
+                        <li>使用清晰、簡潔的語言</li>
+                        <li>從使用者觀點表達</li>
+                        <li>包含明確的價值陳述</li>
+                        <li>確保故事可測試和可驗證</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>需求管理策略</h4>
+                    <ul>
+                        <li>建立清晰的需求階層結構</li>
+                        <li>定期與利害關係人驗證需求</li>
+                        <li>追蹤需求變更和影響</li>
+                        <li>保持需求與設計目標一致</li>
+                        <li>文件化需求決策理由</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>常見陷阱避免</h4>
+                <ul>
+                    <li>避免過於技術性的描述</li>
+                    <li>不要假設使用者需求完全完整</li>
+                    <li>避免過早陷入實施細節</li>
+                    <li>確保需求可追溯到使用者價值</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 19: Integration with Design Process -->
+        <div class="slide">
+            <h2>與設計流程的整合</h2>
+            
+            <div class="process-flow">
+                <h3>從需求到設計的流程</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step">使用者故事和需求定義</div>
+                    <div class="flow-step">設計概念發展</div>
+                    <div class="flow-step">原型製作</div>
+                    <div class="flow-step">使用者測試和驗證</div>
+                    <div class="flow-step">設計迭代和改進</div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>持續改進過程</h3>
+                <p>使用者故事和需求並非靜態文件，而是在整個設計和開發過程中不斷演進的活文件。設計師應該準備基於新洞察、使用者回饋和技術約束來調整和精煉需求。這種迭代方法確保最終產品真正滿足使用者需求並提供卓越的使用者體驗。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>敏捷環境中的需求</h4>
+                    <p>在敏捷開發環境中，使用者故事作為開發衝刺的基礎。每個故事應該足夠小，可以在單一衝刺內完成，並為使用者提供可測量的價值。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>跨職能協作</h4>
+                    <p>成功的需求管理需要UX設計師、產品經理、開發人員和利害關係人之間的密切協作。定期審查和更新需求確保所有人對專案目標有共同理解。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Summary -->
+        <div class="slide">
+            <h2>10.6 本章總結</h2>
+            
+            <div class="highlight-box">
+                <h3>關鍵學習成果</h3>
+                <p>在本章中，我們學習如何將UX研究成果轉化為可操作的使用者故事和設計需求。這個過程是UX設計生命週期中的關鍵轉折點，將研究洞察轉化為具體的設計指導。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>使用者故事掌握</h4>
+                    <ul>
+                        <li>理解使用者故事的結構和目的</li>
+                        <li>學會從原始研究資料撰寫有效故事</li>
+                        <li>掌握故事的組織和優先排序</li>
+                        <li>了解如何驗證和改進故事品質</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>需求管理能力</h4>
+                    <ul>
+                        <li>建立清晰的需求陳述格式</li>
+                        <li>從多個來源綜合需求輸入</li>
+                        <li>組織和管理需求階層結構</li>
+                        <li>與利害關係人有效溝通需求</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote">
+                通過系統性地將UX研究轉化為使用者故事和需求，我們為後續的設計階段建立了堅實基礎，確保設計決策始終以使用者需求為中心
+            </div>
+            
+            <div class="highlight-box">
+                <h3>後續發展</h3>
+                <p>完成使用者故事和需求定義後，我們現在準備進入設計階段。下一階段將運用這些需求來創建具體的設計解決方案，包括概念設計、詳細設計和原型製作。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">20</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
