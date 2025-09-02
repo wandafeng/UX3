@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第28章：互動週期</title>
+    <title>第28章：互動循環</title>
     <style>
         body {
             font-family: 'Microsoft JhengHei', Arial, sans-serif;
@@ -91,30 +91,144 @@
             border-radius: 5px;
         }
         
-        .example-box {
+        .cycle-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .cycle-visual {
+            width: 400px;
+            height: 400px;
+            margin: 20px auto;
+            position: relative;
+            border: 4px solid #3498db;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ecf0f1, #fff);
+        }
+        
+        .cycle-component {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            background: #3498db;
+            color: white;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .planning {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e74c3c;
+        }
+        
+        .translation {
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            background: #f39c12;
+        }
+        
+        .execution {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #27ae60;
+        }
+        
+        .assessment {
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: #9b59b6;
+        }
+        
+        .norman-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .stage-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stage-step {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .stage-step.left {
+            background: #e74c3c;
+        }
+        
+        .stage-step.right {
+            background: #27ae60;
+        }
+        
+        .gulf-visual {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            height: 200px;
+        }
+        
+        .gulf-side {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .gulf-execution {
+            background: #fdf2e9;
+            border: 2px solid #f39c12;
+            border-radius: 10px;
+        }
+        
+        .gulf-evaluation {
             background: #e8f5e8;
-            border: 1px solid #27ae60;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
         }
         
-        .example-box h4 {
-            color: #27ae60;
-            margin-top: 0;
+        .gulf-bridge {
+            width: 100px;
+            height: 4px;
+            background: #34495e;
+            margin: 0 20px;
+            position: relative;
         }
         
-        .warning-box {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        
-        .warning-box h4 {
-            color: #856404;
-            margin-top: 0;
+        .gulf-bridge::before {
+            content: '🌉';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
         }
         
         .technique-grid {
@@ -141,162 +255,6 @@
         .technique-card p {
             font-size: 0.9em;
             color: #6c757d;
-        }
-        
-        .cycle-diagram {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        .cycle-visual {
-            width: 400px;
-            height: 400px;
-            margin: 20px auto;
-            position: relative;
-            border: 3px solid #3498db;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ecf0f1, #fff);
-        }
-        
-        .cycle-stage {
-            position: absolute;
-            width: 100px;
-            height: 60px;
-            background: #3498db;
-            color: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-            font-weight: bold;
-            text-align: center;
-        }
-        
-        .stage-planning {
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .stage-translation {
-            top: 50%;
-            left: 20px;
-            transform: translateY(-50%);
-        }
-        
-        .stage-physical {
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .stage-outcomes {
-            bottom: 50%;
-            right: 20px;
-            transform: translateY(50%);
-        }
-        
-        .stage-assessment {
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-        }
-        
-        .gulf-diagram {
-            background: linear-gradient(to right, #e74c3c, #3498db);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            color: white;
-            text-align: center;
-        }
-        
-        .gulf-visual {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-        }
-        
-        .gulf-side {
-            background: rgba(255,255,255,0.2);
-            padding: 20px;
-            border-radius: 10px;
-            width: 40%;
-        }
-        
-        .gulf-bridge {
-            width: 15%;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-        
-        .task-flow {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .flow-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .flow-step {
-            background: #3498db;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            position: relative;
-        }
-        
-        .flow-step::after {
-            content: '↓';
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 20px;
-            color: #3498db;
-        }
-        
-        .flow-step:last-child::after {
-            display: none;
-        }
-        
-        .multi-user-diagram {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .users-visual {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 20px 0;
-        }
-        
-        .user-cycle {
-            width: 150px;
-            height: 150px;
-            border: 3px solid #3498db;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            font-weight: bold;
-            text-align: center;
         }
         
         .navigation {
@@ -337,7 +295,6 @@
             padding: 10px 15px;
             border-radius: 20px;
             font-size: 0.9em;
-            z-index: 1000;
         }
         
         .home-link {
@@ -352,11 +309,127 @@
             font-weight: bold;
             transition: all 0.3s;
             font-size: 0.9em;
-            z-index: 1000;
         }
         
         .home-link:hover {
             background: #2980b9;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .task-example {
+            background: #f0f8ff;
+            border: 1px solid #4a90e2;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .task-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .task-step {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .multi-user-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .user-cycles {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .user-cycle {
+            width: 150px;
+            height: 150px;
+            border: 3px solid #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #ecf0f1, #fff);
+            position: relative;
+        }
+        
+        .user-cycle::before {
+            content: attr(data-user);
+            position: absolute;
+            top: -30px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .stacking-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .stack-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .stack-layer {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .stack-layer.secondary {
+            background: #e74c3c;
+            width: 180px;
+        }
+        
+        .stack-layer.primary {
+            background: #27ae60;
+            width: 220px;
         }
     </style>
 </head>
@@ -364,435 +437,370 @@
     <div class="presentation-container">
         <!-- Slide 1: Title -->
         <div class="slide active">
-            <h1>第28章：互動週期</h1>
+            <h1>第28章：互動循環 (The Interaction Cycle)</h1>
             <div class="quote">
-                "互動週期是我們對Norman（1986）'行動階段'模型的適應，該模型描述了人類用戶與幾乎任何種類系統之間典型發生的互動用戶行動序列。"
+                "互動循環是我們對Norman (1986) 『行動階段』模型的改編，該模型描述了人類使用者與幾乎任何類型系統之間典型發生的互動序列。"
             </div>
             <div class="highlight-box">
                 <p><strong>本章重點：</strong></p>
                 <ul>
-                    <li>簡介</li>
-                    <li>互動週期</li>
+                    <li>互動循環概念介紹</li>
                     <li>基於理論的概念框架需求</li>
-                    <li>互動週期</li>
-                    <li>Norman的行動階段互動模型</li>
-                    <li>用戶與系統間的鴻溝</li>
-                    <li>從Norman模型到我們的互動週期</li>
-                    <li>互動週期中的協作用戶系統任務績效</li>
+                    <li>Norman的行動階段模型</li>
+                    <li>使用者與系統間的鴻溝</li>
+                    <li>從Norman模型到互動循環的轉換</li>
+                    <li>互動循環內的合作式使用者-系統任務執行</li>
+                    <li>UX設計議題的互動循環類別</li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 2: Introduction -->
+        <!-- Slide 2: What is the Interaction Cycle -->
         <div class="slide">
-            <h2>28.1 簡介</h2>
+            <h2>28.1 什麼是互動循環？</h2>
             
             <div class="highlight-box">
-                <h3>28.1.1 什麼是互動週期？</h3>
-                <p>互動週期是我們對Norman（1986）"行動階段"模型的適應，該模型描述了人類用戶與幾乎任何種類系統之間典型發生的互動用戶行動序列。</p>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🎯 理論基礎需求</h4>
-                    <p>Gray和Salzman（1998）指出："對於天真的觀察者來說，HCI領域似乎應該有一套共同類別來討論其最基本概念之一：可用性。但我們沒有。"</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>📚 分類架構發展</h4>
-                    <p>正如Gray和Salzman（1998）所說："發展一個共同的分類架構，最好是基於理論的，將使我們能夠比較不同類型軟體和介面的可用性問題。"</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔗 易供性概念連結</h4>
-                    <p>我們相信我們的互動週期與易供性概念一起，有助於滿足這一需求。它為UX實務人員提供了一種在設計如何支持用戶行動和意圖的結構內框架設計問題和UX問題資料的方法。</p>
-                </div>
-            </technique-grid>
-            
-            <div class="example-box">
-                <h4>概念框架價值</h4>
-                <p>它為UX實務人員提供了一種在設計如何支持用戶行動和意圖的結構內框架設計問題和UX問題資料的方法。</p>
-            </div>
-        </div>
-
-        <!-- Slide 3: Norman's Model -->
-        <div class="slide">
-            <h2>28.2 Norman的行動階段互動模型</h2>
-            
-            <div class="highlight-box">
-                <h3>行動階段的三大類用戶活動</h3>
-                <p>Norman（2013）的行動階段模型如圖28.1所示。行動階段自然分為三大類用戶活動。</p>
+                <h3>定義</h3>
+                <p>互動循環是我們對Norman (1986) 「行動階段」模型的改編，該模型描述了人類使用者與幾乎任何類型系統之間典型發生的互動序列。</p>
             </div>
             
             <div class="cycle-diagram">
-                <h3>Norman的行動階段模型</h3>
+                <h3>基本互動循環</h3>
                 <div class="cycle-visual">
-                    <div class="cycle-stage stage-planning">目標<br>預期最終狀態</div>
-                    <div class="cycle-stage stage-translation">行動意圖</div>
-                    <div class="cycle-stage stage-physical">行動序列</div>
-                    <div class="cycle-stage stage-outcomes">執行</div>
-                    <div class="cycle-stage stage-assessment">評估結果</div>
+                    <div class="cycle-component planning">規劃<br>Planning</div>
+                    <div class="cycle-component translation">轉換<br>Translation</div>
+                    <div class="cycle-component execution">執行<br>Execution</div>
+                    <div class="cycle-component assessment">評估<br>Assessment</div>
                 </div>
-                <p><em>用戶活動的循環性質</em></p>
+                <p><em>四個基本階段形成完整的互動循環</em></p>
             </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>📋 執行側（左側）</h4>
-                    <p>用戶通常從圖的頂部開始，建立目標，將目標分解為任務和意圖，並將意圖映射到行動序列規範。用戶通過執行物理行動來操縱系統控制項。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔍 評估側（右側）</h4>
-                    <p>用戶感知、解釋和評估關於目標和意圖的結果，從感知系統狀態開始，通過感知系統回饋。互動成功然後通過將結果與原始目標比較來評估。</p>
-                </div>
-            </technique-grid>
-        </div>
-
-        <!-- Slide 4: Gulfs Between User and System -->
-        <div class="slide">
-            <h2>28.2.1 用戶與系統間的鴻溝</h2>
-            
-            <div class="highlight-box">
-                <h3>執行與評估的鴻溝</h3>
-                <p>最初由Hutchins、Hollan和Norman（1986）構想，執行和評估的鴻溝後來被Norman（1986）進一步描述。兩個鴻溝代表用戶互動中最困難的地方，設計師需要特別注意幫助用戶。</p>
-            </div>
-            
-            <div class="gulf-diagram">
-                <h3>執行與評估鴻溝</h3>
-                <div class="gulf-visual">
-                    <div class="gulf-side">
-                        <h4>執行鴻溝</h4>
-                        <p>用戶需要幫助了解在系統中的什麼對象上採取什麼行動來完成工作目標</p>
-                    </div>
-                    <div class="gulf-bridge">橋接<br>設計</div>
-                    <div class="gulf-side">
-                        <h4>評估鴻溝</h4>
-                        <p>用戶需要幫助了解是否他們的行動產生了預期結果</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🌉 執行鴻溝橋接</h4>
-                    <p>執行鴻溝可以通過語言映射來橋接。從用戶的角度意味著教導用戶系統中必須發生什麼來實現工作領域的目標。從系統的角度意味著通過有效的概念設計幫助用戶形成正確的心理模型。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>📊 評估鴻溝橋接</h4>
-                    <p>評估鴻溝通過建立系統狀態顯示來橋接，告訴用戶關於結果。這是通過將系統狀態轉化為用戶工作領域的語言以便用戶能夠將結果與目標和意圖比較來評估互動成功的互動設計師的工作。</p>
-                </div>
-            </technique-grid>
             
             <div class="example-box">
-                <h4>恒溫器範例</h4>
-                <p>讓我們重新訪問第14.2節中恒溫器的範例。假設用戶在家感到寒冷。用戶制定一個簡單目標："感到溫暖。"為了達到這個目標，物理系統領域必須發生某事。必須啟動點火功能和暖氣爐的鼓風機。</p>
+                <h4>💡 實際應用</h4>
+                <p>互動循環幫助我們理解使用者在與任何系統互動時的認知過程，從設定目標到評估結果的完整流程。</p>
             </div>
         </div>
 
-        <!-- Slide 5: Our Interaction Cycle -->
+        <!-- Slide 3: Need for Theory-Based Framework -->
         <div class="slide">
-            <h2>28.2.2 從Norman模型到我們的互動週期</h2>
+            <h2>28.1.2 基於理論的概念框架需求</h2>
             
-            <div class="highlight-box">
-                <h3>模型的調整和擴展</h3>
-                <p>我們採用並擴展了Norman（1990）的行動階段理論模型（圖28.1），形成我們的互動週期，這也是典型互動序列中發生的用戶行動模型。</p>
+            <div class="warning-box">
+                <h4>⚠️ Gray和Salzman的觀察</h4>
+                <p>「對於天真的觀察者來說，HCI領域似乎很明顯會有一套共同的類別來討論其最基本的概念之一：可用性。但事實並非如此。相反地，我們有一個拼湊的do-it-yourself類別集合和各種rules-of-thumb的集合。」</p>
             </div>
             
-            <div class="cycle-diagram">
-                <h3>從Norman模型到互動週期的轉換</h3>
-                <div class="cycle-visual">
-                    <div class="cycle-stage stage-planning">規劃</div>
-                    <div class="cycle-stage stage-translation">翻譯</div>
-                    <div class="cycle-stage stage-physical">物理<br>行動</div>
-                    <div class="cycle-stage stage-outcomes">結果</div>
-                    <div class="cycle-stage stage-assessment">評估</div>
-                </div>
-                <p><em>適應後的互動週期模型</em></p>
+            <div class="highlight-box">
+                <h3>理論框架的重要性</h3>
+                <p>Gray和Salzman (1998) 繼續指出：「開發一個共同的分類方案，最好是基於理論的方案，將使我們能夠比較不同類型軟體和介面的可用性問題。」</p>
             </div>
             
             <div class="technique-grid">
                 <div class="technique-card">
-                    <h4>📋 模型分割</h4>
-                    <p>因為Norman執行側的早期部分是關於目標和意圖的規劃，我們稱之為週期的規劃部分（如圖28.2改編）。規劃包括制定目標和任務層級以及分解和識別特定意圖。</p>
+                    <h4>🎯 一致性需求</h4>
+                    <p>我們相信我們的互動循環，連同可負擔性概念，有助於滿足這種需求。</p>
                 </div>
                 
                 <div class="technique-card">
-                    <h4>🔄 翻譯組件</h4>
-                    <p>規劃之後是特定行動的制定（在系統上）來執行每個意圖，我們稱之為翻譯的認知行動，因為在這裡目標和計劃被翻譯成行動意圖。</p>
+                    <h4>📊 框架功能</h4>
+                    <p>它為UX從業者提供了一種在設計如何支持使用者行動和意圖的結構內構建UX設計議題和UX問題數據的方法。</p>
                 </div>
-                
-                <div class="technique-card">
-                    <h4>⚙️ 結果和系統反應</h4>
-                    <p>最後，我們添加了結果概念和系統反應，導致圖28.2所示的互動週期映射。結果部分表示為物理行動和評估之間的浮動部分，因為我們的是關於用戶互動。</p>
-                </div>
-            </technique-grid>
+            </div>
         </div>
 
-        <!-- Slide 6: UX Design Issue Categories -->
+        <!-- Slide 4: Norman's Model -->
         <div class="slide">
-            <h2>28.3 互動週期的UX設計問題類別</h2>
+            <h2>28.2 Norman的行動階段模型</h2>
             
-            <div class="highlight-box">
-                <h3>設計問題分類</h3>
-                <p>在這裡，我們概述每個互動週期類別下的UX設計問題類型。這些類別和子類別，以及不同類型的易供性，是我們在下一章中組織UX設計指南的方法。</p>
+            <div class="norman-diagram">
+                <h3>Norman行動階段模型結構</h3>
+                <div class="stage-flow">
+                    <div class="stage-step left">目標<br>The Goal</div>
+                    <div class="stage-step left">行動意圖<br>Intention to Act</div>
+                    <div class="stage-step left">行動序列<br>Action Sequence</div>
+                    <div class="stage-step">執行<br>Execution</div>
+                </div>
+                <div style="text-align: center; margin: 20px 0;">
+                    <div style="background: #34495e; color: white; padding: 15px; border-radius: 10px; display: inline-block;">
+                        <strong>真實世界 (The World)</strong>
+                    </div>
+                </div>
+                <div class="stage-flow">
+                    <div class="stage-step right">評估結果<br>Evaluate the Outcome</div>
+                    <div class="stage-step right">詮釋<br>Interpretation</div>
+                    <div class="stage-step right">感知<br>Perception</div>
+                </div>
+                <p><em>Norman (2013) 的七階段行動模型</em></p>
             </div>
             
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>📝 28.3.1 規劃</h4>
-                    <p><strong>設計幫助用戶知道該做什麼</strong><br>
-                    規劃是互動週期中包含主要認知行動的部分，用戶決定某些問題（例如"我該做什麼？"或"我能做什麼？"）</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔄 28.3.2 翻譯</h4>
-                    <p><strong>設計幫助用戶知道如何做某事</strong><br>
-                    翻譯涉及任務準備的最低層級。翻譯包括任何與決定用戶如何或應該在對象上採取行動有關的事情。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>👆 28.3.3 物理行動</h4>
-                    <p><strong>設計幫助用戶執行行動</strong><br>
-                    在用戶決定要採取什麼行動後，互動週期的物理行動部分是用戶執行行動的地方。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🎯 28.3.4 結果</h4>
-                    <p><strong>系統內部不可見效果/結果</strong><br>
-                    物理用戶行動被系統視為輸入，通常觸發系統功能，導致我們稱為互動結果的系統狀態變化。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>📊 28.3.5 評估</h4>
-                    <p><strong>設計幫助用戶知道互動是否成功</strong><br>
-                    互動週期的評估部分對應於Norman（1990）互動評估側。用戶在評估中執行感知和認知行動。</p>
-                </div>
-            </technique-grid>
+            <div class="highlight-box">
+                <h3>模型特點</h3>
+                <p>行動階段自然分為三個主要類型的使用者活動。在執行側（圖左側），使用者通常從圖頂部開始建立目標，將目標分解為任務和意圖，並將意圖映射為行動序列規格。</p>
+            </div>
         </div>
 
-        <!-- Slide 7: Task Example -->
+        <!-- Slide 5: Gulfs Between User and System -->
         <div class="slide">
-            <h2>商業報告任務範例</h2>
+            <h2>28.2.1 使用者與系統間的鴻溝</h2>
+            
+            <div class="gulf-visual">
+                <div class="gulf-side gulf-execution">
+                    <h4>執行鴻溝</h4>
+                    <p>使用者知道要在系統中對什麼物件採取什麼行動以完成工作目標時需要幫助</p>
+                </div>
+                <div class="gulf-bridge"></div>
+                <div class="gulf-side gulf-evaluation">
+                    <h4>評估鴻溝</h4>
+                    <p>使用者需要幫助了解他們的行動是否有預期的結果</p>
+                </div>
+            </div>
             
             <div class="example-box">
-                <h4>在互動週期中創建商業報告的任務</h4>
-                <p>讓我們說創建管理層季度報告關於公司財務狀況的任務分解為這些基本步驟：</p>
-            </div>
-            
-            <div class="task-flow">
-                <h3>任務分解範例</h3>
-                <div class="flow-steps">
-                    <div class="flow-step">
-                        <strong>1. 規劃階段</strong><br>
-                        計算上季度每月利潤
-                    </div>
-                    
-                    <div class="flow-step">
-                        <strong>2. 翻譯階段</strong><br>
-                        打開試算表程式，設定列標題和格式
-                    </div>
-                    
-                    <div class="flow-step">
-                        <strong>3. 物理行動</strong><br>
-                        點擊程式圖示，輸入資料，創建圖表
-                    </div>
-                    
-                    <div class="flow-step">
-                        <strong>4. 結果</strong><br>
-                        系統處理輸入，計算結果，顯示圖表
-                    </div>
-                    
-                    <div class="flow-step">
-                        <strong>5. 評估</strong><br>
-                        檢查結果是否正確，確認報告符合要求
-                    </div>
-                </div>
+                <h4>🏠 恆溫器範例</h4>
+                <p>考慮使用者在家中感到寒冷時使用恆溫器的情況。使用者在工作領域中制定了一個簡單的目標：「感覺溫暖」。為了實現這個目標，物理系統領域中必須發生一些事情。</p>
+                <ul>
+                    <li><strong>執行鴻溝：</strong>用戶必須將工作領域目標轉換為物理系統領域中的行動序列</li>
+                    <li><strong>評估鴻溝：</strong>系統狀態是內部系統變數的函數，互動設計師需要創建系統回饋顯示來橋接鴻溝</li>
+                </ul>
             </div>
             
             <div class="warning-box">
-                <h4>任務複雜性</h4>
-                <p>在這種任務分解中，某些步驟比其他步驟更細緻是常見的，意味著某些步驟將分解為更多子步驟和更多細節。例如，第一步可以分解為這些子步驟：打開試算表程式、為每個月調用會計部門和詢問數字、在試算表中創建每個產品類別的費用和收入列標題、計算利潤。</p>
+                <h4>設計挑戰</h4>
+                <p>為了避免必須訓練所有使用者，互動設計師可以通過有效的概念設計承擔從系統端橋接執行鴻溝的責任，以幫助使用者形成正確的心智模型。</p>
             </div>
         </div>
 
-        <!-- Slide 8: Cooperative Task Performance -->
+        <!-- Slide 6: From Norman to Interaction Cycle -->
         <div class="slide">
-            <h2>28.4 互動週期中的協作用戶系統任務績效</h2>
+            <h2>28.2.2 從Norman模型到互動循環</h2>
             
             <div class="highlight-box">
-                <h3>28.4.1 主要任務</h3>
-                <p>主要任務具有直接與工作相關的目標。之前創建商業報告的範例中的任務是主要任務，打印小任務也是如此。主要任務可以由用戶啟動或由環境、系統或其他用戶啟動。</p>
+                <h3>模型改編</h3>
+                <p>我們採用並擴展了Norman (1990) 行動理論模型，將其改編為我們的互動循環，這也是人類使用者與系統之間典型互動序列中發生的使用者行動模型。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔄 模型分割</h4>
+                    <p>因為Norman執行側的早期部分是關於目標和意圖的規劃，我們稱之為循環的規劃部分（如圖28.2所改編）。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 轉換階段</h4>
+                    <p>規劃之後是特定行動的制定（在系統上）以執行每個意圖，這是一個認知行動，我們稱之為轉換。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 執行與評估</h4>
+                    <p>Norman的「執行」組件直接映射到我們所稱的互動循環物理行動部分。使用者基於系統回饋評估每個物理行動的結果，我們稱之為評估部分。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                轉換是互動循環中最重要且最具設計意義的部分，因為我們在轉換中設計認知可負擔性以實現有效的前饋
+            </div>
+        </div>
+
+        <!-- Slide 7: UX Design Issue Categories -->
+        <div class="slide">
+            <h2>28.3 UX設計議題的互動循環類別</h2>
+            
+            <div class="highlight-box">
+                <h3>設計議題概述</h3>
+                <p>我們提供了每個互動循環類別下的UX設計議題類型概述。這些類別和子類別，連同不同類型的可負擔性，幫助我們在下一章中組織UX設計指南。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 規劃 (Planning)</h4>
+                    <p>設計幫助使用者知道該做什麼 - 包含主要是認知行動，幫助使用者確定某些問題。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 轉換 (Translation)</h4>
+                    <p>設計幫助使用者知道如何做某事 - 關於任務準備的最低層級，包括決定如何對物件採取行動。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 物理行動 (Physical Actions)</h4>
+                    <p>設計幫助使用者執行行動 - 使用者執行行動的地方，包括所有使用者輸入。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 評估 (Assessment)</h4>
+                    <p>設計幫助使用者知道互動是否成功 - 對應Norman的評估側，關於使用者是否能感知回饋訊息。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Business Report Task Example -->
+        <div class="slide">
+            <h2>範例：建立商業報告任務</h2>
+            
+            <div class="task-example">
+                <h3>📊 季度報告任務分解</h3>
+                <p>假設建立管理層季度報告關於公司財務狀況的任務分解為以下基本步驟：</p>
+                
+                <div class="task-steps">
+                    <div class="task-step">1. 計算上季度月度利潤</div>
+                    <div class="task-step">2. 撰寫摘要，包括圖表，顯示公司績效</div>
+                    <div class="task-step">3. 建立內容表格</div>
+                    <div class="task-step">4. 列印報告</div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4>互動循環中的步驟</h4>
+                    <p>在這種任務分解中，常見的是某些步驟比其他步驟更細緻，意味著某些步驟將分解為更多子步驟和更多細節。例如，第一步可以分解為這些子步驟：</p>
+                    <div class="task-steps">
+                        <div class="task-step">1. 開啟試算表程式</div>
+                        <div class="task-step">2. 致電會計部門索取各月數字</div>
+                        <div class="task-step">3. 在試算表中為各產品類別的支出和收入建立欄標題</div>
+                        <div class="task-step">4. 計算利潤</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Cooperative Task Performance -->
+        <div class="slide">
+            <h2>28.4 互動循環內的合作式使用者-系統任務執行</h2>
+            
+            <div class="highlight-box">
+                <h3>主要任務與次要任務</h3>
+                <p>主要任務具有直接與工作相關的目標。次要任務是開銷任務，目標與工作領域較少直接相關，通常更傾向於處理電腦作為人工製品的問題。</p>
             </div>
             
             <div class="multi-user-diagram">
-                <h3>多用戶互動、系統事件和互動週期中的異步外部事件</h3>
-                <div class="users-visual">
-                    <div class="user-cycle">
-                        <div>用戶1：<br>啟動者</div>
+                <h3>多使用者互動系統</h3>
+                <div class="user-cycles">
+                    <div class="user-cycle" data-user="使用者1">
+                        互動循環1
                     </div>
-                    <div class="user-cycle">
-                        <div>用戶2：<br>響應者</div>
-                    </div>
-                    <div class="user-cycle">
-                        <div>系統<br>事件</div>
+                    <div class="user-cycle" data-user="使用者2">
+                        互動循環2
                     </div>
                 </div>
+                <p><em>多使用者互動、系統事件和異步外部事件在多個互動循環內</em></p>
             </div>
             
             <div class="technique-grid">
                 <div class="technique-card">
-                    <h4>👤 用戶啟動任務</h4>
-                    <p>用戶啟動任務的典型線性路徑從頂部開始，在互動週期周圍逆時針進行，代表用戶啟動的任務，因為它從用戶規劃和翻譯開始。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🌐 環境啟動任務</h4>
-                    <p>當用戶任務由用戶互動週期外發生的事件啟動時，用戶行動變為反應性。用戶的互動週期從結果部分開始，接著用戶感知後續系統在回饋輸出顯示中的反應。</p>
-                </div>
-                
-                <div class="technique-card">
                     <h4>🔄 路徑變化</h4>
-                    <p>並非所有簡單任務，互動都可以採取替代的，可能非線性路徑。雖然用戶啟動的任務通常以某種規劃開始，Norman（1986）強調互動可能不遵循簡單的行動週期。</p>
+                    <p>在簡單的任務中，互動可能採取替代的、可能非線性的路徑。使用者的互動過程可能在幾乎任何任務/行動細節層級上圍繞互動循環流動。</p>
                 </div>
-            </technique-grid>
+                
+                <div class="technique-card">
+                    <h4>👥 多使用者任務</h4>
+                    <p>當兩個或更多使用者的互動循環在合作工作環境中交織時，一個使用者將透過物理行動輸入，另一個使用者將在共享工作空間中評估系統回應。</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Slide 9: Secondary Tasks -->
+        <!-- Slide 10: Secondary Tasks and Stacking -->
         <div class="slide">
             <h2>28.4.3 次要任務、意圖轉移和堆疊</h2>
             
-            <div class="highlight-box">
-                <h3>次要任務和意圖轉移</h3>
-                <p>Kaur、Maiden和Sutcliffe（1999）基於對虛擬環境應用的檢查，以及基於Norman（1990）行動階段，認識到需要中斷主要面向工作的任務以容納次要任務以適應意圖轉移、探索、資訊尋求和錯誤處理。</p>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🔍 探索任務</h4>
-                    <p>探索任務可能被認為是由於資訊需求而產生的，用戶無法在意圖到行動規範時掌握。然後他們必須搜索這樣的對象或認知易供性，如按鈕或選單選擇上的標籤以匹配期望的行動。</p>
+            <div class="stacking-diagram">
+                <h3>任務堆疊視覺化</h3>
+                <div class="stack-visual">
+                    <div class="stack-layer primary">主要任務</div>
+                    <div class="stack-layer secondary">探索性（次要）任務</div>
+                    <div class="stack-layer secondary">錯誤恢復（次要）任務</div>
                 </div>
-                
-                <div class="technique-card">
-                    <h4>📚 堆疊和恢復工作情境</h4>
-                    <p>在程式執行期間堆疊和恢復工作情境是一個建立的軟體概念。人類在程式執行期間也必須這樣做，這是由於自發的意圖轉移。支持主要和次要任務所需的互動週期只是基本互動週期的變化。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🎯 情境切換</h4>
-                    <p>這種計劃變化導致任務流程中斷和正常任務規劃，要求用戶心理上堆疊當前目標、任務和/或意圖，同時關注中斷任務。</p>
-                </div>
-            </technique-grid>
-            
-            <div class="example-box">
-                <h4>意圖轉移範例</h4>
-                <p>由於意圖轉移的堆疊範例。為了使用之前創建商業報告來說明因自發意圖轉移而堆疊，假設用戶已經完成任務步驟"打印報告"並準備繼續。然而，在查看打印報告時，用戶不喜歡結果的方式並決定重新格式化報告。</p>
-            </div>
-        </div>
-
-        <!-- Slide 10: Task Context Stacking -->
-        <div class="slide">
-            <h2>任務情境堆疊和恢復</h2>
-            
-            <div class="cycle-diagram">
-                <h3>堆疊和返回互動週期任務情境實例</h3>
-                <div style="display: flex; justify-content: space-around; margin: 20px 0;">
-                    <div class="user-cycle" style="background: #3498db; color: white;">
-                        主要任務<br>
-                        <small>規劃→評估→結果→物理行動</small>
-                    </div>
-                    <div style="margin: 0 20px; display: flex; align-items: center; font-size: 2em;">→</div>
-                    <div class="user-cycle" style="background: #e74c3c; color: white;">
-                        探索性<br>
-                        （次要）任務<br>
-                        <small>完整週期</small>
-                    </div>
-                    <div style="margin: 0 20px; display: flex; align-items: center; font-size: 2em;">→</div>
-                    <div class="user-cycle" style="background: #f39c12; color: white;">
-                        錯誤恢復<br>
-                        （次要）任務<br>
-                        <small>完整週期</small>
-                    </div>
-                </div>
+                <p><em>堆疊和返回互動循環任務環境實例</em></p>
             </div>
             
             <div class="warning-box">
-                <h4>計劃變化的影響</h4>
-                <p>這種計劃變化導致任務流程中斷和正常任務規劃，要求用戶心理上堆疊當前目標、任務和/或意圖，同時關注中斷任務（圖28.4）。當主要任務在中週期暫停時，用戶為次要任務啟動新的互動週期。最終，用戶可以解開每個目標和任務，成功返回主任務。</p>
+                <h4>⚠️ 意圖轉移問題</h4>
+                <p>由於意圖轉移而導致的堆疊範例：假設使用者已完成任務步驟「列印報告」並準備繼續進行。然而，在查看列印報告時，使用者不喜歡其呈現方式並決定重新格式化報告。</p>
             </div>
             
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🏗️ 堆疊機制</h4>
-                    <p>堆疊和恢復工作情境的概念，這種任務要求對人類記憶負載或用戶可能需要互動設計中明確支持的翻譯部分施加相當大的判斷。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔄 情境恢復</h4>
-                    <p>次要任務也經常需要在用戶關於何時評估方面的翻譯部分進行相當大的判斷。例如，探索任務可能被認為是當用戶滿意他們已經有足夠或感到疲倦並放棄時結論。</p>
-                </div>
-            </technique-grid>
+            <div class="example-box">
+                <h4>堆疊機制</h4>
+                <p>這樣的計劃變更導致任務流中斷和正常任務規劃，要求使用者在心理上堆疊當前目標、任務和/或意圖，同時處理中斷任務。最終，使用者可以成功地拆除每個目標和任務，並返回主要任務。</p>
+            </div>
         </div>
 
-        <!-- Slide 11: Multiple Interaction Cycles -->
+        <!-- Slide 11: Design Guidelines Preview -->
         <div class="slide">
-            <h2>28.4.2 互動週期中的路徑變化</h2>
+            <h2>互動循環與設計指南連結</h2>
             
             <div class="highlight-box">
-                <h3>多用戶任務</h3>
-                <p>當兩個或更多用戶的互動週期在協作工作環境中交織時，一個用戶將通過物理行動（圖28.3）輸入，另一個用戶將評估（感知、解釋和評估）系統反應。</p>
+                <h3>設計指南組織</h3>
+                <p>互動循環提供了一個有效的框架來組織UX設計指南。每個循環階段都對應特定的設計考慮：</p>
             </div>
             
             <div class="technique-grid">
                 <div class="technique-card">
-                    <h4>👥 協作互動</h4>
-                    <p>多用戶任務是在共享工作空間中顯示系統結果，以便第一個用戶的行動對第一個用戶行動的評估而訪問。對於啟動交換的用戶，週期從規劃開始，但對其他用戶，互動週期從感知系統反應並評估發生的事情開始，然後再成為下一輪互動的第二個用戶的規劃輪次。</p>
+                    <h4>📋 規劃階段設計</h4>
+                    <ul>
+                        <li>使用者策略支援</li>
+                        <li>工作環境脈絡</li>
+                        <li>系統特徵意識</li>
+                        <li>系統方式知識</li>
+                    </ul>
                 </div>
                 
                 <div class="technique-card">
-                    <h4>🔄 反應性互動</h4>
-                    <p>環境、系統或其他用戶啟動的任務。當用戶任務由用戶互動週期外發生的事件啟動時，用戶行動變為反應性。用戶的互動週期從結果部分開始，接著用戶感知後續系統在回饋輸出顯示中的反應並且此後對其反應。</p>
+                    <h4>🔄 轉換階段設計</h4>
+                    <ul>
+                        <li>認知可負擔性</li>
+                        <li>前饋設計</li>
+                        <li>行動規格化</li>
+                        <li>物件識別</li>
+                    </ul>
                 </div>
-            </technique-grid>
-            
-            <div class="example-box">
-                <h4>系統事件響應</h4>
-                <p>用戶行動並不總是需要產生系統響應。系統也可以自主產生結果，可能響應內部系統事件，如磁碟變滿、環境中感知的事件，如過程控制報警，或其他用戶在共享工作環境中的物理行動。</p>
+                
+                <div class="technique-card">
+                    <h4>⚡ 執行階段設計</h4>
+                    <ul>
+                        <li>物理可負擔性</li>
+                        <li>輸入/輸出設備</li>
+                        <li>互動樣式</li>
+                        <li>可達性議題</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 評估階段設計</h4>
+                    <ul>
+                        <li>系統回饋</li>
+                        <li>狀態顯示</li>
+                        <li>結果呈現</li>
+                        <li>錯誤處理</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <!-- Slide 12: Business Report Task Detail -->
+        <!-- Slide 12: Research Applications -->
         <div class="slide">
-            <h2>商業報告任務詳細分析</h2>
+            <h2>互動循環的研究應用</h2>
             
-            <div class="example-box">
-                <h4>打印報告行動的詳細分解</h4>
-                <p>用戶然後執行此行動規範，進行相應的物理行動，點擊打印選單選擇。系統接受選單選擇，更改意圖（行動的結果），並顯示打印對話框作為回饋。</p>
+            <div class="highlight-box">
+                <h3>可用性評估框架</h3>
+                <p>互動循環不僅是設計框架，也是評估使用者體驗品質的有效工具。透過分析使用者在每個階段的行為，我們可以識別特定的可用性問題。</p>
             </div>
             
-            <div class="task-flow">
-                <h3>詳細任務流程</h3>
-                <div class="flow-steps">
-                    <div class="flow-step">
-                        <strong>翻譯階段</strong><br>
-                        將第一個意圖翻譯成電腦介面語言的行動規範，用戶利用經驗知識和/或顯示的打印選擇認知易供性來創建行動規範以選擇打印。
-                    </div>
-                    
-                    <div class="flow-step">
-                        <strong>物理行動</strong><br>
-                        用戶執行物理行動，點擊打印選單選擇。系統接受選單選擇，意圖內部（行動的結果）。
-                    </div>
-                    
-                    <div class="flow-step">
-                        <strong>結果顯示</strong><br>
-                        系統顯示打印對話框作為回饋。用戶看到回饋並將其用於評估到目前為止結果的評估。
-                    </div>
-                    
-                    <div class="flow-step">
-                        <strong>評估階段</strong><br>
-                        因為對話框對此時互動的用戶有意義，結果被認為是有利的——也就是說，導致完成用戶意圖和指示成功規劃和行動到目前為止。
-                    </div>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 問題識別</h4>
+                    <p>根據我們多年的經驗，在UX評估中觀察到的UX問題中約75%屬於轉換類別，這凸顯了為有效前饋設計認知可負擔性的重要性。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📈 效果測量</h4>
+                    <p>互動循環幫助研究人員量化不同設計解決方案對使用者績效的影響，特別是在任務完成時間和錯誤率方面。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 設計改善</h4>
+                    <p>透過追蹤使用者在循環各階段的困難，設計師可以針對性地改善介面設計，提高整體使用者體驗。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 資料分類</h4>
+                    <p>互動循環提供了一致的分類系統，使不同研究之間的比較和meta分析成為可能。</p>
                 </div>
             </div>
         </div>
@@ -802,66 +810,81 @@
             <h2>28.5 總結</h2>
             
             <div class="highlight-box">
-                <h3>本章重點回顧</h3>
-                <p>在本章中，我們討論了互動週期及其基本階段。在下一章中，我們使用互動週期作為組織UX設計指南的方法。</p>
+                <h3>🎯 本章重點回顧</h3>
+                <ul>
+                    <li><strong>互動循環概念：</strong>基於Norman行動階段模型的改編，描述使用者與系統的互動序列</li>
+                    <li><strong>理論基礎：</strong>提供一致的概念框架來分析和比較不同類型的可用性問題</li>
+                    <li><strong>四個核心階段：</strong>規劃、轉換、執行、評估形成完整的互動循環</li>
+                    <li><strong>設計應用：</strong>為UX設計師提供組織設計指南和評估使用者體驗的結構化方法</li>
+                    <li><strong>合作式任務：</strong>支援多使用者互動和複雜任務執行的分析框架</li>
+                </ul>
             </div>
             
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🎯 理論框架價值</h4>
-                    <ul>
-                        <li>提供系統性分析用戶互動的方法</li>
-                        <li>識別設計問題的具體位置</li>
-                        <li>建立一致的可用性評估標準</li>
-                        <li>橋接Norman理論與實務應用</li>
-                    </ul>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔄 互動週期階段</h4>
-                    <ul>
-                        <li>規劃：幫助用戶知道該做什麼</li>
-                        <li>翻譯：幫助用戶知道如何做</li>
-                        <li>物理行動：支持行動執行</li>
-                        <li>結果：系統內部處理</li>
-                        <li>評估：幫助用戶了解成功與否</li>
-                    </ul>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🌉 鴻溝橋接</h4>
-                    <ul>
-                        <li>執行鴻溝：通過概念設計橋接</li>
-                        <li>評估鴻溝：通過回饋設計橋接</li>
-                        <li>認知易供性支持理解</li>
-                        <li>物理易供性支持操作</li>
-                    </ul>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>👥 複雜互動情境</h4>
-                    <ul>
-                        <li>多用戶協作互動</li>
-                        <li>主要與次要任務管理</li>
-                        <li>情境堆疊和恢復</li>
-                        <li>錯誤處理和恢復機制</li>
-                    </ul>
-                </div>
-            </technique-grid>
-            
             <div class="quote">
-                互動週期提供了一個強大的概念框架，幫助UX設計師系統性地分析和改善用戶與系統的互動體驗
+                在本章中，我們討論了互動循環及其基本階段。在下一章中，我們使用互動循環作為組織UX設計指南的方法
             </div>
             
             <div class="example-box">
-                <h4>實務應用重點</h4>
-                <p>互動週期不僅是理論工具，更是實用的設計框架。它幫助設計師識別用戶在互動過程中可能遇到的具體困難，並針對性地設計解決方案。通過理解每個階段的特點和挑戰，我們可以創造更直觀、更有效的用戶體驗。</p>
+                <h4>📚 下一步學習</h4>
+                <p>互動循環為理解人機互動提供了強大的理論基礎。在接下來的章節中，我們將探討如何將這個框架應用於具體的設計指南和最佳實踐，幫助創造更好的使用者體驗。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Key Takeaways -->
+        <div class="slide">
+            <h2>重要概念總結</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔄 循環思維</h4>
+                    <ul>
+                        <li>互動是連續循環過程</li>
+                        <li>每個階段相互連接</li>
+                        <li>使用者持續學習調整</li>
+                        <li>設計需支援完整流程</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🌉 橋接鴻溝</h4>
+                    <ul>
+                        <li>執行鴻溝需要轉換支援</li>
+                        <li>評估鴻溝需要回饋設計</li>
+                        <li>概念設計減少認知負荷</li>
+                        <li>可負擔性引導使用者行動</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 設計評估</h4>
+                    <ul>
+                        <li>問題分類更精確</li>
+                        <li>改善方向更明確</li>
+                        <li>評估標準更一致</li>
+                        <li>比較分析更客觀</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 實務應用</h4>
+                    <ul>
+                        <li>設計指南組織架構</li>
+                        <li>可用性測試框架</li>
+                        <li>問題診斷工具</li>
+                        <li>改善優先序決定</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>💡 實務建議</h3>
+                <p>成功應用互動循環需要理解每個階段的特定設計需求，並認識到75%的可用性問題出現在轉換階段。這提醒我們特別關注認知可負擔性的設計，確保使用者能夠有效地將意圖轉換為具體行動。同時，互動循環的系統性方法有助於建立一致的設計語言和評估標準。</p>
             </div>
         </div>
     </div>
 
     <div class="slide-counter">
-        <span id="current-slide">1</span> / <span id="total-slides">13</span>
+        <span id="current-slide">1</span> / <span id="total-slides">14</span>
     </div>
 
     <a href="index.html" class="home-link">首頁</a>
