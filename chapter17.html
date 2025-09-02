@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第十七章：情感影響設計</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .emotion-wheel {
+            background: #f8f9fa;
+            border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            position: relative;
+            border: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .emotion-segment {
+            position: absolute;
+            width: 100px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .seg-aesthetics { top: 20px; left: 50%; transform: translateX(-50%); background: #e74c3c; }
+        .seg-pleasure { top: 50px; right: 30px; background: #f39c12; }
+        .seg-social { right: 20px; top: 50%; transform: translateY(-50%); background: #27ae60; }
+        .seg-fashion { bottom: 50px; right: 30px; background: #9b59b6; }
+        .seg-meaning { bottom: 20px; left: 50%; transform: translateX(-50%); background: #34495e; }
+        .seg-motivation { bottom: 50px; left: 30px; background: #1abc9c; }
+        .seg-connection { left: 20px; top: 50%; transform: translateY(-50%); background: #e67e22; }
+        .seg-pride { top: 50px; left: 30px; background: #8e44ad; }
+        
+        .center-core {
+            width: 120px;
+            height: 120px;
+            background: #2980b9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .mood-board-container {
+            background: #2c3e50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .mood-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .mood-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .mood-item-1 { background: linear-gradient(45deg, #27ae60, #2ecc71); }
+        .mood-item-2 { background: linear-gradient(45deg, #f1c40f, #f39c12); }
+        .mood-item-3 { background: linear-gradient(45deg, #3498db, #2980b9); }
+        .mood-item-4 { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .mood-item-5 { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
+        .mood-item-6 { background: linear-gradient(45deg, #1abc9c, #16a085); }
+        
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .color-swatch {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            border: 2px solid #ecf0f1;
+        }
+        
+        .color-1 { background: #27ae60; }
+        .color-2 { background: #f1c40f; }
+        .color-3 { background: #3498db; }
+        .color-4 { background: #e74c3c; }
+        .color-5 { background: #34495e; }
+        
+        .typography-showcase {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .font-example {
+            margin: 15px 0;
+        }
+        
+        .font-light {
+            font-weight: 300;
+            font-size: 1.5em;
+            color: #7f8c8d;
+        }
+        
+        .font-bold {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #2c3e50;
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #2c3e50;
+            border-radius: 10px;
+        }
+        
+        .icon-item {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: #2c3e50;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .metaphor-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .design-spec {
+            background: #2c3e50;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第十七章：情感影響設計</h1>
+            <div class="quote">
+                "設計不僅僅是外觀和感覺，更重要的是如何運作和如何讓人感受。優秀的設計能夠觸動用戶的情感，創造持久而有意義的體驗。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>理解情感需求在用戶體驗中的重要性</li>
+                    <li>學習如何設計滿足情感需求的產品</li>
+                    <li>探索概念設計中的情感層面</li>
+                    <li>使用隱喻和情境板創建情感設計</li>
+                    <li>中介情感影響設計的實踐方法</li>
+                    <li>情感影響設計的製作階段</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>17.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>17.1.1 您的位置</h3>
+                <p>我們在每個流程章節開始都會提供一個「您在這裡」的圖片，顯示該章節主題在 Wheel UX 生命週期模板整體脈絡中的位置。第十七章專注於在設計解決方案活動的整體 Wheel UX 生命週期脈絡中為情感影響而設計。</p>
+            </div>
+            
+            <div class="emotion-wheel">
+                <div class="center-core">情感影響<br>設計</div>
+                <div class="emotion-segment seg-aesthetics">美學</div>
+                <div class="emotion-segment seg-pleasure">愉悅</div>
+                <div class="emotion-segment seg-social">社會認同</div>
+                <div class="emotion-segment seg-fashion">時尚與<br>文化層面</div>
+                <div class="emotion-segment seg-meaning">長期關係<br>(意義感)</div>
+                <div class="emotion-segment seg-motivation">動機與<br>靈感</div>
+                <div class="emotion-segment seg-connection">與他人的<br>連結</div>
+                <div class="emotion-segment seg-pride">擁有的<br>自豪感</div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>17.1.2 情感影響設計經常被忽視但可能成為市場差異化因素</h4>
+                <p>在當今產品和系統設計中，特別是企業軟體、商業利益相關者往往專注於支持需求金字塔的中間（互動）層級，在較小程度上關注底層（生態）層級。頂層（情感）需求往往被忽視。專為情感需求而設計可能無法在設計簡介中明確體現，但最終可能成為區分優秀產品與卓越產品的差異化因素。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Emotional Needs -->
+        <div class="slide">
+            <h2>17.2 情感需求</h2>
+            
+            <div class="highlight-box">
+                <p>在第 11.2.1 節中，我們描述了情感需求如何佔據人類需求金字塔的頂層。用戶希望獲得具有價值敏感性的設計，提供用戶滿意度、美學和使用樂趣。在更深層次上，他們需要在使用產品時獲得豐富感和文化滿足感。用戶也渴望設計中的意義感，這些設計既持久又永恆，具有成為他們生活親密部分的潛力。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎨 有時用戶渴望獨特性</h4>
+                    <p>對於許多產品來說，目標是通過製造不同且引人注目的東西來引發用戶的情感反應，為最酷和最好的藝術作品製作藝術設計。範例包括傢俱、珠寶、時尚服裝和建築。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏠 日常產品中的情感設計</h4>
+                    <p>這些領域滿足生態和互動需求，但全世界都崇拜那些將獨特情感觀點融入作品中的設計師所創造的作品。誰不想要擁有定製服裝？或者由 Frank Lloyd Wright 設計的家？</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🚗 汽車設計範例</h4>
+                    <p>以 Mini Cooper 汽車為例。小巧的車身本來可能最終變得平凡和實用，但設計師讓這款車看起來像一個獨特的功能。設計師使用受飛機駕駛艙啟發的控制和切換開關。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>✈️ 設計主題一致性</h4>
+                    <p>中央資訊控制台的位置和形狀也遵循這個概念。結果是一個有趣和冒險的主題，與他們著名的卡丁車般操控一致。詢問 Mini 駕駛者他們的 Mini 對他們意味著什麼，他們很可能用情感術語來描述它。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Designing for Emotional Impact -->
+        <div class="slide">
+            <h2>17.3 為滿足情感需求而設計情感影響</h2>
+            
+            <div class="highlight-box">
+                <h3>情感設計的複雜性</h3>
+                <p>人類對於他們所看到、聽到和觸摸的東西有廣泛的情感範圍。例如，如果設計的目標是取悦用戶，比如兒童平板電腦應用程式，一個俏皮的視覺調色板結合大膽顏色、正確的動畫和螢幕轉換，以及慷慨使用音頻提示都可以誘發那種情感。另一方面，如果目標是傳達穩定性和可靠性，比如股票交易應用程式，更加克制的視覺風格，使用顏色來編碼資訊，可以誘發安全感和生產力的情感。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>股票交易應用程式範例</h4>
+                <p>例如，您可以使用綠色顯示金融工具價格的收益，用紅色顯示損失。在這樣的系統中，音頻的使用也將被降級到以任務為中心的問題，如傳達錯誤狀態和通知。為情感影響而設計可能是最困難的設計類型，需要操作化並外部化為一個過程。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>情感設計的挑戰</h4>
+                <p>與生態或互動設計努力不同，沒有直接告知情感影響屬性的直接工作活動模型。這些必須從用戶和 UX 研究數據中仔細收集和培養。此外，情感反應目標會有所不同（例如，在消費產品中，愉悅和快樂等反應很重要，而在機構或企業產品中，目標更多地是關於減少重複任務和在任務表現期間產生滿意度）。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Design Goals Model -->
+        <div class="slide">
+            <h2>17.3.1 情感影響設計目標模型</h2>
+            
+            <div class="emotion-wheel">
+                <div class="center-core">情感影響<br>設計</div>
+                <div class="emotion-segment seg-aesthetics">美學</div>
+                <div class="emotion-segment seg-pleasure">樂趣，<br>愉悦，<br>快樂</div>
+                <div class="emotion-segment seg-social">社會認同</div>
+                <div class="emotion-segment seg-fashion">時尚和<br>文化層面</div>
+                <div class="emotion-segment seg-meaning">長期關係<br>(意義感)</div>
+                <div class="emotion-segment seg-motivation">動機和<br>靈感</div>
+                <div class="emotion-segment seg-connection">與他人<br>連結</div>
+                <div class="emotion-segment seg-pride">擁有的<br>自豪感</div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>模型的目的</h3>
+                <p>圖 17.2 中模型的目的是開始識別和組織設計目標方面的用戶需求。在這個模型中，對於每個設計目標，我們向中心指向，我們識別與該產品用戶相關的特定需求類型。例如，對於時尚因素，什麼對該產品的用戶來說很重要？是前衛的？復古的？現代的？一旦確定了這一點，設計師就可以解決理念、草圖和批評如何在設計中具體實現每個因素。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Conceptual Design -->
+        <div class="slide">
+            <h2>17.4 情感層面的概念設計</h2>
+            
+            <div class="highlight-box">
+                <h3>抽象主題的挑戰</h3>
+                <p>情感層面的概念設計往往更加抽象且難以表達。它們跨越品牌、視覺或圖形設計、聲音、動作甚至使用的語言調性等概念。它是圍繞一個想法或因素的抽象主題。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🏔️ 隱喻的使用</h4>
+                    <p>隱喻可以用來表達情感概念設計。一個例子出現在 Backpacker 雜誌中，將 Garmin 手持式 GPS 作為徒步旅行伴侶來廣告。在將人類自我認同價值與方向感聯繫的隱喻中，Garmin 說：「找到自己，然後回來。」</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🧭 情感品質突出</h4>
+                    <p>它突出了情感品質，如舒適感、舒適的熟悉感和陪伴關係：「就像一雙舊靴子和您最喜歡的羊毛衫一樣，GPSMAP 62ST 是理想的徒步旅行伴侶。」</p>
+                </div>
+            </div>
+            
+            <div class="metaphor-box">
+                <h3>🎒 徒步旅行伴侶隱喻</h3>
+                <p>「找到自己，然後回來。」</p>
+                <p>「就像一雙舒適的靴子和您最喜歡的羊毛衫，GPSMAP 62ST 是理想的徒步旅行伴侶。」</p>
+                <small>— Garmin GPS 廣告範例</small>
+            </div>
+        </div>
+
+        <!-- Slide 7: Mood Boards -->
+        <div class="slide">
+            <h2>17.4.2 情境板：為情感層面創建概念設計</h2>
+            
+            <div class="highlight-box">
+                <h3>情境板的概念</h3>
+                <p>使用情境板來配合您想到的各種主題和隱喻來設計產品。對於設計中考慮的每個主題，創建一個情境板（工藝品和圖像的拼貼，展示或說明主題的不同方面）。情境板可以包含素描、顏色樣本、圖片、聲音、字體或任何其他工藝品。對於應該如何構建它沒有規則；目標是讓各種組合元素承載正在傳達的抽象想法的感覺。</p>
+            </div>
+            
+            <div class="mood-board-container">
+                <h3 style="color: white; text-align: center;">國家公園網站情境板範例</h3>
+                <div class="mood-grid">
+                    <div class="mood-item mood-item-1"></div>
+                    <div class="mood-item mood-item-2"></div>
+                    <div class="mood-item mood-item-3"></div>
+                    <div class="mood-item mood-item-4"></div>
+                    <div class="mood-item mood-item-5"></div>
+                    <div class="mood-item mood-item-6"></div>
+                </div>
+                <p style="color: #ecf0f1; text-align: center; font-style: italic;">
+                    充滿活力的自然主題情境板，用於國家公園產品的視覺設計概念
+                </p>
+            </div>
+            
+            <div class="example-box">
+                <h4>國家公園網站範例</h4>
+                <p>圖 17.3 包含基於充滿活力自然主題的情境板範例。這個情境板是為 16.7.1 節中介紹的國家公園產品構建的。這是設計團隊為這個練習探索的許多主題之一。該情境板中描繪的各種圖片和景象說明了自然的活力和能量，使其對潛在的公園遊客具有吸引力。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Intermediate Design -->
+        <div class="slide">
+            <h2>17.5 中介情感影響設計</h2>
+            
+            <div class="highlight-box">
+                <h3>概念設計的進一步發展</h3>
+                <p>在採用概念設計後，通過更詳細的情境板、理念和草圖來進一步闡述每個感官通道（例如，視覺、聽覺、觸覺）來發展它。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎨 17.5.1 定義視覺語言和詞彙</h4>
+                    <p>視覺設計基於情感影響實踐中最常用的感官通道。在這種情況下，情境板給出了系統中要使用的視覺語言的風味。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏙️ 實踐範例</h4>
+                    <p>我們曾經受一位紐約市客戶委託設計移動應用程式的情感反應，表現大膽和活力。我們創建了一個視覺情境板，包含標誌性紐約市主題的圖像：黃色計程車、地鐵標誌、摩天大樓和街頭人物等。</p>
+                </div>
+            </div>
+            
+            <div class="typography-showcase">
+                <h3>字體與圖像學風格</h3>
+                <div class="font-example">
+                    <div class="font-light">Aa 輕量字體</div>
+                    <p style="color: #7f8c8d;">Avenir Next Medium</p>
+                </div>
+                <div class="font-example">
+                    <div class="font-bold">Aa 粗體字體</div>
+                    <p style="color: #7f8c8d;">Avenir Next Bold</p>
+                </div>
+                <div class="color-palette">
+                    <div class="color-swatch color-1"></div>
+                    <div class="color-swatch color-2"></div>
+                    <div class="color-swatch color-3"></div>
+                    <div class="color-swatch color-4"></div>
+                    <div class="color-swatch color-5"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Visual Language Development -->
+        <div class="slide">
+            <h2>17.5.1 視覺語言發展過程</h2>
+            
+            <div class="highlight-box">
+                <h3>從情境板到具體設計</h3>
+                <p>通過為您認為適合正在設計的系統的每個主題創建情境板來開始定義您的整體視覺主題。確保它們包含字體和圖像學。字體風格包括字體系列，它們在生態系統中的不同設備上如何以及是否會有所不同，以及各種樣式（例如，標題、正文、標註、按鈕標籤）的外觀。具有強大圖形設計背景的團隊成員對此是一個資產。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🖼️ 圖像學定義</h4>
+                    <p>識別所有將在設計中表示為圖示或其他圖像的想法，並定義圖像學的樣式。如果適當的話，創建關鍵螢幕的樣本視圖，以了解視覺風格如何為情感設計的整體概念做出貢獻。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎨 色彩方案設計</h4>
+                    <p>繼續國家公園範例，注意圖 17.4 如何描繪從圖 17.3 情境板中衍生出的色彩方案。設計師選擇了情境板的關鍵圖像並提取了各種方面，如葉子的綠色、完整花瓣的白色、花中心的黃色和水影的深色，以獲得主要調色板。</p>
+                </div>
+            </div>
+            
+            <div class="icon-grid">
+                <div class="icon-item">🐟</div>
+                <div class="icon-item">⛺</div>
+                <div class="icon-item">✂️</div>
+                <div class="icon-item">🏊</div>
+                <div class="icon-item">🚐</div>
+                <div class="icon-item">🍴</div>
+                <div class="icon-item">🏥</div>
+                <div class="icon-item">🪑</div>
+                <div class="icon-item">🎁</div>
+                <div class="icon-item">⭐</div>
+                <div class="icon-item">🏔️</div>
+                <div class="icon-item">💬</div>
+            </div>
+            
+            <p style="text-align: center; color: #7f8c8d; font-style: italic;">
+                使用來自寧靜自然情境板的視覺主題為國家公園產品創建的圖像學
+            </p>
+        </div>
+
+        <!-- Slide 10: Motion and Interaction -->
+        <div class="slide">
+            <h2>17.5.2 為每個設計定義動作樣式和互動物理學</h2>
+            
+            <div class="highlight-box">
+                <h3>動作設計的重要性</h3>
+                <p>對於生態系統中的每個設備，定義要使用的動畫和其他轉換的樣式和物理學。這將包括關於使用動畫、滾動和螢幕轉換的想法，以及關於動作如何發生的描述。擁有動作設計背景的團隊成員會有所幫助。他們為這些類型的動作素描想法，以描述加速、時間等。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>iPad iBooks 應用程式範例</h4>
+                <p>我們在第 14.3.6 節中談到了在模擬物理翻頁的 iPad iBooks 應用程式中使用動畫。在該應用程式中使用動畫的機會是什麼？例如，尋找系統執行長時間操作的地方；載入動畫可能在這樣的領域有所幫助。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>⚡ 互動物理學考量</h4>
+                    <p>考慮互動的物理學將如何工作。如果有兩個內容窗格，哪個是主要的，哪個是次要的？哪個窗格會滑過另一個？它會從左邊還是右邊滑入？哪個更符合應用程式小工具排列的方式？</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 社會心理因素</h4>
+                    <p>設計師應該在整個過程中尋找機會來構建設計，以利用社會和心理因素。例如，在健身應用程式中，工作領域的各個方面（如動機和反饋）可以通過顯示用戶每天服用的步數並與朋友和家人進行比較來構建，以幫助用戶在情感上成功。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Audio and Language -->
+        <div class="slide">
+            <h2>17.5.3-17.5.4 語言調性與音頻特性設計</h2>
+            
+            <div class="highlight-box">
+                <h3>17.5.3 定義設計中使用的語言調性</h3>
+                <p>設計師使用的另一個情感影響途徑是語言的整體樣式。使用幽默和擬人化來在某些領域（如兒童學習、成人遊戲和娛樂）賦予個性是常見的。這是通過使用樣本和語言描述來捕獲的，以便在情境板上實現。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🗣️ 語言個性設計</h4>
+                    <p>對於整體生態系統，所有與用戶對話中使用的語言調性是什麼？它會是對話式和非正式的還是簡潔和正式的？它會使用幽默嗎？它會有自己的個性還是保持中性？</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📚 語言指南維護</h4>
+                    <p>持續更新產品的語言和調性設計庫。列出應該避免的詞語、短語和主題，以及應該使用的範例。</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>17.5.4 定義設計中使用的音頻特性</h3>
+                <p>對於聲音設計，為可以通過使用聲音增強的適當動作制定想法。被圍繞的用戶空間的封閉使用空間是完美的溫和環繞聲，這將大大增加沉浸感。在互動過程中為用戶提供反饋的機會是什麼？聲音的整體主題是什麼——振奮和俏皮或莊重和嚴肅？</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>音頻設計考量</h4>
+                <p>通過識別主題並使用音樂樣本組合與不同任務類別對應的聲音調色板。例如，警報將有一個調性，而正面反饋動作將有另一個調性。對於國家公園應用程式，自然情境板可以包含各種自然聲音，然後可以使用這些聲音來為設計衍生音頻詞彙。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Audio Context Considerations -->
+        <div class="slide">
+            <h2>音頻設計的使用情境考量</h2>
+            
+            <div class="warning-box">
+                <h4>使用情境的重要性</h4>
+                <p>在使用音頻設計互動時，請記住將使用聲音的使用情境。消費者應用程式，用戶在家中舒適地與您的系統互動，需要與在開放辦公室情境中團隊使用的企業應用程式不同的音頻調色板。我們曾經不得不為在密集包裝的交易樓層使用的應用程式設計音頻警報。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>交易樓層音頻設計實例</h4>
+                <p>在團隊確定了音頻警報的概念設計後，我們了解到我們不僅需要一個，而是至少四個不同的概念，因為繁忙交易樓層上交易員的接近意味著來自一個用戶的音頻警報可能會干擾相鄰用戶，如果他們都使用相同的調色板。團隊必須創建多個調色板，同時確保它們都符合公司的品牌精神和價值觀。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🏠 家庭使用環境</h4>
+                    <p>個人用戶在家中舒適環境中需要溫和、和諧的音頻體驗</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏢 辦公室環境</h4>
+                    <p>開放式辦公室需要考慮不干擾他人的音頻設計方案</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📈 交易樓層環境</h4>
+                    <p>高密度工作環境需要多套音頻調色板以避免相互干擾</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎵 品牌一致性</h4>
+                    <p>所有音頻設計都必須符合公司品牌精神和企業價值觀</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Social and Psychological Aspects -->
+        <div class="slide">
+            <h2>17.5.5 在設計中利用社會和心理層面</h2>
+            
+            <div class="highlight-box">
+                <h3>社會心理因素的整合</h3>
+                <p>設計師應該在整個過程中尋找機會來構建設計，以利用社會和心理因素。例如，在健身應用程式中，工作領域的各個方面，如動機和反饋，可以通過顯示用戶每天走的步數並與朋友和家人進行比較來構建，以幫助用戶在情感上獲得成功。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👥 社會比較機制</h4>
+                    <p>利用用戶與朋友、家人或社群的比較來激發動機和參與度。健身應用中的步數競賽就是一個典型例子。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏆 成就系統設計</h4>
+                    <p>設計徽章、等級、排行榜等成就系統，滿足用戶的認可需求和成就感。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💬 社群歸屬感</h4>
+                    <p>創建讓用戶感受到歸屬感和社群連結的功能，如分享成就、互相鼓勵等。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 個人化體驗</h4>
+                    <p>根據用戶行為和偏好提供個人化內容，讓用戶感受到產品對他們的理解和重視。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>實踐範例：健身應用程式</h4>
+                <p>在健身應用程式中，我們可以設計一個功能，讓用戶看到今天走了多少步，並與昨天的表現進行比較。同時顯示朋友圈中的排名，激發用戶的競爭意識。當用戶達到目標時，系統會發送祝賀訊息並建議分享到社交媒體，滿足用戶的認可需求。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Emotional Impact Design Production -->
+        <div class="slide">
+            <h2>17.6 情感影響設計製作</h2>
+            
+            <div class="highlight-box">
+                <h3>設計製作階段</h3>
+                <p>情感影響的最終設計候選者將接受評估。在評估中識別的任何想法都將啟動另一輪細化和修改。一旦設計完成，它將在設計製作階段進行詳細描述，其目標是將設計定義得足夠詳細，使其成為軟體工程師實施的規範。</p>
+            </div>
+            
+            <div class="design-spec">
+                <h3>設計規格範例 - 國家公園應用程式</h3>
+                <div style="margin: 15px 0;">
+                    <strong>BUTTONS</strong><br>
+                    Primary: #27AE60, hover: #229A52<br>
+                    Secondary: #3498DB, hover: #2980B9<br>
+                    Disabled: #BDC3C7
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>TYPOGRAPHY</strong><br>
+                    Headers: Avenir Next Bold, 24px<br>
+                    Body: Avenir Next Medium, 16px<br>
+                    Captions: Avenir Next, 14px
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>ICONS</strong><br>
+                    Style: Rounded, 2px stroke<br>
+                    Size: 24px standard, 32px large<br>
+                    Color: #2C3E50 default
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>ANIMATIONS</strong><br>
+                    Duration: 300ms standard<br>
+                    Easing: ease-out<br>
+                    Loading: Organic fade-in
+                </div>
+            </div>
+            
+            <div class="quote">
+                圖 17.7 提供了國家公園應用程式部分視覺設計的詳細設計規範。特別是，諸如填充、大小和確切顏色規範等細節被詳細說明，用於設計中使用的所有視覺元素。
+            </div>
+        </div>
+
+        <!-- Slide 15: Exercise and Practice -->
+        <div class="slide">
+            <h2>練習 17.1：為您的產品或系統設計情感反應概念</h2>
+            
+            <div class="highlight-box">
+                <h3>實踐步驟</h3>
+                <p>思考您的系統和 UX 研究數據，並從情感角度設想概念設計。創建一個包含想法、主題和靈感的情境板來捕捉這個願景。嘗試以視覺方式傳達設計元素如何在用戶中喚起情感影響。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 步驟一：研究分析</h4>
+                    <p>回顧您的 UX 研究數據，識別用戶的情感需求和期望。了解他們的價值觀、生活方式和情感觸發點。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 步驟二：概念發展</h4>
+                    <p>基於研究洞察，發展 2-3 個不同的情感概念方向。每個概念都應該有清晰的情感目標。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎨 步驟三：情境板創建</h4>
+                    <p>為每個概念創建詳細的情境板，包含顏色、字體、圖像、材質等元素，傳達特定的情感調性。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 步驟四：測試與精煉</h4>
+                    <p>與目標用戶測試您的概念，收集反饋並根據結果精煉最有潜力的方向。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>思考提示</h4>
+                <ul>
+                    <li>您的產品應該讓用戶感受到什麼情感？</li>
+                    <li>什麼視覺、聽覺或觸覺元素可以喚起這些情感？</li>
+                    <li>您的設計如何在競爭中脫穎而出？</li>
+                    <li>如何確保情感設計與功能需求保持平衡？</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: Summary -->
+        <div class="slide">
+            <h2>17.7 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>本章重點回顧</h3>
+                <p>在前兩章中，我們涵蓋了生態和互動需求的設計。在本章中，我們討論了情感需求的設計，以結束第 3 部分。接下來，我們進入第 4 部分的原型製作。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 情感需求重要性</h4>
+                    <p>情感需求位於用戶需求金字塔的頂層，是創造優秀用戶體驗的關鍵差異化因素。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎨 設計方法論</h4>
+                    <p>通過隱喻、情境板、色彩、字體、聲音等多種設計元素來傳達和喚起特定情感反應。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 系統性方法</h4>
+                    <p>從概念設計到中介設計再到最終製作，需要系統性地發展情感設計策略。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 實踐考量</h4>
+                    <p>情感設計必須考慮使用情境、技術限制和品牌一致性等實際因素。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                情感影響設計是 UX 設計中最具挑戰性但也是最有回報的領域之一。它要求設計師不僅要理解功能需求，更要深入理解人類的情感需求和心理機制，創造出真正觸動人心的產品體驗。
+            </div>
+            
+            <div class="highlight-box">
+                <h3>下一步：原型製作</h3>
+                <p>在完成了生態、互動和情感三個層面的設計後，我們將進入原型製作階段，將設計概念轉化為可測試的原型，驗證我們的設計決策是否能夠有效滿足用戶需求並創造預期的情感影響。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">16</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

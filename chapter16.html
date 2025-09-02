@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第十六章：設計互動</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .lifecycle-wheel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .wheel-diagram {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid #3498db;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ecf0f1, #fff);
+        }
+        
+        .wheel-step {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .step-understand {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .step-design {
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+        
+        .step-prototype {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .step-evaluate {
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+        }
+        
+        .interaction-flow {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            min-width: 120px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .flow-step::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .flow-step:last-child::after {
+            display: none;
+        }
+        
+        .design-elements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .element-card {
+            background: #ffffff;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .element-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第十六章：設計互動</h1>
+            <div class="quote">
+                "互動設計專注於人們如何使用系統或產品來執行工作實務範圍內的任務，涵蓋使用者與生態系統互動的所有觸點。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>為互動需求設計</li>
+                    <li>創建互動設計</li>
+                    <li>故事板（Storyboards）</li>
+                    <li>線框圖（Wireframes）</li>
+                    <li>中階互動設計</li>
+                    <li>互動設計製作</li>
+                    <li>設計系統</li>
+                </ul>
+            </div>
+            <div class="lifecycle-wheel">
+                <h3>UX設計生命週期 - 設計互動階段</h3>
+                <div class="wheel-diagram">
+                    <div class="wheel-step step-understand">理解使用者需求</div>
+                    <div class="wheel-step step-design">設計解決方案</div>
+                    <div class="wheel-step step-prototype">原型候選</div>
+                    <div class="wheel-step step-evaluate">評估UX</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>16.1 簡介 - 你在這裡</h2>
+            
+            <div class="highlight-box">
+                <h3>設計互動在UX生命週期中的位置</h3>
+                <p>我們開始每個流程章節都有一個「你在這裡」的圖片，顯示章節主題在整體UX設計生命週期模板中的背景。在本章中，我們描述如何為人類需求金字塔的中層設計——互動。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 互動需求分析</h4>
+                    <p>在第11.2.1節中，我們討論了互動需求如何關於能夠操作使用者介面控制項，以在工作領域中執行所需任務。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 不同裝置的設計需求</h4>
+                    <p>不同裝置在生態系統中有不同的形式因子、使用約定、限制和能力，每個都需要適當的互動設計。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💻 裝置間差異考量</h4>
+                    <p>例如，搜尋任務在桌面、手機和手錶上的互動設計會有所不同——較小且能力較弱的裝置提供較少選項和更受限的結果。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Designing for Interaction Needs -->
+        <div class="slide">
+            <h2>16.2 為互動需求設計</h2>
+            
+            <div class="highlight-box">
+                <h3>16.2.1 為互動需求設計就是支援使用者任務</h3>
+                <p>在實際術語中，互動設計是關於人們如何使用系統或產品來執行工作實務範圍內的任務，涵蓋使用者與生態系統互動的所有觸點。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>Apple Music 生態系統互動設計範例</h4>
+                <ul>
+                    <li>支援使用者註冊Apple ID</li>
+                    <li>登入系統</li>
+                    <li>按藝術家、標題、專輯和評分搜尋或瀏覽歌曲</li>
+                    <li>使用語音助手Siri或Apple Music執行各種任務</li>
+                    <li>購買Apple Music訂閱</li>
+                    <li>提供策展支援讓使用者建立自己的播放清單</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h4>16.2.2 生態系統中不同裝置類型需要不同的互動設計</h4>
+                <p>不同裝置有不同的形式因子、使用約定、限制和能力，每個都需要適當的互動設計方法。即使在同一裝置類別內，互動設計也會有所不同。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Creating Interaction Design -->
+        <div class="slide">
+            <h2>16.3 創建互動設計</h2>
+            
+            <div class="interaction-flow">
+                <h3>互動設計流程</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step">識別所有裝置</div>
+                    <div class="flow-step">生成式設計</div>
+                    <div class="flow-step">建立概念設計</div>
+                    <div class="flow-step">運用設計模式</div>
+                </div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 16.3.1 首先識別生態系統中的所有裝置及其角色</h4>
+                    <p>與你的UX團隊開始，列舉生態系統中預期的所有裝置。每個裝置在工作實務中會扮演什麼角色？</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 16.3.2 進行生成式設計</h4>
+                    <p>深入了解任務相關模型、需求和使用者故事，並運用第13章討論的技術讓團隊進行構想和素描。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎨 16.3.3 為互動建立良好的概念設計</h4>
+                    <p>互動的概念設計可以基於設計模式、常見設計問題的可重複解決方案，或使用隱喻來描述互動設計的運作方式。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 16.3.4 利用互動設計模式</h4>
+                    <p>設計模式是針對常見設計問題的可重複解決方案，鼓勵分享和重用，並促進一致性。現代圖形使用者介面和行動介面建立在設計模式之上。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Conceptual Design Examples -->
+        <div class="slide">
+            <h2>概念設計範例：售票亭系統</h2>
+            
+            <div class="example-box">
+                <h4>售票亭系統的概念設計</h4>
+                <p>對售票亭的常見認知包括一個基座上的盒子和一個顯示選擇的彩色觸控螢幕。如果你給一組學生一個任務，讓他們為售票亭系統提出30分鐘的概念設計，90%的時間你可能會得到類似的東西。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>沉浸式體驗設計思維</h3>
+                <p>在我們對售票亭系統的構想中，有人提到要創造沉浸式體驗。這觸發了更多關於如何使其沉浸式的想法和素描，直到我們提出了一個三面板整體設計，從字面上圍繞並沉浸使用者。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📱 中央螢幕</h4>
+                    <p>互動區域，沉浸和購票行動發生的地方</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⬅️ 左螢幕</h4>
+                    <p>包含可用選項或可能的下一步（例如，此螢幕可能提供完成交易所需的所有步驟清單）</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>➡️ 右螢幕</h4>
+                    <p>包含情境支援，如互動歷史和相關動作（例如，此螢幕可能提供目前交易的摘要和相關資訊）</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Storyboards -->
+        <div class="slide">
+            <h2>16.4 故事板範例</h2>
+            
+            <div class="highlight-box">
+                <h3>什麼是故事板？</h3>
+                <p>故事板顯示使用三螢幕亭設計購買音樂會門票的範例素描。這是思考和建模此類工作目標的一種方式，就是通過使用故事板。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>售票亭系統設計情境</h4>
+                <p>相應的設計情境可能類似以下內容：</p>
+                <ul>
+                    <li>購票者接近亭子</li>
+                    <li>感應器檢測使用者存在並開始沉浸協議</li>
+                    <li>激活「包圍聲」標識顯示在包裹外殼上</li>
+                    <li>檢測有Middleburg大學(MU)護照的人員</li>
+                    <li>中央螢幕：問候購票者並詢問PIN</li>
+                    <li>中央螢幕：根據購票者類別顯示推薦和最受歡迎的當前優惠</li>
+                    <li>右側螢幕：如果MU系統上存在，則顯示購票者的資料</li>
+                    <li>左側螢幕：列出選項，如瀏覽活動、購買門票和搜尋</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h4>設計廣度考量</h4>
+                <p>這個範例很好地說明了我們對互動範圍的意圖，包括一個人走在亭子附近、無線電頻率識別等。這種情境可以直接用於創建線框圖。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: User Stories -->
+        <div class="slide">
+            <h2>16.5 互動視角的使用者故事範例</h2>
+            
+            <div class="highlight-box">
+                <h3>售票亭系統使用者故事</h3>
+                <p>使用第10.2.2.1節建議的格式，以下是可能相關的使用者故事範例：</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>範例使用者故事</h4>
+                <div style="background: #f8f9fa; padding: 15px; margin: 10px 0; font-family: monospace;">
+                    <p><strong>作為TKS門票購買者，</strong></p>
+                    <p>我希望能夠聽到可用音樂會的樣本聲音片段</p>
+                    <p>這樣我就可以更好地了解選擇參加的音樂會。</p>
+                    <br>
+                    <p><strong>作為TKS門票購買者，</strong></p>
+                    <p>我希望能夠看到可用座位的視覺選項，</p>
+                    <p>這樣我就可以找到我認為最適合活動的座位。</p>
+                    <br>
+                    <p><strong>作為TKS門票購買者，</strong></p>
+                    <p>我希望隱私，</p>
+                    <p>保護我不被其他人看到我的交易。</p>
+                    <br>
+                    <p><strong>作為TKS門票購買者，</strong></p>
+                    <p>我希望能夠用信用卡、簽帳卡或PayPal付款，</p>
+                    <p>這樣我的付款就會安全和方便。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                你能看出這些範例使用者故事如何影響設計情境作為輸入嗎？
+            </div>
+        </div>
+
+        <!-- Slide 8: Wireframes -->
+        <div class="slide">
+            <h2>16.6 線框圖</h2>
+            
+            <div class="highlight-box">
+                <h3>16.6.1 什麼是線框圖？</h3>
+                <p>線框圖是一個互動設計狀態（一個互動螢幕）內的互動設計的線條繪圖表現。線框圖包含盒子和其他形狀的線條和輪廓來表示新興互動設計。線框圖的外觀就像線框，因為線框圖是一種原型，我們需要在這裡介紹線框圖。</p>
+            </div>
+            
+            <div class="design-elements">
+                <div class="element-card">
+                    <h4>📋 示意圖和草圖</h4>
+                    <p>定義網頁或螢幕布局和導航流程</p>
+                </div>
+                
+                <div class="element-card">
+                    <h4>🔍 高層概念說明</h4>
+                    <p>用於說明高層概念、近似視覺布局和行為</p>
+                </div>
+                
+                <div class="element-card">
+                    <h4>⚡ 外觀和感覺展示</h4>
+                    <p>有時用於顯示互動設計的外觀和感覺</p>
+                </div>
+                
+                <div class="element-card">
+                    <h4>🔄 狀態轉換描述</h4>
+                    <p>描述使用期間的螢幕或其他狀態轉換，描繪設想的任務流程</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>16.6.2 通往線框圖的路徑</h4>
+                <p>圖16.6顯示了從構想和素描、任務互動模型和設想設計情境到線框圖的路徑，作為螢幕布局和導航流程設計的表現。</p>
+                <p>沿著構想、素描和批評，任務互動模型和設計情境是設計故事講述和溝通的主要輸入。故事板作為草圖序列，是素描的自然延伸。故事板通常只代表選定的任務線索，幸運的是，從故事板到線框圖是一個短暫且自然的步驟。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Wireframe Design Elements -->
+        <div class="slide">
+            <h2>16.6.3 線框圖設計元素</h2>
+            
+            <div class="highlight-box">
+                <h3>低保真度線框圖特點</h3>
+                <p>低保真度線框圖通常沒有圖形設計元素（例如圖像、特定顏色、字體）。線框圖中表示的典型元素可以包括以下內容：</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📱 基本介面元素</h4>
+                    <ul>
+                        <li>標題和頁腳</li>
+                        <li>內容區域</li>
+                        <li>標籤和選單</li>
+                        <li>標籤頁（可能包含下拉選單）</li>
+                        <li>按鈕和圖標</li>
+                        <li>彈出視窗和訊息</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔗 導航元素</h4>
+                    <ul>
+                        <li>導航欄、導航連結</li>
+                        <li>標誌和品牌圖像的佔位符</li>
+                        <li>輸入欄位（用於搜尋等）</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote">
+                線框圖在該領域長期以來一直是記錄、溝通和原型製作這些互動設計的選擇。
+            </div>
+            
+            <div class="warning-box">
+                <h4>工具選擇建議</h4>
+                <p>當然，沒有什麼能比得上鉛筆/筆和紙或白板進行構想所需的素描（頭腦風暴設計創作見第13章），但在某個時候，當設計概念從構想中出現時，必須將其傳達給追求生命週期流程其餘部分的其他人。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Intermediate Interaction Design -->
+        <div class="slide">
+            <h2>16.7 中階互動設計</h2>
+            
+            <div class="highlight-box">
+                <h3>設計細化過程</h3>
+                <p>隨著團隊繼續細化互動設計，使用高層故事板探索的工作流程會受到批評和分析。這導致必要的調整和想法的精簡。然後，團隊專注於最有前景的想法，通過增加設計的保真度並制定更多的流程細節，朝著線框圖原型的方向發展。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>16.7.1 國家公園網站範例介紹</h4>
+                <p>作為創建線框圖原型的一步，我們介紹一個涉及虛構國家公園網站的範例，使用者可以在其中瀏覽景點和戶外活動，並可以預訂公園資源，如露營地。我們從智慧型手機裝置上此產品的早期中階互動設計範例開始。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🏕️ 工作領域筆記</h4>
+                    <ul>
+                        <li>國家公園可能非常大</li>
+                        <li>一個國家公園可能包含多個露營地</li>
+                        <li>許多露營地將有自己的網站</li>
+                        <li>有時較大的露營地會分為區域或部門</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚙️ 露營地預訂參數</h4>
+                    <ul>
+                        <li>對於給定的露營地，露營地預訂將有幾個參數</li>
+                        <li>包括所需設施（如電力、水、下水道服務）</li>
+                        <li>安全舒適的露營體驗</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: User Persona Example -->
+        <div class="slide">
+            <h2>16.7.1.2 使用者人物誌範例：Annie</h2>
+            
+            <div class="example-box">
+                <h4>Annie Simpson的人物誌資料</h4>
+                <div style="background: #f8f9fa; padding: 15px; margin: 10px 0;">
+                    <p><strong>姓名：</strong>Annie Simpson</p>
+                    <p><strong>年齡：</strong>28歲</p>
+                    <p><strong>婚姻狀況：</strong>單身</p>
+                    <p><strong>地點：</strong>科羅拉多州博爾德</p>
+                    <p><strong>職業：</strong>狗美容師</p>
+                    <br>
+                    <p><strong>個人簡介：</strong></p>
+                    <p>Annie擁有一家小型狗美容企業。她熱愛戶外活動，對大自然有著深厚的情感依戀。她在露營方面相對有經驗，擁有一個小型拖車。她有一些兼職助手幫助她在外出時照顧生意。</p>
+                    <br>
+                    <p><strong>目標：</strong>她喜歡狗美容，但也希望有一天成為作家，撰寫關於她的旅行和在戶外露營的非虛構作品。</p>
+                    <br>
+                    <p><strong>挫折：</strong>她必須使用電腦，但主要是為了追蹤她的狗客戶。她上網購物時不喜歡複雜的選項。她需要簡單易懂的互動。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Design Scenario -->
+        <div class="slide">
+            <h2>16.7.1.3 國家公園露營地預訂系統設計情境</h2>
+            
+            <div class="highlight-box">
+                <h3>Annie的露營之旅情境</h3>
+                <p>你能看出使用者在這個情境中的旅程描述是如何受到第16.7.1.1節的使用者故事和Annie人物誌的影響的嗎？</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>Annie計劃露營之旅的工作活動情境</h4>
+                <p>Annie正在計劃一次露營之旅去猶他州。這是Annie旅程的簡要描述，作為一種工作活動情境。在考慮州立公園和私人露營地後，Annie決定在她的小拖車中在國家公園露營。她在猶他州和附近的猶他州在線搜索國家公園，查看公園景點和功能，並決定在布萊斯谷國家公園露營。然後她執行以下操作：</p>
+                
+                <ol style="margin-left: 20px;">
+                    <li>訪問布萊斯谷國家公園主畫面</li>
+                    <li>搜索此公園內或附近的露營地</li>
+                    <li>在布萊斯谷國家公園區域找到地圖</li>
+                    <li>選擇一個有前景的露營地並查看彈出窗口，名為John Muir露營地</li>
+                    <li>點擊圖標前往John Muir露營地頁面</li>
+                    <li>跟隨連結查看露營地評論</li>
+                    <li>滿意後，回到John Muir露營地頁面並跟隨連結到「露營」和另一個到「檢查露營地可用性」</li>
+                    <li>輸入預訂資訊，包括到達日期和出發日期，在彈出日曆小工具上</li>
+                    <li>在搜索過濾器中選擇偏好（例如，房車、水、電、下水道）</li>
+                    <li>點擊「搜索」查找站點可用性</li>
+                    <li>站點可用性結果顯示在露營地地圖上，將可用站點圖標以顏色標記（藍色），默認視圖。在這種情況下，站點A03顯示為從可用站點中選擇的</li>
+                    <li>如果使用者偏好以清單格式查看可用站點，點擊右側的「清單」獲得清單顯示</li>
+                    <li>從圖16.8畫面選擇A03站點圖標或點擊圖16.9的A03選擇圓圈並點擊「選擇」以表達對此站點的選擇</li>
+                    <li>如果所選露營地的詳細資訊看起來不錯，點擊「預訂」進行預訂並前往「付款」頁面</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 13: Interaction Design Production -->
+        <div class="slide">
+            <h2>16.8 互動設計製作</h2>
+            
+            <div class="highlight-box">
+                <h3>設計細化到實作</h3>
+                <p>互動的最終候選被原型製作並受到評估。在評估中識別的任何問題都會啟動另一輪設計修改和原型製作。一旦設計完成，就會在稱為設計製作的階段中詳細描述。這個階段的目標是以足夠詳細的方式定義設計，使其成為軟體工程師實作的規格。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 詳細設計規格</h4>
+                    <p>設計製作包括創建詳細的設計規格，定義每個互動元素的確切行為、外觀和功能。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📐 精確尺寸和位置</h4>
+                    <p>註明元素的精確尺寸、位置、間距和對齊方式，確保開發人員能夠準確實現設計。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎨 視覺設計細節</h4>
+                    <p>包括顏色代碼、字體規格、圖標和圖像要求，以及各種狀態下的外觀變化。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 互動行為說明</h4>
+                    <p>詳細說明使用者互動時的系統響應，包括動畫、轉場效果和狀態變化。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>設計註解範例</h4>
+                <p>圖16.14顯示了桌面裝置互動設計的詳細設計規格範例。注意底部定義細節的註解，例如描述預覽應該有多少行，以及當使用者將滑鼠懸停在螢幕上的某些元素上時會發生什麼。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Design Systems -->
+        <div class="slide">
+            <h2>16.9 採用並維護設計系統</h2>
+            
+            <div class="highlight-box">
+                <h3>16.9.1 什麼是設計系統？</h3>
+                <p>設計系統是設計師時尚和維護的儲存庫，用於捕獲和描述視覺和其他一般設計決策的細節，特別是關於螢幕設計、模式、使用者介面小工具、字體選擇、圖像學和顏色使用，可以在多個地方應用。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 一致性保證</h4>
+                    <p>設計系統幫助實現設計一致性，減少小工具設計、布局、格式、顏色選擇等細節的變化。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📚 標準化詞彙</h4>
+                    <p>提供互動元素和語法的標準化詞彙，幫助一致性和設計決策的重用。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 提高效率</h4>
+                    <p>通過預製（和指定）較低級設計選擇的高效生成設計，設計系統是一個生產力助推器。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 避免重複勞動</h4>
+                    <p>幫助避免重複發明的浪費，通過重用經過深思熟慮的設計模式。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>16.9.2 為什麼要使用設計系統？</h4>
+                <ul>
+                    <li><strong>專案控制和溝通：</strong>沒有大量設計決策的文檔，專案會失控</li>
+                    <li><strong>可靠性朝向設計一致性：</strong>有效的設計系統幫助減少整個產品和產品線中細節的變化</li>
+                    <li><strong>通過重用經過深思熟慮的設計模式提高生產力</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 15: What to Include in Design System -->
+        <div class="slide">
+            <h2>16.9.3 設計系統中應該包含什麼？</h2>
+            
+            <div class="highlight-box">
+                <h3>設計系統核心內容</h3>
+                <p>你的設計系統應該包括你的組織關心一致性的所有類型的使用者介面對象和設計情況。大多數設計系統都非常詳細，詳細說明圖形佈局和價格的參數，包括尺寸、位置和間距。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎨 視覺設計元素</h4>
+                    <ul>
+                        <li>字體、顏色方案、背景圖形</li>
+                        <li>設計系統的其他常見設計元素</li>
+                        <li>互動程序、互動樣式</li>
+                        <li>訊息和對話字體、文字樣式和語調</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 互動元件</h4>
+                    <ul>
+                        <li>小工具使用、位置和設計</li>
+                        <li>標籤標準、詞彙控制</li>
+                        <li>術語和訊息標籤措辭</li>
+                        <li>決定如何使用的模式和違約情況</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 設計指導</h4>
+                    <ul>
+                        <li>範例設計指導方針和圖片</li>
+                        <li>設計模式目錄（Borchers, 2001）</li>
+                        <li>組織品牌的設計系統規則</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚠️ 錯誤範例</h4>
+                    <ul>
+                        <li>錯誤使用元素的具體範例</li>
+                        <li>包括UX問題的具體範例</li>
+                        <li>評估相關設計系統違規</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote">
+                設計系統應該措辭非常具體，你應該詳細說明適用性的解釋和條件。
+            </div>
+        </div>
+
+        <!-- Slide 16: Modern Design Systems -->
+        <div class="slide">
+            <h2>現代設計系統與原型製作工具</h2>
+            
+            <div class="highlight-box">
+                <h3>現代線框圖工具的優勢</h3>
+                <p>我們在第18.3.2節的原型製作背景下重新討論設計系統，談論現代線框圖工具如何通過最小的努力幫助實現一致性和效率。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔧 Figma等現代工具</h4>
+                    <p>現代設計工具如Figma提供了內建的設計系統功能，讓設計師能夠創建和維護一致的組件庫。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📚 組件庫管理</h4>
+                    <p>設計師可以創建可重複使用的組件，確保整個專案中的一致性，並能夠集中更新設計元素。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 協作效率</h4>
+                    <p>團隊成員可以共享設計系統，確保所有人都使用相同的設計標準和組件。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 版本控制</h4>
+                    <p>現代工具提供版本控制功能，讓設計團隊能夠追蹤設計系統的變更歷史。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Chapter Summary -->
+        <div class="slide">
+            <h2>16.10 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 本章重點回顧</h3>
+                <ul>
+                    <li><strong>互動需求設計：</strong>了解如何為不同裝置和使用情境設計適當的互動</li>
+                    <li><strong>設計流程：</strong>從概念設計到故事板，再到線框圖的完整設計流程</li>
+                    <li><strong>設計模式應用：</strong>利用既有設計模式提高一致性和效率</li>
+                    <li><strong>原型製作技術：</strong>從低保真到高保真的原型製作方法</li>
+                    <li><strong>設計系統建立：</strong>創建和維護設計系統以確保產品一致性</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                我們已經涵蓋了在前一章中為生態需求設計和本章中的互動需求設計。我們將在下一章中通過處理情感需求來結束第3部分。
+            </div>
+            
+            <div class="example-box">
+                <h4>實務應用建議</h4>
+                <ul>
+                    <li>始終從使用者需求出發進行互動設計</li>
+                    <li>重視跨裝置的一致性體驗</li>
+                    <li>建立並維護完善的設計系統</li>
+                    <li>透過原型測試驗證設計決策</li>
+                    <li>持續收集使用者回饋並改進設計</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 18: Key Concepts -->
+        <div class="slide">
+            <h2>重要概念總結</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 互動設計本質</h4>
+                    <ul>
+                        <li>支援使用者任務執行</li>
+                        <li>跨裝置一致體驗</li>
+                        <li>符合使用約定</li>
+                        <li>適應裝置限制</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 設計方法論</h4>
+                    <ul>
+                        <li>生成式設計思考</li>
+                        <li>概念設計建立</li>
+                        <li>設計模式運用</li>
+                        <li>迭代式改進</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📱 原型製作</h4>
+                    <ul>
+                        <li>故事板敘事</li>
+                        <li>線框圖結構</li>
+                        <li>高保真原型</li>
+                        <li>互動流程圖</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎨 設計系統</h4>
+                    <ul>
+                        <li>組件庫建立</li>
+                        <li>設計標準化</li>
+                        <li>品牌一致性</li>
+                        <li>效率提升</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>💡 實務建議</h3>
+                <p>成功的互動設計需要深入理解使用者需求、技術限制和商業目標之間的平衡。透過系統化的設計流程、有效的原型製作和完善的設計系統，設計師能夠創建出既實用又令人滿意的使用者體驗。記住，互動設計不僅是關於介面的外觀，更重要的是如何讓使用者能夠有效、愉快地完成他們的任務。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">18</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

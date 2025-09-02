@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第十八章：原型製作</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .prototype-spectrum {
+            background: linear-gradient(to right, #e74c3c, #f39c12, #f1c40f, #2ecc71);
+            height: 80px;
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .spectrum-label {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+        }
+        
+        .prototype-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .prototype-type {
+            background: #ffffff;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .horizontal {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .vertical {
+            border-color: #f39c12;
+            background: #fff8e7;
+        }
+        
+        .t-prototype {
+            border-color: #2ecc71;
+            background: #eafaf1;
+        }
+        
+        .local {
+            border-color: #9b59b6;
+            background: #f4f1f8;
+        }
+        
+        .fidelity-flow {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .flow-steps {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .flow-step {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 10px;
+            text-align: center;
+            position: relative;
+            min-width: 150px;
+        }
+        
+        .flow-step::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .flow-step:last-child::after {
+            display: none;
+        }
+        
+        .wireframe-process {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .process-step {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .step-letter {
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .advantages-list {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .advantages-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .advantages-list li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第十八章：原型製作</h1>
+            <div class="quote">
+                "原型製作是一個完整的生命週期活動，用於實現、設想和評估那些有前景的設計候選方案，通過擴展其範圍、細節和理解來進行。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>原型製作與其他UX設計活動的相互關聯</li>
+                    <li>原型的深度和廣度</li>
+                    <li>水平原型、垂直原型、局部原型、T型原型</li>
+                    <li>線框圖原型</li>
+                    <li>一般的互動表示流程</li>
+                    <li>原型的保真度</li>
+                    <li>以遞增保真度層級建構原型</li>
+                    <li>點擊穿越原型</li>
+                    <li>專門化原型</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>18.1 簡介 - 你在這裡</h2>
+            
+            <div class="highlight-box">
+                <h3>18.1.2 原型製作與其他UX活動的相互關聯</h3>
+                <p>原型製作是這種相互關聯的良好例子。原型製作發生在草圖創作初期的思考過程中，並持續到與線框圖和其他形式相呼應，貫穿設計過程的大部分剩餘時間。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 18.1.3 困境與解決方案</h4>
+                    <p>確保你的設計是正確設計和最佳設計的唯一方法是將其提交給UX評估。然而，在某個早期階段，你將對設計或系統進行設計或實例化，如果等到實施後再評估，變更將變得更加困難和昂貴。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 原型的優勢</h4>
+                    <p>原型讓你在必須投入資源建構真實系統之前有東西可以評估。原型讓你能夠更快地失敗、更早地學習，並且更早地成功。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Advantages of Prototyping -->
+        <div class="slide">
+            <h2>18.1.4 原型製作的優勢</h2>
+            
+            <div class="advantages-list">
+                <h3>原型具有以下優勢：</h3>
+                <ul>
+                    <li>提供支援與使用者進行UX評估的平台</li>
+                    <li>為使用者和設計師之間的溝通提供具體的基準線</li>
+                    <li>提供對話道具來支持不易口頭傳達的概念溝通</li>
+                    <li>允許使用者嘗試設計</li>
+                    <li>在客戶和開發者組織內給予專案可見性和認同</li>
+                    <li>鼓勵早期使用者參與和投入</li>
+                    <li>給人設計變更容易進行的印象，因此現在是進行變更的時機</li>
+                    <li>為設計師提供對使用者表現和設計決策後果的即時觀察</li>
+                    <li>幫助管理層對新產品想法的銷售</li>
+                    <li>協助向現有系統的新版本轉變</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h4>18.1.5 原型製作的普遍性</h4>
+                <p>原型製作的概念是永恆且普遍的。汽車設計師建造和測試模型，建築師和雕塑家製作模型，電路設計師使用麵包板，藝術家使用草圖，飛機設計師建造和飛行實驗設計。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Depth and Breadth -->
+        <div class="slide">
+            <h2>18.2 原型的深度與廣度</h2>
+            
+            <div class="highlight-box">
+                <h3>原型背後的想法</h3>
+                <p>原型背後的想法是提供對設想的UX設計的快速且易於更改的早期視圖。因為必須快速且易於更改，原型是某種方式上不如完整實施的設計表示。製作原型的方法是通過關注系統的廣度或深度來使其不那麼完整。</p>
+            </div>
+            
+            <div class="prototype-spectrum">
+                <div class="spectrum-label">水平原型<br>廣度</div>
+                <div class="spectrum-label">T型原型<br>結合</div>
+                <div class="spectrum-label">垂直原型<br>深度</div>
+                <div class="spectrum-label">局部原型<br>焦點</div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 關鍵概念</h4>
+                    <p>當您通過廣度來劃分系統的特徵和功能時，您會得到水平原型。當您通過深度來劃分時，您會得到垂直原型。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Horizontal Prototypes -->
+        <div class="slide">
+            <h2>18.2.1 水平原型</h2>
+            
+            <div class="prototype-types">
+                <div class="prototype-type horizontal">
+                    <h4>水平原型特徵</h4>
+                    <p>在它所涵蓋的功能中非常廣泛，但在功能運作方式的覆蓋深度上提供較少</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>水平原型的應用</h3>
+                <p>水平原型是開始原型製作的好地方，因為它提供了一個可以基於頂層方法進行原型製作的概述。在漏斗中進行原型製作往往本質上是水平的。敏捷UX漏斗模型的早期部分是為大範圍活動設計的，通常用於概念設計，在與軟體工程師同步之前。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>18.2.5.1 水平原型範例</h4>
+                <p>在水平原型中，您展示主頁面或應用程式主要登陸頁面上的所有按鈕和其他可操作的互動對象。點擊任何按鈕將引導到原型中相應任務的第一個螢幕，但不提供有關執行任何任務的進一步詳細資訊。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>使用時機</h4>
+                <p>由於缺乏細節，水平原型通常不支持完整的工作流程。它們對於以概念驗證為重點的使用者體驗評估和確保新興的早期設計與使用者的更廣泛工作目標一致是很好的選擇。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Vertical Prototypes -->
+        <div class="slide">
+            <h2>18.2.2 垂直原型</h2>
+            
+            <div class="prototype-types">
+                <div class="prototype-type vertical">
+                    <h4>垂直原型特徵</h4>
+                    <p>包含一些功能的更多深度細節，但僅針對狹窄的功能選擇</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>垂直原型的特點</h3>
+                <p>垂直原型允許對有限範圍的功能進行評估，但包含的那些部分已經發展到足以支援使用者體驗評估的程度。垂直原型的功能可以包括為連接到實際後端資料庫的存根或連接。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>18.2.5.2 垂直原型範例</h4>
+                <p>在垂直原型中，點擊任何按鈕（除了選定的按鈕，比如"設置時間"按鈕）會顯示相應任務/功能的存在，但沒有詳細資訊。在此範例中詳細展示的"設置時間"任務確實會讓使用者深入了解"設置時間"任務序列的所有細節。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>應用場景</h4>
+                <p>垂直原型在您需要完全代表某個孤立互動設計工作流程的細節以了解這些細節在實際使用中如何發揮作用時是理想的。垂直原型在流程的後期漏斗部分最常使用。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: T Prototypes and Local Prototypes -->
+        <div class="slide">
+            <h2>18.2.3 T型原型 & 18.2.4 局部原型</h2>
+            
+            <div class="prototype-types">
+                <div class="prototype-type t-prototype">
+                    <h4>T型原型</h4>
+                    <p>結合水平和垂直原型的優勢，為設計評估提供良好的妥協方案</p>
+                </div>
+                
+                <div class="prototype-type local">
+                    <h4>局部原型</h4>
+                    <p>在兩個維度上都很窄，將焦點限制在局部化的互動設計問題上</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>T型原型的建議使用</h3>
+                <p>在早期，我們建議使用T型原型，因為它在兩個極端之間提供了良好的平衡，給您一些優勢的每一個。在您的水平原型中建立了系統概述作為實際問題，T型原型是朝著實現一些深度的下一步。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>18.2.5.4 局部原型範例</h4>
+                <p>局部原型可以用於探索一個互動點的替代方案。例如，在設置日期的任務中，考慮多種設置日期的方法：(1)上下箭頭設定日期值；(2)相同的旋轉器；(3)使用左右箭頭導航並在日曆上選擇日期的彈出日曆。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Wireframe Prototypes -->
+        <div class="slide">
+            <h2>18.3 線框圖原型</h2>
+            
+            <div class="highlight-box">
+                <h3>線框圖原型的定義</h3>
+                <p>線框圖是互動設計原型的首選技術，在第16.6節中介紹。線框圖是由線條和形狀組成的二維素描或繪圖，包括一些標籤文字。每個形狀代表單一互動對象、模式、頁面或螢幕（在最廣義的螢幕意義上）。</p>
+            </div>
+            
+            <div class="wireframe-process">
+                <h3>18.3.1 繪製您為原型設計創建的所有內容</h3>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-letter">A</div>
+                        <div>繪製您的流程模型和任務序列模型以表示流程和導航</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-letter">B</div>
+                        <div>構建使用者工作流程和導航圖表</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-letter">C</div>
+                        <div>為每個方塊（代表使用者狀態）創建低保真度線框圖</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-letter">D</div>
+                        <div>迭代並細化為更高保真度的線框圖原型</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>線框圖原型基礎</h4>
+                <p>線框圖原型本質上是使用者工作流程圖。線框圖原型包含以下內容：表示系統狀態的方塊，每個狀態都是線框圖，可能代表裝置上的螢幕；表示線框圖之間導航流程的箭頭（由於使用者互動而產生的轉換）。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Creating Wireframes -->
+        <div class="slide">
+            <h2>18.3.3 為每個狀態創建線框圖</h2>
+            
+            <div class="highlight-box">
+                <h3>線框圖設計要點</h3>
+                <p>使用者流程圖的每個狀態（方塊）都成為一個螢幕的低保真度線框圖設計。在該螢幕內，您正在為該狀態中存在的內容進行設計，例如支援相關任務的工作區和對話框，包括按鈕、圖標、下拉選單和要由使用者填寫的表單等元素。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔧 導航控制</h4>
+                    <p>使用者流程圖的弧線將指導您在線框圖之間添加控制項（如按鈕）以支援導航。在工作時，您可能需要添加新狀態和相應的導航來處理非主流對話框。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 設計系統整合</h4>
+                    <p>您可以通過具有互動對象庫的工具提高建構這些線框圖的效率。不要浪費時間反覆建構互動對象，而要讓它們的樣式規格適合您的設計系統。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>18.3.5 線框圖套組</h4>
+                <p>當您將線框圖原型分解為一組個別線框圖，所有與同一任務相關的線框圖時，您可以將它們分組為幻燈片放映中的幻燈片。如果您將個別線框圖視為套牌中的卡片，這稱為線框圖套組。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Fidelity of Prototypes -->
+        <div class="slide">
+            <h2>18.4 原型的保真度</h2>
+            
+            <div class="highlight-box">
+                <h3>保真度的定義</h3>
+                <p>除了深度和廣度，原型保真度的級別是反映在完整性方面達成的權衡的另一個特徵，以及投入的成本/時間。原型的保真度反映了它被客戶和使用者感知為完成程度以及內容和功能完整性以及外觀精緻程度。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎨 18.4.1.1 表現保真度</h4>
+                    <ul>
+                        <li>沒有顯示螢幕所有元素的粗略草圖</li>
+                        <li>顯示大部分細節但不準確的素描</li>
+                        <li>顯示一些細節準確的粗略線框圖</li>
+                        <li>具有所有互動元素細節的線框圖規格</li>
+                        <li>視覺效果圖（完美的視覺表示）</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 18.4.1.2 行為保真度</h4>
+                    <ul>
+                        <li>粗略素描系列，箭頭顯示使用者環境的流程</li>
+                        <li>一些詳細素描，執行者在螢幕間移動</li>
+                        <li>代表預定義情境或工作流程的線框圖套組</li>
+                        <li>點擊穿越線框圖原型</li>
+                        <li>完全功能原型</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Building Prototypes -->
+        <div class="slide">
+            <h2>18.5 以遞增保真度層級建構原型</h2>
+            
+            <div class="fidelity-flow">
+                <h3>保真度遞增流程</h3>
+                <div class="flow-steps">
+                    <div class="flow-step">低保真度<br>素描</div>
+                    <div class="flow-step">線框圖<br>套組</div>
+                    <div class="flow-step">中等保真度<br>點擊穿越</div>
+                    <div class="flow-step">高保真度<br>功能原型</div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>18.5.1 極低保真度線框圖素描</h3>
+                <p>低保真度原型是不忠實表示實際外觀、感覺和行為的原型，而是給出更高級別、更抽象的預期設計印象。低保真度版本通常沒有圖形設計元素，如圖像、顏色或字體。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>快速設計探索的特點</h4>
+                <p>這些快速且粗略的設計表示幾乎總是手繪草圖。它們是一次性和短命的，並且快速發展，迭代成本幾乎為零。因此，這些基本上是作為設計生成的一部分出現和消失的草圖。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Click-Through Prototypes -->
+        <div class="slide">
+            <h2>18.5.4 中等保真度點擊穿越線框圖原型</h2>
+            
+            <div class="highlight-box">
+                <h3>點擊穿越原型的功能</h3>
+                <p>當您準備與客戶、使用者和其他利害關係人進行最早的設計走查時，您可以通過某些初始熱點（可以點擊的連結或活動按鈕）將這些線框圖連接在套組中，以展示透過螢幕的互動流程，模擬導航行為。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>💻 線框圖工具優勢</h4>
+                    <p>點擊穿越線框圖原型用於通過UX團隊和其他利害關係人進行設計走查評估。這不比從一個靜態視覺線框圖移動到另一個更多功能，但因為現在一些連結工作，原型可以在電腦上由群組中的任何人操作。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 現實感增強</h4>
+                    <p>添加的現實主義是有價值的。我們曾經有使用者和客戶感嘆這些是如此逼真，看起來就像真實的東西。當您點擊按鈕時，看起來它真的在工作。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>18.5.5.1 包含欺騙性使用者介面對象</h4>
+                <p>如果目標是與真實使用者進行實驗評估，則確保原型代表真實設計，這意味著它們具有水平覆蓋範圍。如果您只包含執行基準測試任務所需的使用者介面對象，對使用者來說可能不現實容易。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: High-Fidelity Prototypes -->
+        <div class="slide">
+            <h2>18.5.5 中等到高保真度點擊穿越原型</h2>
+            
+            <div class="highlight-box">
+                <h3>高保真度原型的必要性</h3>
+                <p>一旦您決定了每個線框圖的佈局並且所有文字、標籤、方塊、小工具和連結都就位，您可能準備考慮從設計走查評估轉向深入的實證評估。這可以與真正的使用者進行駕駛和操作原型，或與執行分析評估的專家進行。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>高保真度要求</h4>
+                <p>這些天，深入的UX評估不是您總是有時間進行的事情，但如果您需要，您應該有合適的原型來支持它。為了支持基於使用者的實證評估或基於專家的分析評估，您可能需要具有更多外觀和互動行為細節的中等到高保真度程式化原型。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🛠️ 技術實現</h4>
+                    <p>HTML5和CSS3是程式化原型的常見技術，通常由UX團隊的專門原型製作者或UX工程師開發。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📱 腳本語言應用</h4>
+                    <p>您可以使用包含腳本的原型（用腳本語言編寫）來給線框圖集合更多回應使用者動作的能力，如連結到真實或模擬功能的片段。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Specialized Prototypes -->
+        <div class="slide">
+            <h2>18.6 專門化原型</h2>
+            
+            <div class="highlight-box">
+                <h3>18.6.1 物理互動的物理模型</h3>
+                <p>物理模型是物理裝置或產品的有形三維原型或模型，通常是可以握住且通常用手工製作的，在探索和評估期間使用以至少模擬物理互動。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔨 實體原型製作</h4>
+                    <p>如果產品或系統的主要特徵是物理性，如手持裝置，則有效的原型還將在其互動中提供相同的物理性。在具有挑戰性的硬體和軟體平台上進行程式化新應用程式意味著昂貴且冗長的實施過程。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📦 材料選擇</h4>
+                    <p>您可以使用手邊的材料和/或製作具有現實硬體的物理原型。從黏上式按鈕開始，逐步發展到真正的觸控按鈕和其他您設計中可能的控制項：觸控按鈕、滑動器、旋鈕和撥盤。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>體驗原型製作</h4>
+                <p>Buchenau和Suri指出，如果您被告知某事，您會忘記它。如果您做某事，您會理解它。對於參與者理解設計情境和上下文足夠好以提供有效回饋，他們使用的原型必須讓他們實際執行正在設計的活動，以便參與主觀體驗。</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Animated Prototypes -->
+        <div class="slide">
+            <h2>18.6.2 動畫原型</h2>
+            
+            <div class="highlight-box">
+                <h3>動畫在原型中的角色</h3>
+                <p>大多數原型是靜態的，它們依賴使用者互動來顯示它們能做什麼。視頻動畫可以為原型帶來生命，用於概念演示、視覺化新UX設計以及傳達設計想法。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎬 視頻動畫應用</h4>
+                    <p>儘管動畫原型在交互性方面不如活躍的原型，但動畫原型是一種原型，其中互動對象透過動畫生動起來，通常在視頻中，以動態方式視覺化互動對象的樣子。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📱 早期概念展示</h4>
+                    <p>人機互動領域的設計師從1980年代就開始使用視頻將原型帶入生活。一個簡單的方法是使用故事板框架以翻書風格的視頻序列或者如果您已經有相當完整的低保真度原型，您可以通過製作其部分在互動任務中移動的逐幀視頻來拍攝它。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>動畫原型的優勢</h4>
+                <p>Löwgren顯示了基於一系列草圖的視頻動畫如何將低保真度原型的優勢帶到新維度，其中靜態原型仍然不夠粗糙以邀請參與和設計建議，但更像情境或故事板，動畫可以在使用情境中傳達更好的流程和排序。</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Software Tools -->
+        <div class="slide">
+            <h2>18.7 製作線框圖的軟體工具</h2>
+            
+            <div class="highlight-box">
+                <h3>工具選擇建議</h3>
+                <p>線框圖可以使用任何支援創建和操作形狀的繪圖或文字處理軟體套件來素描。雖然許多應用程式足以進行簡單的線框圖製作，我們建議專門為此目的設計的工具。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎨 Figma優勢</h4>
+                    <p>我們使用Figma，一個線框圖應用程式，來完成所有繪圖。Figma支援大量的插件組合，幫助設計師處理原型製作的許多方面，如啟用點擊穿越原型製作、設計資產和庫管理，以及將佔位符文字、數字或圖形資料填入螢幕。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 效率提升</h4>
+                    <p>從設計系統重用模板可以明顯提高您的效率，但它也可以通過跨設計的一致性幫助您。像Figma這樣的工具允許您建構這些可重用元素的庫，它們稱為符號。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>工具選擇原則</h4>
+                <p>除了本次討論外，在這種教科書中嘗試涵蓋製作原型的軟體工具並不明智。該領域變化很快，無論我們在這裡說什麼，到您閱讀本書時可能都已過時。要獲得最新的原型製作軟體工具資訊，最好詢問有經驗的UX專業人士或進行線上研究。</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Scandinavian Origins -->
+        <div class="slide">
+            <h2>18.8 原型製作的斯堪的納維亞起源</h2>
+            
+            <div class="highlight-box">
+                <h3>歷史背景</h3>
+                <p>就像UX生命週期流程總體的許多其他部分一樣，UX中原型製作的起源，特別是低保真度原型製作，可以追溯到Ehn、Kyng和其他人的斯堪的納維亞工作活動理論研究和實踐。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📚 理論基礎</h4>
+                    <p>這些形成性工作強調了促進使用者早期和詳細參與設計溝通以及參與理解該設計需求的必要性。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🤝 參與式設計</h4>
+                    <p>斯堪的納維亞方法強調與使用者的密切合作，並將原型製作視為一種溝通和合作設計的工具，而不僅僅是設計驗證的手段。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Chapter Summary -->
+        <div class="slide">
+            <h2>18.9 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>本章重點回顧</h3>
+                <ul>
+                    <li><strong>原型製作的重要性：</strong>作為UX設計生命週期中的關鍵活動，提供早期評估和修改的機會</li>
+                    <li><strong>原型類型：</strong>水平、垂直、T型和局部原型各自的特點和適用場景</li>
+                    <li><strong>保真度層級：</strong>從低保真度素描到高保真度功能原型的遞增式建構方法</li>
+                    <li><strong>線框圖原型：</strong>作為互動設計原型製作的核心技術和實現流程</li>
+                    <li><strong>專門化原型：</strong>物理模型、動畫原型等特殊情況的應用</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                我們以原型製作討論結束第4部分。接下來，我們將進入評估設計的章節，在第5部分中處理評估。
+            </div>
+            
+            <div class="example-box">
+                <h4>實務建議</h4>
+                <p>成功的原型製作需要根據專案階段、目標受眾和評估需求選擇適當的原型類型和保真度等級。記住原型的目的是支援快速學習和迭代，而不是創造完美的最終產品。透過系統化的原型製作方法，設計師能夠更有效地驗證設計假設並改善使用者體驗。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">18</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
