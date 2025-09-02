@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第29章：UX設計指導原則和範例</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .interaction-cycle {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .cycle-diagram {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid #3498db;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ecf0f1, #fff);
+        }
+        
+        .cycle-step {
+            position: absolute;
+            width: 100px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .step-planning {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .step-translation {
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+        }
+        
+        .step-physical {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .step-outcomes {
+            bottom: 50px;
+            right: 45%;
+            transform: translateX(50%);
+        }
+        
+        .step-assessment {
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .memory-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .memory-box {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .guideline {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第29章：UX設計指導原則和範例</h1>
+            <div class="quote">
+                "錯誤是人之常情；用設計來寬恕。" —匿名
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>人類記憶限制的UX層面</li>
+                    <li>互動循環作為指導原則的組織結構</li>
+                    <li>針對使用者行為的選定UX設計指導原則和範例</li>
+                    <li>規劃、翻譯（前饋）、實體行動、結果、評估</li>
+                    <li>整體設計考量</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>29.1 引言</h2>
+            
+            <div class="highlight-box">
+                <h3>設計指導原則的範圍和普遍性</h3>
+                <p>在適當的情境下正確解釋時，UX設計指導原則幫助根據實證研究和廣泛實務經驗的集體智慧來引導設計。設計原則背後的指導原則不會隨時間改變，儘管互動風格和指導原則可能會隨著技術變化而有所改變。</p>
+            </div>
+            
+            <h3>🔍 設計指導原則的挑戰</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📚 看似明顯的原則</h4>
+                    <p>大多數UX設計指導原則在絕對意義上陳述時似乎很明顯，如「保持簡單」和「保持一致」。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🤔 解釋與應用困難</h4>
+                    <p>在特定UX設計和評估情況下解釋或應用這些指導原則並不總是容易的。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚖️ 情境依賴性</h4>
+                    <p>沒有設計和使用情境，許多指導原則變得毫無意義。正確答案總是：「這要看情況」。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Human Memory Limitations -->
+        <div class="slide">
+            <h2>29.2 人類記憶限制的UX層面</h2>
+            
+            <div class="highlight-box">
+                <h3>為什麼要討論人類記憶？</h3>
+                <ul>
+                    <li>它適用於互動循環的大多數部分</li>
+                    <li>是少數幾個在UX設計中有實證資料支持的心理學領域之一</li>
+                </ul>
+            </div>
+            
+            <h3>🧠 短期記憶或工作記憶</h3>
+            <div class="memory-diagram">
+                <h4>工作記憶特性</h4>
+                <div class="memory-box">持續時間：約30秒</div>
+                <div class="memory-box">容量：7±2項目</div>
+                <div class="memory-box">干擾影響：前攝干擾</div>
+            </div>
+            
+            <div class="example-box">
+                <h4>💡 範例：電話號碼設計</h4>
+                <p>不計算區號，電話號碼有七位數字——這並非巧合，這正好符合Miller（1956）對工作記憶容量的估計。如果你在電子郵件中看到一個電話號碼並想要撥打，這需要你用七個記憶單元載入工作記憶。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Chunking -->
+        <div class="slide">
+            <h2>29.2.1.1 分塊（Chunking）</h2>
+            
+            <div class="highlight-box">
+                <p>短期記憶中的項目通常是Simon（1974）標記為「分塊」的編碼。分塊是包含一個可識別為單一格式塔的資料片段的基本人類記憶單元。</p>
+            </div>
+            
+            <h3>📱 分塊原理</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔤 語言分塊</h4>
+                    <p>對於口語表達，分塊是一個單詞，不是音素；在書面表達中，分塊是一個單詞甚至一個句子，通常不是字母。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔢 數字分組</h4>
+                    <p>隨機字母字串可以分成組，這樣更容易記憶。如果組合可發音，即使沒有意義也更容易記憶。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚖️ 容量與持續時間權衡</h4>
+                    <p>持續時間與容量權衡；其他條件相等，涉及的分塊越多，它們在短期記憶中保留的時間就越短。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>💻 範例：通過分組和重新編碼進行分塊</h4>
+                <p>考慮在工作記憶中保持這種模式：<code>001010110111000</code></p>
+                <p>表面上，這是15位數字的字串，超出了大多數人的工作記憶容量。但聰明的使用者可能注意到這是二進位數字，可以分組為三個：<code>001 010 110 111 000</code></p>
+                <p>轉換為八進位數字：<code>12670</code></p>
+                <p>我們可以用少量處理換取記憶需求的減少。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Interaction Cycle Structure -->
+        <div class="slide">
+            <h2>29.3 互動循環作為指導原則的組織結構</h2>
+            
+            <div class="interaction-cycle">
+                <h3>互動循環圖</h3>
+                <div class="cycle-diagram">
+                    <div class="cycle-step step-planning">規劃</div>
+                    <div class="cycle-step step-translation">翻譯</div>
+                    <div class="cycle-step step-physical">實體行動</div>
+                    <div class="cycle-step step-outcomes">結果</div>
+                    <div class="cycle-step step-assessment">評估</div>
+                </div>
+                <p><em>互動循環的最簡單視圖</em></p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>互動循環的基本部分</h3>
+                <ul>
+                    <li><strong>規劃：</strong>UX設計如何支持使用者決定要採取什麼任務和行動路徑</li>
+                    <li><strong>翻譯或前饋：</strong>UX設計如何支持使用者決定如何對物件執行動作並預測這些動作的結果</li>
+                    <li><strong>實體行動：</strong>UX設計如何支持使用者執行這些動作</li>
+                    <li><strong>結果：</strong>系統的非互動功能如何幫助使用者實現工作目標</li>
+                    <li><strong>評估結果：</strong>UX設計如何支持使用者確定互動是否成功</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 6: Feed-Forward Concept -->
+        <div class="slide">
+            <h2>29.4 前饋概念</h2>
+            
+            <div class="highlight-box">
+                <p>前饋是一種認知能供性，在互動循環的規劃和翻譯部分幫助使用者知道該做什麼以及如何做。因為前饋是一種認知能供性，它分享所有相關的設計特性。</p>
+            </div>
+            
+            <h3>🎯 前饋的重要性</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🧭 指導作用</h4>
+                    <p>前饋幫助使用者在規劃和翻譯階段知道該做什麼以及如何做</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎓 學習支持</h4>
+                    <p>為新使用者提供必要的認知支持，幫助他們學習和理解系統</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔮 預測功能</h4>
+                    <p>幫助使用者預測動作的結果，減少錯誤和困惑</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Planning Guidelines -->
+        <div class="slide">
+            <h2>29.5 規劃</h2>
+            
+            <div class="highlight-box">
+                <p>對使用者規劃的支援經常是UX設計中缺少的組件。規劃指導原則是關於支持使用者規劃如何使用系統在應用領域中完成工作。</p>
+            </div>
+            
+            <div class="guideline">為使用者提供清晰的系統任務模型</div>
+            
+            <h3>🎯 規劃支援的核心要素</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🗺️ 系統概覽</h4>
+                    <p>支持使用者獲得系統整體理解的能力，包括系統模型、概念設計和隱喻</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 任務分解</h4>
+                    <p>幫助使用者分解任務，將長而複雜的任務邏輯分解為更小、更簡單的部分</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🧭 狀態意識</h4>
+                    <p>讓使用者了解系統狀態以規劃下一個任務。保持任務背景可見以最小化記憶負載</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>📚 範例：掌握主文件功能</h4>
+                <p>考慮Microsoft Word中的主文件功能。為了方便和保持檔案大小可管理，Microsoft Word使用者可以將文件的每個部分維護在單獨的檔案中。然而，我們發現主文件功能的使用幾乎不可能理解。系統沒有幫助使用者確定可以用它做什麼或它如何幫助完成這項任務。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Translation and Feed-Forward -->
+        <div class="slide">
+            <h2>29.6 翻譯和前饋</h2>
+            
+            <div class="highlight-box">
+                <p>翻譯指導原則是支持使用者在感官和認知行動中確定如何執行任務步驟，包括對哪些物件採取什麼行動以及如何執行。翻譯與規劃一起，是前饋發揮主要作用的互動循環場所之一。</p>
+            </div>
+            
+            <h3>📋 翻譯議題包括：</h3>
+            <ul>
+                <li><strong>存在性</strong>（前饋的）</li>
+                <li><strong>呈現</strong>（前饋的）</li>
+                <li><strong>內容和意義</strong>（前饋的）</li>
+                <li><strong>任務結構</strong></li>
+            </ul>
+            
+            <div class="guideline">提供有效的前饋，幫助使用者存取系統功能</div>
+            
+            <div class="example-box">
+                <h4>💻 範例：PowerPoint的幫助</h4>
+                <p>在早期版本的Microsoft PowerPoint啟動畫面中，在有各種使用者可以做的事情的應用程式中，面對空白螢幕時很難知道該做什麼來開始。添加一個簡單的認知能供性（「點擊添加第一張投影片」的前饋建議）為不確定的使用者提供了開始創建演示文稿的簡單方法。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Feed-Forward Guidelines -->
+        <div class="slide">
+            <h2>前饋設計指導原則</h2>
+            
+            <div class="guideline">可預測：用前饋幫助使用者預測動作結果</div>
+            
+            <div class="guideline">幫助使用者確定該做什麼以開始</div>
+            
+            <div class="guideline">為使用者可能忘記的步驟提供前饋</div>
+            
+            <h3>🎯 關鍵前饋原則</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👁️ 可見性</h4>
+                    <p>如果前饋不可見，它可能是因為尚未顯示或被另一個物件遮擋</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 可注意性</h4>
+                    <p>將前饋放在使用者的注意力焦點內。彈出訊息比螢幕底部的訊息更容易被注意到</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📖 可讀性</h4>
+                    <p>使文字清晰可讀。文字呈現問題包括字體類型、大小、顏色對比等</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ 避免「無知同意」</h4>
+                <p>不提供前饋線索就是Cooper（2004）所說的「無知同意」——使用者必須在不理解後果的情況下繼續，可能會掉入陷阱。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Physical Actions -->
+        <div class="slide">
+            <h2>29.7 實體行動</h2>
+            
+            <div class="highlight-box">
+                <p>實體行動指導原則包括支持使用者進行打字、點擊、在GUI中拖曳、在網頁或應用程式中滾動、語音介面說話、在虛擬環境中行走、手勢互動中移動雙手和眼睛注視。這是使用者互動循環中基本上沒有認知組件的部分。</p>
+            </div>
+            
+            <h3>🎯 實體行動設計的兩個主要領域</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👁️ 感知物件</h4>
+                    <p>設計如何支持使用者感知要操作的物件（感官能供性）</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>✋ 物理操作</h4>
+                    <p>設計如何支持使用者進行物理操作。簡單例子：看到按鈕（感官能供性）並點擊它（物理能供性）</p>
+                </div>
+            </div>
+            
+            <div class="guideline">設計布局以支持手動靈巧度和費茲定律</div>
+            
+            <div class="example-box">
+                <h4>🚗 範例：卡車收音機和暖氣旋鈕中的優秀物理性</h4>
+                <p>音量控制的大且易抓握的外環使用起來很愉快，並且沒有與任何其他模式重複。同樣，注意收音機下方的暖氣控制旋鈕。再次，抓取和調整這些旋鈕的物理性在寒冷的冬天早晨帶來極大的樂趣。</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Assessment and Feedback -->
+        <div class="slide">
+            <h2>29.9 評估</h2>
+            
+            <div class="highlight-box">
+                <p>評估指導原則是支持使用者理解結果顯示和其他關於結果的回饋，如錯誤指示。評估與翻譯一起，是認知能供性發揮主要作用的互動循環場所之一。</p>
+            </div>
+            
+            <h3>🔄 回饋概念</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 系統回應組成</h4>
+                    <p>回饋（關於互動過程的資訊）、資訊顯示（結果計算的結果）、前饋（關於下一步該做什麼的資訊）</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⏳ 進度指示器</h4>
+                    <p>特別是對於長操作，支持使用者規劃任務進度指示器，幫助使用者管理任務排序</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔊 回饋媒體</h4>
+                    <p>考慮呈現回饋的媒體的適當替代方案。音訊可能比視覺媒體更有效地吸引使用者注意</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>🧾 範例：TurboTax讓你保持正軌</h4>
+                <p>填寫所得稅表格是多步驟長任務的好例子。TurboTax的設計師使用類似精靈的逐步提示來幫助使用者理解他們在整體任務中的位置，顯示使用者通過步驟的進度，同時總結每個點上使用者工作的淨效果。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Overall Guidelines -->
+        <div class="slide">
+            <h2>29.10 整體</h2>
+            
+            <div class="highlight-box">
+                <p>本節以一套全域性和一般性應用於整體UX設計的指導原則結束指導原則的條列，而不是與互動循環的特定部分相關聯。</p>
+            </div>
+            
+            <h3>👑 保持使用者控制</h3>
+            <div class="guideline">避免失控感</div>
+            <div class="guideline">避免真正的控制喪失</div>
+            <div class="guideline">始終為使用者提供退出正在進行操作的方法</div>
+            
+            <h3>🎯 整體簡單性</h3>
+            <div class="guideline">不要試圖通過減少有用性來實現簡單的外觀</div>
+            <div class="guideline">組織複雜系統，使最頻繁的操作變得簡單</div>
+            
+            <h3>🔄 整體一致性</h3>
+            <div class="guideline">通過以相似方式做相似事情來保持一致</div>
+            <div class="guideline">跨螢幕為物件使用一致的布局/位置</div>
+            
+            <div class="warning-box">
+                <h4>⚠️ 一致性的複雜性</h4>
+                <p>一致性不是絕對的。許多設計情況有多個一致性議題，有時它們會相互權衡。一致性可能與創新發生衝突——當需要為了創新而打破一致性時，拋開約束和障礙，發揮創造力。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Conclusions -->
+        <div class="slide">
+            <h2>29.12 結論</h2>
+            
+            <div class="highlight-box">
+                <h3>💡 使用指導原則的注意事項</h3>
+                <ul>
+                    <li><strong>謹慎使用指導原則</strong> - 使用指導原則時要仔細思考和解釋</li>
+                    <li><strong>應用中的衝突和重疊</strong> - 指導原則可能會衝突和重疊</li>
+                    <li><strong>不保證品質</strong> - 指導原則不保證品質的使用者體驗</li>
+                    <li><strong>不消除測試需求</strong> - 使用指導原則不會消除UX測試的需求</li>
+                    <li><strong>設計依據</strong> - 按指導原則設計，不按政治或個人意見</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                "當在特定情境下正確解釋時，UX設計指導原則有助於根據實證研究和廣泛實務經驗的集體智慧來引導設計。"
+            </div>
+            
+            <div class="example-box">
+                <h4>🎉 恭喜！</h4>
+                <p>恭喜！你完成了這本書。謝謝你堅持到底。如果你要作為UX實務者應用這些知識，祝你好運！</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔑 關鍵要點</h3>
+                <p>記住，任何UX設計問題的唯一正確答案是：「這要看情況。」指導原則提供方向，但必須在具體情境中明智地應用。最重要的是理解使用者的需求並創造真正有用和可用的體驗。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">13</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
