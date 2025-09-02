@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIUX課程大綱</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin: 0;
+            padding: 40px 20px;
+            font-size: 2.5em;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1em;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:nth-child(odd) {
+            background-color: white;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
+        }
+        
+        .week-col {
+            width: 6%;
+            text-align: center;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .topic-col {
+            width: 25%;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .objective-col {
+            width: 22%;
+            color: #34495e;
+        }
+        
+        .chapters-col {
+            width: 12%;
+            text-align: center;
+            font-weight: 500;
+            color: #6c757d;
+        }
+        
+        .tools-col {
+            width: 35%;
+            color: #495057;
+        }
+        
+        .midterm-row {
+            background-color: #e8f5e8 !important;
+            font-weight: bold;
+        }
+        
+        .final-row {
+            background-color: #fff3cd !important;
+            font-weight: bold;
+        }
+        
+        .chapter-badge {
+            background-color: #3498db;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .tool-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .tool-description {
+            color: #6c757d;
+            font-size: 0.85em;
+            margin-top: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            
+            table {
+                font-size: 0.8em;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AIUX 與 UX 課程大綱</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>週次</th>
+                    <th>主題</th>
+                    <th>學習目標</th>
+                    <th>對應章節</th>
+                    <th>AI工具</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="week-col">1</td>
+                    <td class="topic-col">課程導論、AIUX 與 UX 基本概念</td>
+                    <td class="objective-col">認識 UX3 架構，理解 AI 與 UX 的融合</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH1-CH2</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Perplexity, ChatGPT</div>
+                        <div class="tool-description">探索 AIUX 定義與案例規律</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">2</td>
+                    <td class="topic-col">使用者研究方法論架構</td>
+                    <td class="objective-col">掌握研究流程與理論框架</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH3-CH4</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Gemini, Stitch</div>
+                        <div class="tool-description">快速生成研究架構草稿</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">3</td>
+                    <td class="topic-col">設計思維與研究流程</td>
+                    <td class="objective-col">學會設計驅動的研究思維</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH5-CH6</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">v0.app, Lovable</div>
+                        <div class="tool-description">設計流程模擬互動原型</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">4</td>
+                    <td class="topic-col">質性研究基礎、資料蒐集方法</td>
+                    <td class="objective-col">掌握觀察與質性研究技術</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH7-CH8</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Gemini + ChatGPT</div>
+                        <div class="tool-description">自動轉錄與重點整理</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">5</td>
+                    <td class="topic-col">深度訪談技巧與案例演練</td>
+                    <td class="objective-col">能進行使用者訪談與需求發掘</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH10-CH11</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Gemini + ChatGPT</div>
+                        <div class="tool-description">生成訪談提綱與分析</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">6</td>
+                    <td class="topic-col">問卷設計與量化研究方法</td>
+                    <td class="objective-col">學會問卷設計、調查與數據收集</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH12-CH13</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Gemini</div>
+                        <div class="tool-description">問卷題項優化、自動摘要</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">7</td>
+                    <td class="topic-col">數據分析與統計應用</td>
+                    <td class="objective-col">能進行量化數據分析與結果解讀</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH14-CH15</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Perplexity, Grok</div>
+                        <div class="tool-description">數據分析、自動報表</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">8</td>
+                    <td class="topic-col">AIUX 與使用者數據分析案例</td>
+                    <td class="objective-col">探索 AI 在數據分析的輔助角色</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH16-CH17</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Grok, Gemini</div>
+                        <div class="tool-description">AI 分析報告</div>
+                    </td>
+                </tr>
+                
+                <tr class="midterm-row">
+                    <td class="week-col">9</td>
+                    <td class="topic-col">◆期中報告</td>
+                    <td class="objective-col">期中報告</td>
+                    <td class="chapters-col">-</td>
+                    <td class="tools-col">日本</td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">10</td>
+                    <td class="topic-col">情緒與情感在 UX 的角色</td>
+                    <td class="objective-col">理解情緒在體驗設計中的重要性</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH18-CH19</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Vibe Designing, Lovable</div>
+                        <div class="tool-description">情緒流設計、情緒原型設計</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">11</td>
+                    <td class="topic-col">情緒分析技術與 AI 應用</td>
+                    <td class="objective-col">學會應用情緒分析技術</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH20</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Gemini, ChatGPT</div>
+                        <div class="tool-description">文字情感分析</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">12</td>
+                    <td class="topic-col">使用性測試流程與方法</td>
+                    <td class="objective-col">掌握可用性測試設計與執行</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH21-CH22</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Figma + Gemini</div>
+                        <div class="tool-description">快速製作原型並收集回饋</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">13</td>
+                    <td class="topic-col">專家評估、啟發式評估</td>
+                    <td class="objective-col">能運用專家與啟發式方法改善設計</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH23-CH24</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">ChatGPT, Perplexity</div>
+                        <div class="tool-description">生成專家建議、比較競發式</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">14</td>
+                    <td class="topic-col">AIUX 使用性測試案例與工具</td>
+                    <td class="objective-col">學會運用 AI 工具輔助使用性測試</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH25</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">ChatGPT</div>
+                        <div class="tool-description">測試紀錄自動摘要、AI 分析使用者行為</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">15</td>
+                    <td class="topic-col">敘事 UX 研究策略</td>
+                    <td class="objective-col">學會在敘事環境中整合研究</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH26-CH27</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Grok, Gemini</div>
+                        <div class="tool-description">支援敘述送代與任務追蹤</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">16</td>
+                    <td class="topic-col">跨團隊協作與 AI 支援</td>
+                    <td class="objective-col">探索 AI 在團隊協作的應用</td>
+                    <td class="chapters-col"><span class="chapter-badge">CH28-CH29</span></td>
+                    <td class="tools-col">
+                        <div class="tool-name">Stitch, v0.app, Lovable</div>
+                        <div class="tool-description">協作設計、快速原型</div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="week-col">17</td>
+                    <td class="topic-col">期末報告準備</td>
+                    <td class="objective-col">小組專題發展，整合 AIUX 理論與實作</td>
+                    <td class="chapters-col">-</td>
+                    <td class="tools-col">
+                        <div class="tool-name">任選工具組合</div>
+                        <div class="tool-description">Figma + Gemini + Stitch + ChatGPT</div>
+                    </td>
+                </tr>
+                
+                <tr class="final-row">
+                    <td class="week-col">18</td>
+                    <td class="topic-col">期末報告發表</td>
+                    <td class="objective-col">展示專題成果，進行綜合評估</td>
+                    <td class="chapters-col">-</td>
+                    <td class="tools-col">
+                        <div class="tool-name">Demo 工具</div>
+                        <div class="tool-description">Figma + Lovable + Grok / Github</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <a href="index.html" class="home-link">返回首頁</a>
+    </div>
+</body>
+</html>
