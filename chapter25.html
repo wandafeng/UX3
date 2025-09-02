@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第25章：UX評估：報告結果</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .audience-matrix {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .audience-card {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .audience-primary {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .audience-management {
+            border-color: #f39c12;
+            background: #fdf8e7;
+        }
+        
+        .audience-client {
+            border-color: #27ae60;
+            background: #e8f5e8;
+        }
+        
+        .report-structure {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .structure-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .structure-step {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .structure-step::after {
+            content: '↓';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .structure-step:last-child::after {
+            display: none;
+        }
+        
+        .communication-tips {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .tip-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #27ae60;
+        }
+        
+        .problem-layers {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .layers-visual {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .layer {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第25章：UX評估：報告結果</h1>
+            <div class="quote">
+                "評估報告經常需要跨越時間、地點和人員的不連續性進行溝通。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>優質溝通和參與者匿名的重要性</li>
+                    <li>報告不同類型的資料</li>
+                    <li>報告非正式總結結果</li>
+                    <li>報告質性結果</li>
+                    <li>報告生態和情感影響問題</li>
+                    <li>報告對象</li>
+                    <li>報告內容</li>
+                    <li>報告機制</li>
+                    <li>報告語調</li>
+                </ul>
+            </div>
+            <div class="example-box">
+                <h4>您現在的位置</h4>
+                <p>在Wheel UX生命週期範本的整體背景下，您現在處於評估UX活動中的評估資料報告部分。</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>25.1 簡介</h2>
+            
+            <div class="highlight-box">
+                <h3>25.1.1 您現在的位置</h3>
+                <p>我們在每個流程章節開始時都會展示該章節主題在The Wheel（整體UX設計生命週期範本）背景下的"您在這裡"圖片。本章是關於報告UX評估結果，適用於評估方法或資料收集技術，以及資料是實證還是分析性的。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 溝通挑戰</h4>
+                    <p>評估報告經常需要跨越時間、地點和人員的不連續性進行溝通，這帶來了獨特的溝通挑戰。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⏰ 時間延遲</h4>
+                    <p>重新設計活動與UX評估之間經常存在時間延遲，可能因人類記憶限制而導致資訊遺失。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>👥 不同人員</h4>
+                    <p>如果進行重新設計的人員不是進行評估的人員，情況會更加複雜。缺乏適當背景資訊的UX評估報告對未參與評估的設計師來說會過於模糊。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📍 不同地點</h4>
+                    <p>評估和重新設計可能發生在不同的物理地點，使得所有資訊無法得到良好溝通，變得無法恢復。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Quality Communication -->
+        <div class="slide">
+            <h2>25.1.2 優質溝通的重要性</h2>
+            
+            <div class="warning-box">
+                <h4>⚠️ 缺乏業界標準的問題</h4>
+                <p>目前還沒有廣泛的文獻或業界標準關於UX評估報告。美國國家標準技術研究所（NIST）在2000年代初期的一個值得注意的例外工作。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>NIST的貢獻</h3>
+                <p>NIST在這個領域的初始工作是製作一個通用業界格式（CIF），用於報告正式的總結UX評估結果。在這項初始努力之後，該小組在Mary Theofanos、Whitney Quesenbery等人的指導下，於2005年組織了兩個研討會，旨在制定形成性評估報告的CIF。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 跨功能團隊需求</h4>
+                    <p>設計、評估和重新設計發生在金字塔人類需求的背景下。重要性分析需要估算在金字塔每個層級進行改變的成本以及進行這些改變的重要性。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>👥 協作角色</h4>
+                    <p>跨功能團隊中的協作角色包括UX人員、軟體工程（SE）團隊、業務和行銷，以及系統工程師，所有這些都是評估報告受眾的潛在部分。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>業務目標轉化</h4>
+                <p>每個業務目標都轉化為一套生態、互動和情感關注。業務人員和行銷人員是受眾，因為每個業務目標都轉化為一套生態、互動和情感關注。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Participant Anonymity -->
+        <div class="slide">
+            <h2>25.1.3 參與者匿名性</h2>
+            
+            <div class="highlight-box">
+                <h3>隱私保護的重要性</h3>
+                <p>我們提醒您，在深入了解細節之前，無論您是哪種評估或報告，您都必須保持參與者匿名性。您在知情同意書上向他們承諾了這一點，您有道德的，也許還有法律的義務在此後虔誠地保護它。保持參與者匿名的必要性特別延伸到評估報告。</p>
+            </div>
+            
+            <div class="communication-tips">
+                <h4>📋 隱私保護實務</h4>
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <strong>匿名化資料</strong><br>
+                        確保所有報告中的參與者資料完全匿名
+                    </div>
+                    <div class="tip-item">
+                        <strong>編號系統</strong><br>
+                        使用參與者編號而非真實姓名
+                    </div>
+                    <div class="tip-item">
+                        <strong>敏感資訊處理</strong><br>
+                        避免可能識別個人的詳細描述
+                    </div>
+                    <div class="tip-item">
+                        <strong>法律合規</strong><br>
+                        遵循知情同意書中的承諾
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>業界格式標準化需求</h4>
+                <p>雖然他們的工作定義基於擁有代表性用戶進行形成性測試，但我們在這裡使用稍微更廣泛的形成性評估術語，包括可用性檢查和其他收集形成性可用性與用戶體驗資料的方法。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Consider Your Audience -->
+        <div class="slide">
+            <h2>25.2 考量您的受眾</h2>
+            
+            <div class="highlight-box">
+                <h3>受眾導向的報告策略</h3>
+                <p>Theofanos和Quesenbery (2005)指出，關於內容、格式、詞彙和語調的選擇都是關於報告作者與受眾之間的關係。2005年UPA關於形成性評估報告的研討會報告強調了不同商業背景和受眾的不同報告要求。</p>
+            </div>
+            
+            <div class="audience-matrix">
+                <h3>主要受眾類型</h3>
+                <div class="audience-grid">
+                    <div class="audience-card audience-primary">
+                        <h4>🎯 主要受眾：您自己的團隊</h4>
+                        <p>您的主要受眾至少包括UX團隊、SE團隊和跨功能團隊。這些人將進行您建議的變更，他們對問題和潛在解決方案的深度理解至關重要。</p>
+                    </div>
+                    
+                    <div class="audience-card audience-management">
+                        <h4>📊 管理層報告</h4>
+                        <p>管理受眾需要不同類型的報告。團隊的關鍵目標是影響並說服他們這是流程的一部分，流程正在運作。</p>
+                    </div>
+                    
+                    <div class="audience-card audience-client">
+                        <h4>🤝 客戶或客戶報告</h4>
+                        <p>如果您是UX顧問，可能需要不同類型的報告給您的客戶。如果您不是創建被評估設計的團隊的一部分，最好不要一開始就向客戶指出系統的問題。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>報告策略差異化</h4>
+                <p><strong>團隊報告：</strong>從基本摘要開始，包括評估目標、方法和UX目標及基準任務。使用螢幕截圖說明實際問題遭遇情況。</p>
+                
+                <p><strong>管理層報告：</strong>簡明扼要直接切入重點。從執行摘要開始，可能是他們唯一會閱讀的內容。簡要解釋流程、評估目標、方法和使用的UX目標及基準任務。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Report Guidelines -->
+        <div class="slide">
+            <h2>25.3 報告指導原則</h2>
+            
+            <div class="highlight-box">
+                <h3>不同類型內容和寫作風格</h3>
+                <p>本節提供不同種類的內容和寫作風格供您選擇，以配合您的受眾。</p>
+            </div>
+            
+            <div class="report-structure">
+                <h3>25.3.1 問題報告</h3>
+                <div class="structure-flow">
+                    <div class="structure-step">
+                        <h4>📋 概述</h4>
+                        <p>對專案團隊而言，在迭代中進行評估的報告是重新設計提案。Hornbæk和Frøkjær (2005)顯示可用性評估報告需要總結概述和背景，而不僅僅是問題描述清單。</p>
+                    </div>
+                    
+                    <div class="structure-step">
+                        <h4>🎯 評估概述</h4>
+                        <p>包括：評估目標、使用的方法、UX目標和基準任務（如適用）、發現的UX問題類型的概述、整體評估設計與評估、重新設計迭代的關係</p>
+                    </div>
+                    
+                    <div class="structure-step">
+                        <h4>❓ 問題類型概述</h4>
+                        <p>問題概述可以包括以下問題：大部分問題是否為外觀和措辭方面的美觀且容易修復？是否有許多涉及必須重新設計的用戶工作流程的問題？是否有影響產品與其生態關係的深層問題？</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>視覺呈現的重要性</h4>
+                <p>依靠受眾的視覺學習能力，使用螢幕截圖來說明實際問題遭遇。所有UX實務人員都應該能夠撰寫清晰有效的評估報告，但在他們的比較可用性評估研究中，Dumas、Molich和Jeffries發現許多人做不到。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Problem Reporting Foundation -->
+        <div class="slide">
+            <h2>25.3.1.2 問題報告：基礎</h2>
+            
+            <div class="highlight-box">
+                <h3>良好質性問題報告的試金石</h3>
+                <p>作為良好質性問題報告的一種試金石，要清楚地傳達問題及其對系統和業務的影響，以及如何修復這些問題，問題報告應建立在以下基礎上：</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 具體性</h4>
+                    <p>在問題報告中使用精確語言，準確描述設計的哪個部分出現缺陷</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 完整性</h4>
+                    <p>為評估團隊之外的利害關係人提供足夠的背景和內容細節</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 問題描述</h4>
+                    <p>確保將已識別的問題描述為問題而非解決方案</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 影響評估</h4>
+                    <p>對設計中問題原因的最佳判斷，以及對其嚴重性或影響的估計</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>問題描述範例</h4>
+                <p><strong>不良描述：</strong>"我們需要閃爍的紅色按鈕"</p>
+                <p><strong>良好描述：</strong>"用戶無法找到下一步該做什麼，因為他們沒有注意到提交按鈕"，而不是"我們需要閃爍的紅色按鈕"</p>
+                
+                <p><strong>原因估計：</strong>UX設計中問題原因的工程判斷是診斷的必要部分，也許是報告最重要的部分，因為設計中的缺陷是需要修復的，您無法與適當的設計指導原則或啟發式違規建立聯繫。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Problem Content and Impact -->
+        <div class="slide">
+            <h2>25.3.1.3 問題報告：內容</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 問題描述要素</h4>
+                    <ul>
+                        <li>問題描述</li>
+                        <li>設計中問題原因的最佳判斷</li>
+                        <li>其嚴重性或影響的估計</li>
+                        <li>建議的解決方案</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 問題識別技巧</h4>
+                    <p>確保將已識別的問題描述為問題而非解決方案。如果問題是由於用戶所做的事情而經歷的，請在那個背景下描述它們——用戶和任務以及問題對用戶的影響。</p>
+                </div>
+            </div>
+            
+            <div class="problem-layers">
+                <h3>25.3.1.4 優先處理待修復問題</h3>
+                <p>如果我們能夠修復在評估中發現的所有UX問題那就太好了，但時間和預算總是有限的。因此，將UX問題清單呈現給主要受眾而不優先考慮修復的緊急性是沒有意義的。</p>
+                
+                <div class="layers-visual">
+                    <div class="layer">
+                        <div>問題<br>關鍵性</div>
+                    </div>
+                    <div class="layer">
+                        <div>嚴重性</div>
+                    </div>
+                    <div class="layer">
+                        <div>業務<br>影響</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>成本重要性分析</h4>
+                <p>在第24.4節中，我們執行成本重要性分析以協助跨功能團隊建立這些優先順序。現在您的責任是組織您的UX問題描述展示以包含這個優先順序，以問題關鍵性、嚴重性和對被評估的產品或系統的業務價值的影響為導向。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Ecological and Emotional Reporting -->
+        <div class="slide">
+            <h2>25.3.1.5 報告生態和情感層面問題</h2>
+            
+            <div class="highlight-box">
+                <h3>金字塔不同層面的關注</h3>
+                <p>您將發現和報告的大多數UX問題將發生在互動層面，但您也應該對生態和情感層面給予一些關注。如果在生態層面存在問題，特別是對於概念設計，請確保強調這一設計層面的重要性。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🌍 生態層面問題</h4>
+                    <p>來自跨功能團隊的投入在這裡會有所幫助。除非設計在生態層面成功，否則評估其他層面不會帶來良好的設計。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💭 情感影響問題</h4>
+                    <p>應該對報告情感影響問題進行特殊討論，因為它們可能是最重要的產品改進和行銷優勢，但這些問題及其解決方案也可能是最難以捉摸的。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>情感影響報告技巧</h4>
+                <p><strong>標記差異化：</strong>情感影響問題應標記為與其他推薦解決方案有些不同的問題類型。</p>
+                
+                <p><strong>平衡摘要：</strong>提供對參與者整體情感影響的平衡摘要。報告來自特定情節的具體正面和負面亮點及範例。如果可能，嘗試通過與具有高情感影響評級的產品和系統進行比較來激發。</p>
+            </div>
+            
+            <div class="communication-tips">
+                <h4>報告建議</h4>
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <strong>具體範例</strong><br>
+                        使用具體的用戶情節和行為描述
+                    </div>
+                    <div class="tip-item">
+                        <strong>情感詞彙</strong><br>
+                        使用準確的情感描述詞彙
+                    </div>
+                    <div class="tip-item">
+                        <strong>影響量化</strong><br>
+                        盡可能量化情感影響的程度
+                    </div>
+                    <div class="tip-item">
+                        <strong>解決方案導向</strong><br>
+                        提供可行的改善建議
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Report Mechanics -->
+        <div class="slide">
+            <h2>25.3.2 報告機制</h2>
+            
+            <div class="highlight-box">
+                <h3>25.3.2.1 使用一致的問題描述結構</h3>
+                <p>建立您自己的結果報告標準有助於控制UX問題報告在內容、結構和品質上的廣泛變化。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📝 精確性和具體性</h4>
+                    <p>您與他人溝通以完成結果或甚至理解您想要的結果。為了讓受眾分享那個結果的願景或甚至理解您想要的結果，您需要有效地溝通。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚠️ 避免模糊表達</h4>
+                    <p>草率的術語、模糊的描述和偷懶的手勢很可能會被漠視，設計師和其他實務人員對報告中的問題和我們提出的解決方案不感興趣，他們可能不會認真對待報告。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>25.3.2.2 在報告詞彙中使用精確性和具體性</h4>
+                <p>說對話框訊息文字難以理解和建議某人寫得更清楚，實際上您應該盡最大努力重新措辭澄清文字並說明為什麼您的版本更好。有效性的試金石標準是設計師接收您問題報告的人是否能夠做出更好的重新設計選擇。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>報告改善範例</h4>
+                <p><strong>模糊表達：</strong>"對話框難以理解"</p>
+                <p><strong>具體改善：</strong>"提交確認對話框使用技術術語'執行批次處理'，用戶不理解。建議改為'開始處理您的訂單'，更清楚地說明將會發生什麼。"</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Report Tone and Style -->
+        <div class="slide">
+            <h2>25.3.3 報告語調和風格</h2>
+            
+            <div class="highlight-box">
+                <h3>25.3.3.1 尊重報告中的感受</h3>
+                <p>英國人太過於禮貌而不誠實，但荷蘭人太過於誠實而不禮貌。</p>
+                <div class="quote">
+                    ——坦率的荷蘭諺語
+                </div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>😊 積極開始</h4>
+                    <p>以積極的語調開始報告。大多數UX專業人士意識到他們應該對系統有好話要說。然而，即使被鼓勵要積極，一些實務人員在研究中被證明在這方面是頑固的。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 專注設計而非人員</h4>
+                    <p>您的目標不是讓設計師感到憤怒、怨恨，而是讓他們專注於報告並修復問題。一些評估者相信設計缺陷必須用強烈的語言來傳達設計師不會感到情感上的咆哮："直言不諱是沒有幫助的；這只是粗魯"。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 避免責備</h4>
+                    <p>您所呈現的不是對團隊或設計師的評估，而是對設計的評估，專注於問題和影響而不是設計產品的人員。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 避免術語</h4>
+                    <p>避免術語、縮略詞和深奧的術語。考慮您受眾的廣度，以及他們看到深奧術語時是否會知道。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>語言建議</h4>
+                <p>所有您的受眾都值得在評估報告中受到尊重。在向客戶和客戶報告時，大多數UX專業人士都意識到需要調和報告的限制。正如Dumas、Molich和Jeffries (2004)所述，"表達您的煩惱策略性地"。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Personal Presence -->
+        <div class="slide">
+            <h2>25.1.7 報告中的個人存在</h2>
+            
+            <div class="highlight-box">
+                <h3>面對面呈現的價值</h3>
+                <p>報告UX評估發現不僅僅是寫出來並發送出去。如果可能，您應該在交付報告時進行演示。您在報告期間的個人存在對於獲得設計和評估所花費資源的回報至關重要。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>💬 即時回應</h4>
+                    <p>沒有什麼能替代面對面的溝通來設定設計基調和期望。沒有關於被動的替代品，可以回答問題並阻止昂貴的誤解。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🤝 建立信任</h4>
+                    <p>親自出席有助於建立團隊間的信任和理解</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>❓ 澄清疑問</h4>
+                    <p>能夠即時回答問題和澄清模糊之處</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 視覺展示</h4>
+                    <p>可以使用視覺輔助工具更好地說明問題</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>演示準備建議</h4>
+                <ul>
+                    <li>準備關鍵問題的快速摘要</li>
+                    <li>使用螢幕截圖和實例說明</li>
+                    <li>準備回答技術實施問題</li>
+                    <li>帶備用解決方案選項</li>
+                    <li>預期可能的推回和準備回應</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 13: Exercise -->
+        <div class="slide">
+            <h2>練習25.1：您的產品或系統的UX評估報告</h2>
+            
+            <div class="highlight-box">
+                <h3>實作練習目標</h3>
+                <p><strong>目標：</strong>撰寫您對系統選擇進行的形成性UX評估報告（見第5.6.1.2節）</p>
+                <p><strong>預期時間：</strong>2到3小時</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 資料組織</h4>
+                    <p><strong>活動：</strong>使用顯示UX目標、基準任務、問卷和您使用的其他方法蒐集資料的表格報告您的非正式總結評估結果，以及觀察到的目標值。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 問題分析</h4>
+                    <p>新增關於是否達到每個UX目標的簡短陳述。撰寫所選子集（約半打）在質性部分評估中發現的UX問題的完整報告。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 內容重點</h4>
+                    <p>遵循本章關於內容、語調和格式的指導原則，確保包含每個問題的重新設計提案。報告成本重要性分析的結果。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 交付成果</h4>
+                    <p><strong>交付物：</strong>您的形成性評估報告<br>
+                    <strong>時程：</strong>我們預期這個練習需要大約2到3小時</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>報告結構建議</h4>
+                <ol>
+                    <li><strong>執行摘要</strong> - 關鍵發現和建議</li>
+                    <li><strong>評估概述</strong> - 目標、方法、參與者</li>
+                    <li><strong>量化結果</strong> - UX目標達成情況</li>
+                    <li><strong>質性發現</strong> - 主要問題和觀察</li>
+                    <li><strong>優先建議</strong> - 基於成本重要性分析</li>
+                    <li><strong>下步行動</strong> - 實施計劃和時程</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 14: Summary -->
+        <div class="slide">
+            <h2>25.4 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>本章重點回顧</h3>
+                <p>在本章中，我們結束了第五部分，我們對UX評估的覆蓋，討論了報告。在下一章（第六部分），我們轉換齒輪，深入探討我們在第4章開始的敏捷流程討論，並將我們的UX流程與SE對應部分連接。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 受眾導向策略</h4>
+                    <ul>
+                        <li>了解不同受眾的需求</li>
+                        <li>調整內容和格式</li>
+                        <li>選擇適當的詳細程度</li>
+                        <li>建立有效的溝通橋樑</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 結構化報告方法</h4>
+                    <ul>
+                        <li>建立一致的報告格式</li>
+                        <li>使用清晰的問題描述</li>
+                        <li>提供具體的解決方案</li>
+                        <li>包含優先順序建議</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💬 有效溝通技巧</h4>
+                    <ul>
+                        <li>使用精確和具體的語言</li>
+                        <li>避免術語和模糊表達</li>
+                        <li>保持專業和建設性語調</li>
+                        <li>專注於設計而非人員</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔒 倫理和實務考量</h4>
+                    <ul>
+                        <li>維護參與者匿名性</li>
+                        <li>確保資料隱私保護</li>
+                        <li>提供平衡的評估觀點</li>
+                        <li>支持面對面呈現</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote">
+                有效的UX評估報告不僅傳達發現，更重要的是激發行動和改進，建立團隊間的理解與合作基礎
+            </div>
+            
+            <div class="example-box">
+                <h4>實務應用重點</h4>
+                <p>成功的UX評估報告需要平衡技術準確性和溝通效果。記住，您的目標是讓受眾理解問題的重要性並採取相應的行動來改善用戶體驗。通過遵循本章提供的指導原則，您可以創建既具有說服力又實用的評估報告。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">14</span>
+    </div>
+
+    <a href="index.html" class="home-link">Home</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

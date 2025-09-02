@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二十二章：實證UX評估數據收集</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .ux-wheel {
+            background: #f8f9fa;
+            border-radius: 50%;
+            width: 350px;
+            height: 350px;
+            margin: 20px auto;
+            position: relative;
+            border: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wheel-segment {
+            position: absolute;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+            padding: 5px;
+        }
+        
+        .seg-understand { top: 30px; left: 50%; transform: translateX(-50%); width: 120px; height: 40px; background: #3498db; }
+        .seg-design { top: 70px; right: 50px; width: 100px; height: 35px; background: #2980b9; }
+        .seg-prototype { right: 30px; top: 50%; transform: translateY(-50%); width: 90px; height: 40px; background: #3498db; }
+        .seg-realize { bottom: 70px; right: 50px; width: 100px; height: 35px; background: #2980b9; }
+        .seg-evaluate { bottom: 30px; left: 50%; transform: translateX(-50%); width: 120px; height: 40px; background: #e74c3c; }
+        .seg-reporting { bottom: 70px; left: 50px; width: 100px; height: 35px; background: #27ae60; }
+        .seg-analysis { left: 30px; top: 50%; transform: translateY(-50%); width: 90px; height: 40px; background: #f39c12; }
+        .seg-collection { top: 70px; left: 50px; width: 100px; height: 35px; background: #9b59b6; }
+        
+        .wheel-center {
+            width: 150px;
+            height: 150px;
+            background: #34495e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+            font-size: 1.1em;
+        }
+        
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .method-card {
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .quantitative-card {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .qualitative-card {
+            border-color: #27ae60;
+            background: #f0f8f0;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .quis-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .quis-table th {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .quis-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .quis-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .questionnaire-scale {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .scale-points {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        .scale-point {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.9em;
+        }
+        
+        .scale-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .evaluation-setup {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .setup-image {
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            margin: 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .rapid-method-box {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .rapid-method-box h4 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        .specialized-methods {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第二十二章：實證UX評估數據收集</h1>
+            <div class="quote">
+                "實證評估意味著涉及用戶和使用，實證數據通常是在真實用戶參與者執行代表性或真實任務時觀察和/或測量的。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>人類需求金字塔內產生和收集數據的實證方法</li>
+                    <li>產生和收集量化UX數據的實證方法和技術</li>
+                    <li>關鍵事件識別、用戶出聲思考技術、共同發現出聲思考</li>
+                    <li>產生和收集質化UX數據的實證方法和技術</li>
+                    <li>任務表現指標、問卷調查</li>
+                    <li>收集情感影響和意義感相關數據的方法和技術</li>
+                    <li>實證數據收集程序</li>
+                    <li>與參與者的預備工作、會話協定、數據收集</li>
+                    <li>產生和收集質化UX評估數據的快速實證方法</li>
+                    <li>專門的UX評估方法</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>22.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>22.1.1 您在這裡</h3>
+                <p>我們在第5部分的每個流程章節開始都會提供一個「您在這裡」的圖片，顯示該章節主題在整體 Wheel UX 生命週期模板脈絡中的位置。到目前為止在第5部分中，我們已經討論了目標、指標和UX評估的目標值，以及準備進行實證UX評估。本章是關於進行實證UX評估。</p>
+            </div>
+            
+            <div class="ux-wheel">
+                <div class="wheel-center">實證UX評估<br>數據收集</div>
+                <div class="wheel-segment seg-understand">理解用戶<br>工作和需求</div>
+                <div class="wheel-segment seg-design">創建設計<br>概念</div>
+                <div class="wheel-segment seg-prototype">原型<br>候選方案</div>
+                <div class="wheel-segment seg-realize">實現設計<br>替代方案</div>
+                <div class="wheel-segment seg-evaluate">評估UX</div>
+                <div class="wheel-segment seg-reporting">UX評估：<br>報告結果</div>
+                <div class="wheel-segment seg-analysis">分析UX評估：<br>數據收集</div>
+                <div class="wheel-segment seg-collection">實證UX評估：<br>數據收集</div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 實證方法的定義</h4>
+                    <p>實證方法有許多定義，但大多數都有以下基本要求：它們是第一手或直接的，意味著它們產生直接觀察和/或測量的數據。它們是經驗性的，意味著它們從實際經驗中衍生知識，而不是從理論中。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 數據收集特性</h4>
+                    <p>在實踐中，實證評估意味著涉及用戶和使用，實證數據通常是在真實用戶參與者執行代表性或真實任務時觀察和/或測量的。用戶問卷調查和調查也符合實證數據收集工具的條件。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Empirical Methods Overview -->
+        <div class="slide">
+            <h2>22.1.2 實證UX評估方法介紹</h2>
+            
+            <div class="highlight-box">
+                <h3>我們的實證UX評估處理方式</h3>
+                <p>我們描述實證UX評估方法為主流方法，適度嚴格且具有廣泛範圍的觀點作為基礎。這是基於UX實踐的起點，特別是適應敏捷UX實踐。在第22.7節中，我們介紹可以從這個更嚴格的起點衍生出的快速變化方法。</p>
+            </div>
+            
+            <div class="method-grid">
+                <div class="method-card quantitative-card">
+                    <h3>量化數據收集方法</h3>
+                    <h4>任務基礎的客觀數據收集</h4>
+                    <p>最受歡迎的量化數據收集技術涉及基準任務用戶表現的測量，可能在同時收集質化數據的同時進行。基準任務是參與者在UX評估期間執行的任務，以便UX測量（如任務時間和錯誤率）能夠獲得並與多個參與者的表現進行比較。</p>
+                    <ul>
+                        <li>計時任務表現</li>
+                        <li>計算用戶錯誤</li>
+                        <li>問卷調查</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card qualitative-card">
+                    <h3>質化數據收集方法</h3>
+                    <h4>識別UX問題和原因</h4>
+                    <p>形成性UX評估的決定性目標是識別UX問題及其原因，以便改善設計。因此，質化數據收集在形成性UX評估中是最重要的。在最受歡迎的質化數據收集技術中有觀察和記錄關鍵事件的使用。</p>
+                    <ul>
+                        <li>關鍵事件識別</li>
+                        <li>用戶出聲思考技術</li>
+                        <li>共同發現出聲思考</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Quantitative Data Collection -->
+        <div class="slide">
+            <h2>22.2 量化實證數據收集方法</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>⏱️ 22.2.1.1 計時任務表現</h4>
+                    <p>測量任務時間最簡單的方法是手動使用碼表。對於低保真度原型，這是唯一明智的時間測量方法，如點擊式線框原型。對於需要精確計時測量的事件來說，建議將軟件內部檢測化。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>❌ 22.2.1.2 計算用戶錯誤</h4>
+                    <p>計算低保真度原型用戶錯誤的最簡單方法是使用手持計數器，如用於計算通過門的人員事件的計數器。正確計算錯誤的關鍵是知道什麼構成錯誤。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>錯誤定義的重要性</h4>
+                <p>用戶錯誤通常被認為是當參與者採取任何不能導致在預期設計邊界內執行期望任務進展的行動時發生的。我們通常不包括稱為「失誤」的錯誤，這些是用戶意外犯下的錯誤，當實際上他們知道得更好。我們也不包括打字錯誤，除非它們的原因可能某種程度上追溯到設計問題。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>A330 空中巴士生態有效性測試範例</h4>
+                <p>作者親身經歷了一個真實世界的產品範例，該產品本可以從更好的生態有效性測試中受益匪淺。在A330空中巴士飛機首次投入使用時（當時我是1週的乘客），我們被告知在A330空中巴士設計中採取了以人為中心的方法。然而，他們在現場測試方面做得不夠。您的個人電影和其他娛樂觀賞螢幕位於您前方座椅後面，被認為是比天花板上懸掛的螢幕更有利的位置。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Questionnaires -->
+        <div class="slide">
+            <h2>22.2.2 主觀數據收集：問卷調查</h2>
+            
+            <div class="highlight-box">
+                <h3>問卷調查提供實證數據嗎？</h3>
+                <p>簡短回答是肯定的；問卷調查數據通常被認為是實證的。在UX實踐中這並不重要，因為問卷調查只是數據收集方法，所以數據將按相同方式分析和解釋，無論如何。問卷調查是第一手（直接）的，並連接到使用（經驗性），因此它們符合實證的條件。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 問卷調查的優勢</h4>
+                    <p>問卷調查的主要類型是與用戶調查和問卷調查相關的量化/主觀數據，用於收集用戶對設計看法的數據。問卷調查是獲得用戶對特定用戶體驗方面反饋的有效手段，包括感知可用性、有用性和情感影響。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 使用便利性</h4>
+                    <p>在評估會話中與用戶參與者使用問卷調查時，對評估者和參與者來說都很簡單易用。問卷調查是收集主觀UX數據的快速、簡便和廉價方式。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>22.2.2.1 用戶介面滿意度問卷調查（QUIS）</h4>
+                <p>QUIS在馬里蘭大學開發。QUIS被組織為螢幕、術語和系統資訊、學習和系統能力等一般類別，螢幕內也可以參考網頁。在這些一般類別中有關於詳細功能的問題集合，使參與者選擇評級。</p>
+            </div>
+            
+            <div class="quis-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>問題項目</th>
+                            <th>評級尺度</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. 術語與任務領域的關聯</td>
+                            <td>遙遠 — 接近</td>
+                        </tr>
+                        <tr>
+                            <td>2. 描述任務的說明</td>
+                            <td>令人困惑 — 清楚</td>
+                        </tr>
+                        <tr>
+                            <td>3. 說明的一致性</td>
+                            <td>從不 — 總是</td>
+                        </tr>
+                        <tr>
+                            <td>4. 操作與任務的關聯</td>
+                            <td>遙遠 — 接近</td>
+                        </tr>
+                        <tr>
+                            <td>5. 資訊性回饋</td>
+                            <td>從不 — 總是</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 6: System Usability Scale -->
+        <div class="slide">
+            <h2>22.2.2.2 系統可用性量表（SUS）</h2>
+            
+            <div class="highlight-box">
+                <h3>SUS的發展背景</h3>
+                <p>SUS由Brooke在Digital Equipment Corporation開發。SUS問卷調查包含10個問題。與通常的問卷調查不同，SUS問題交替以負面措辭的問題來防止快速回答而不深思熟慮考慮問題。問題以簡單的陳述句形式呈現，每個都有5點Likert量表。</p>
+            </div>
+            
+            <div class="questionnaire-scale">
+                <h4>SUS問卷調查範例問題</h4>
+                <div style="margin: 20px 0; text-align: left;">
+                    <p><strong>我認為我會想要經常使用這個系統。</strong></p>
+                    <div class="scale-points">
+                        <div class="scale-point">
+                            <div class="scale-number">1</div>
+                            <span>強烈不同意</span>
+                        </div>
+                        <div class="scale-point">
+                            <div class="scale-number">2</div>
+                            <span>不同意</span>
+                        </div>
+                        <div class="scale-point">
+                            <div class="scale-number">3</div>
+                            <span>中性</span>
+                        </div>
+                        <div class="scale-point">
+                            <div class="scale-number">4</div>
+                            <span>同意</span>
+                        </div>
+                        <div class="scale-point">
+                            <div class="scale-number">5</div>
+                            <span>強烈同意</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 SUS的特點</h4>
+                    <ul>
+                        <li>從50個可能性列表中選出的10個項目</li>
+                        <li>具有感知鑑別力</li>
+                        <li>強健、廣泛使用、廣泛適應</li>
+                        <li>在公共領域廣受歡迎</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>✅ SUS的優勢</h4>
+                    <ul>
+                        <li>技術獨立，可跨系統、產品和互動風格應用</li>
+                        <li>分析師和參與者都快速簡便</li>
+                        <li>單一數字分數易於理解</li>
+                        <li>免費使用</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Qualitative Data Collection -->
+        <div class="slide">
+            <h2>22.3 質化實證數據收集方法</h2>
+            
+            <div class="highlight-box">
+                <h3>質化數據收集的重要性</h3>
+                <p>形成性UX評估的決定性目標是識別UX問題及其原因，以便改善設計。因此，質化數據收集在形成性UX評估中是至關重要的。在用於任務基礎實證評估的最受歡迎質化數據收集技術中，參與者觀察和關鍵事件記錄、出聲思考技術的使用以及共同發現。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 22.3.1 關鍵事件技術</h4>
+                    <p>關鍵事件是揭示用戶體驗品質方面重要內容的使用事件。關鍵事件通常由評估者觀察，可能在參與者幫助下，通常在任務表現期間。雖然關鍵事件可能是積極的，表明用戶體驗中的某些良好內容，但對大多數實際而言，負面關鍵事件是我們在UX實踐中關注的。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💭 22.3.2 用戶出聲思考技術</h4>
+                    <p>也稱為早期人因文獻中的口語協議，出聲思考技術是質化實證數據收集技術，鼓勵用戶參與者在執行任務和練習UX設計時口頭表達他們對互動體驗的想法。這個技術簡單易用，既適用於UX評估者也適用於參與者。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>關鍵事件數據品質要素</h4>
+                <p>最好的關鍵事件數據類型包括：詳細記錄、在使用期間觀察、立即捕獲、與特定任務表現密切相關。關鍵事件數據是易失的。UX問題數據的關鍵在於細節。實證UX評估有效的最大原因是它允許捕獲詳細的使用相關數據。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Think-Aloud Techniques -->
+        <div class="slide">
+            <h2>出聲思考技術的實施</h2>
+            
+            <div class="highlight-box">
+                <h3>出聲思考技術的優勢</h3>
+                <p>因為出聲思考技術能在使用時準確獲得用戶的心理狀態，為我們提供了對用戶期望、策略、偏見、喜好和不喜歡的寶貴理解。出聲思考技術在評估情感影響方面也很有效，因為情感影響是內在感受的，而用戶的內在想法和感覺正是出聲思考技術所接觸的。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🗣️ 成功管理參與者的提示</h4>
+                    <ul>
+                        <li>在開始時解釋出聲思考的概念</li>
+                        <li>解釋您期望他們在工作和思考時說話，分享他們通過口語化正在做的事情</li>
+                        <li>要求參與者告訴您他們在想什麼，而不是描述他們在做什麼</li>
+                        <li>鼓勵參與者在他們感到困惑、沮喪或被阻擋時特別說出來</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 技術實施要點</h4>
+                    <ul>
+                        <li>您可以從簡短練習或練習會話開始讓參與者熱身</li>
+                        <li>鼓勵他們超越閒聊階段，深入真正的參與和內省</li>
+                        <li>如果他們思想不夠深入，積極引導參與者思想</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>22.3.3 共同發現出聲思考技術</h4>
+                <p>您可以在團隊出聲思考技術中使用兩個或更多參與者，這是Kennedy稱為共同發現的方法。雖然看似不自然和對孤獨參與者來說似乎很拘束，但與他人交談本質上比大聲自言自語更自然。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Emotional Impact Data Collection -->
+        <div class="slide">
+            <h2>22.4 情感影響數據收集方法</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👁️ 22.4.1 直接觀察</h4>
+                    <p>在尋找情感影響和意義感的更專門技術之前，您最好的實際方法是在您使用關鍵事件識別和出聲思考技術的常規使用中收集情感影響和意義感的指示。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💭 22.4.2 使用出聲思考技術評估情感影響</h4>
+                    <p>除了使用出聲思考技術捕獲關鍵事件資訊和UX問題外，它也可以是進入用戶心態以及情感感受的絕佳窗口。在任務表現流程中，情感影響指標可能不頻繁，您可能會看到它們主要作為您尋找其他UX問題指標的副產品。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>22.4.3 問卷調查作為收集情感影響數據的自我報告技術</h4>
+                <p>關於情感影響的問卷調查允許您向參與者提出基於任何情感影響因素的探測性問題，如使用樂趣、樂趣和美學，提供一種方法讓用戶表達他們對這部分用戶體驗的感覺。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>22.4.4 AttrakDiff問卷調查</h3>
+                <p>AttrakDiff由Hassenzahl, Burmester和Koller開發，是基於Likert（語義差異）量表的問卷調查範例，特別是那些為獲得用戶對情感影響感知而開發的。AttrakDiff可自由獲得，簡短且易於管理，口語量表易於理解。</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Meaningfulness Evaluation -->
+        <div class="slide">
+            <h2>22.5 意義感數據收集方法</h2>
+            
+            <div class="highlight-box">
+                <h3>22.5.1 意義感評估需要長期研究</h3>
+                <p>當用戶隨時間體驗產品時，他們通過探索和學習建立感知和判斷，因為使用擴展和出現。因此，自然地，意義感必須在縱向上研究，而不僅僅在您可能習慣在其他類型的UX評估中觀察的使用快照中。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 22.5.2 自我報告的重要性</h4>
+                    <p>真實的意義感數據將來自於對用戶和使用的持續關注，但不可能與參與者24/7在一起並在繁忙生活中參與者到達的所有地方和場所中。因此，大多數長期意義感數據的收集技術是自我報告技術。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 22.5.3 基於日記的用戶自我報告</h4>
+                    <p>我們鼓勵您即興創作自己的自我報告技術，但您應該明確考慮基於日記的技術，讓每個參與者維護一個日記來記錄使用中意義感的問題、體驗和出現。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>日記技術的有效實施</h4>
+                <p>為了使基於日記的技術有效，參與者必須提前準備好，包括給您的用戶一個要報告的事項清單，在識別相關情況和報告方面給他們一些練習練習，讓他們內化需求，定期用提醒促使他們記住報告這些出現。</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Evaluation Session Procedures -->
+        <div class="slide">
+            <h2>22.6 實證數據收集會話程序</h2>
+            
+            <div class="evaluation-setup">
+                <h3>典型評估設置</h3>
+                <div class="setup-image">
+                    評估會話設置示意圖<br>
+                    參與者使用原型進行任務測試
+                </div>
+                <p style="text-align: center; font-style: italic;">圖 22.2 典型的評估桌末設置，參與者使用紙上列印的原型牌組</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 22.6.1 與參與者的預備工作</h4>
+                    <p>向參與者介紹設置，無論是UX評估實驗室、會議室或現場真實工作環境。展示他們場景背後會發生什麼，公開聲明任何影片錄製意圖，這也應該在同意書中說明。讓參與者感到他們是這項努力的夥伴。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 22.6.2 為原型評估做準備</h4>
+                    <p>我們在這裡所說的幾乎所有內容都適用於從紙質低保真度原型到在筆記型電腦或其他設備上運行的高保真度原型。如果您的線框原型牌組印在紙上，請將其布置出來並準備就緒。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Data Collection Session -->
+        <div class="slide">
+            <h2>22.6.3 數據收集會話</h2>
+            
+            <div class="highlight-box">
+                <h3>會話開始</h3>
+                <p>如果您使用基準任務，在預備工作之後，當您都準備開始時，讓參與者閱讀第一個基準或其他任務描述並詢問是否有任何問題。如果您使用計時任務，不要將基準任務閱讀時間包含在任務中。現在是時候管理基準任務並進行關鍵事件識別、使用出聲思考技術，並應用您已經學過的數據收集技術。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎤 促進者與參與者互動</h4>
+                    <p>促進者負責確保會話順利高效運行，這通常是促進者聆聽而不說話的工作。在關鍵時刻，如果不干擾任務計時或專注於質化數據，您可能會收集重要數據。您可以提出簡短問題，如「您試圖做什麼？」</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>😌 保持參與者放鬆</h4>
+                    <p>如果參與者顯示壓力或疲勞跡象，那麼給他們休息。如果參與者變得明顯沮喪、困惑、疲憊或持續為任務表現中的問題責怪自己，您應該介入。讓他們離開參與者房間，四處走動，或做一些新鮮的事情。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>練習 22.1：為您的產品或系統進行實證UX評估</h4>
+                <p><strong>目標：</strong>為一個非常簡單的形成性UX評估練習實證數據收集，使用線框原型牌組。<br>
+                <strong>活動：</strong>這個練習假設一些具體內容，如使用出聲思考數據收集技術。您可以輕鬆地將其適應您自己的UX計畫和方法。<br>
+                <strong>時程：</strong>如果您效率高，大約1小時完成。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Rapid Empirical Methods -->
+        <div class="slide">
+            <h2>22.7 快速實證UX評估方法</h2>
+            
+            <div class="rapid-method-box">
+                <h3>22.7.1 快速UX評估方法介紹</h3>
+                <h4>效率導向的評估</h4>
+                <p>到目前為止在本章中，我們一直在談論相對高嚴格度的主流UX評估方法。然而，這些方法可能時間密集和昂貴。因此，已經發展出專門設計用於零售適應性的快速評估方法，盡可能在不大幅犧牲嚴格度的情況下大幅提高效率並降低成本，這對敏捷UX是必要的。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>⚡ 準實證UX評估</h4>
+                    <p>準實證UX評估方法是混合方法，當UX專業人員開發具有捷徑的自己實證UX評估方法時出現。它們是準的，因為它們被縮寫、非正式和靈活的過程和協議，UX評估者可以在適當時機打斷和介入以引出更多出聲思考並尋求解釋和具體說明。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 準實證方法特徵</h4>
+                    <ul>
+                        <li>主要是實證的，使用志願參與者</li>
+                        <li>由實踐者創新自由度定義</li>
+                        <li>非正式的協議，鼓勵靈活調適</li>
+                        <li>通常不涉及量化數據</li>
+                        <li>經常以即時改變節奏、方向和焦點來打斷</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: RITE Method -->
+        <div class="slide">
+            <h2>22.7.3 快速迭代測試和評估UX評估方法</h2>
+            
+            <div class="highlight-box">
+                <h3>RITE方法簡介</h3>
+                <p>快速迭代測試和評估（RITE）是特定快速UX評估方法的範例。RITE是基於用戶的UX評估方法，設計用於在相對低成本下挑選低懸掛果實。決定性功能是RITE修復關鍵UX問題，只要它們被識別就立即修復。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔄 RITE流程特點</h4>
+                    <p>RITE的定義功能是快速周轉修復關鍵UX問題，只要它們被識別。在收集UX數據後立即，整個專案團隊包括參與者分析問題並決定要做哪些改變。如果有保證，另一輪測試和修復可能隨之而來。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⏰ 快速反應機制</h4>
+                    <p>問題報告在團隊仍在現場時發生，因此他們已經了解並沉浸在過程中。因為改變包含在所有版本的評估中，進一步確定修復的有效性，確定是否修復引入任何新問題。修復問題後立即重新測試。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>RITE方法實施步驟</h4>
+                <p>專案團隊首先選擇UX實踐者作為促進者來指導測試會話。UX促進者和團隊準備包括識別參與者所需特徵、決定參與者將執行的任務、同意關鍵任務、構建基於這些任務的測試腳本、決定如何收集質化用戶行為數據。</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Specialized Methods -->
+        <div class="slide">
+            <h2>22.8 專門的UX評估方法</h2>
+            
+            <div class="specialized-methods">
+                <h3>專門評估方法概述</h3>
+                <p>除了前面章節的標準UX評估方法外，還有一些專門的方法。我們簡要描述一些，作為關心的問題。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🚀 22.8.1 部署後實地測試</h4>
+                    <p>Alpha和Beta測試是有用的部署後評估方法。在幾乎所有開發完成後，軟體應用的製造商有時會發送alpha和beta版本給選定用戶、專家、客戶和專業評審者作為預覽。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🌐 22.8.2 遠程UX評估</h4>
+                    <p>遠程UX評估近來變得更頻繁使用。在許多業務主要或全部基於網路的大型公司中，實證UX評估幾乎全部是遠程的。用戶和UX團隊成員在地理上分散，大流行迫使人們遠程工作，遠程評估成本較低。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🤖 22.8.3 自動UX評估</h4>
+                    <p>基於實驗室和UX檢查方法在範圍上勞動密集且有限。大型複雜系統具有大量用戶，為大量自動使用數據提供潛力。可以分析這種數據來評估指標，如任務完成時間或任務序列中的點，在這些點上用戶放棄交易。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔬 22.8.4 UX中的A/B比較測試</h4>
+                    <p>A/B測試是評估設計變化對各種標準影響的有效且經濟的方法，如用戶表現，通過確定系統中功能的哪個版本最好。A/B測試需要被評估的系統被檢測化，通過嵌入測量和跟踪探針來捕獲細粒度的用戶行動和系統響應。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Summary -->
+        <div class="slide">
+            <h2>22.9 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>本章重要概念回顧</h3>
+                <p>在本章中，我們討論了實證數據收集技術。在下一章中，我們轉向分析版本。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 數據收集方法體系</h4>
+                    <p>掌握量化和質化數據收集的不同方法，包括任務計時、錯誤計算、關鍵事件識別和出聲思考技術等核心技能。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 問卷調查應用</h4>
+                    <p>學會運用QUIS、SUS等標準化問卷調查工具收集主觀評估數據，以及如何根據特定需求調整問卷調查內容。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💭 質化評估技巧</h4>
+                    <p>熟練運用出聲思考、共同發現等技術深入了解用戶心理狀態，有效識別UX問題的根本原因。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 敏捷評估方法</h4>
+                    <p>理解快速迭代評估方法如RITE的價值，在資源有限的情況下仍能有效進行用戶體驗評估。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                實證UX評估的核心在於直接觀察和測量真實用戶的行為和反應。通過系統化的數據收集方法，我們能夠獲得可靠的見解來指導設計決策，確保最終產品真正滿足用戶需求。
+            </div>
+            
+            <div class="example-box">
+                <h4>實務應用建議</h4>
+                <p>成功的實證評估需要平衡嚴謹性與實用性。選擇適合專案需求和資源限制的方法，重視參與者體驗，並確保數據收集的系統性和一致性。記住，最好的評估方法是那些能夠為您的設計決策提供可操作見解的方法。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">16</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二十三章：分析性UX評估數據收集</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .ux-wheel {
+            background: #f8f9fa;
+            border-radius: 50%;
+            width: 350px;
+            height: 350px;
+            margin: 20px auto;
+            position: relative;
+            border: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wheel-segment {
+            position: absolute;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+            padding: 5px;
+        }
+        
+        .seg-understand { top: 30px; left: 50%; transform: translateX(-50%); width: 120px; height: 40px; background: #3498db; }
+        .seg-design { top: 70px; right: 50px; width: 100px; height: 35px; background: #2980b9; }
+        .seg-prototype { right: 30px; top: 50%; transform: translateY(-50%); width: 90px; height: 40px; background: #3498db; }
+        .seg-realize { bottom: 70px; right: 50px; width: 100px; height: 35px; background: #2980b9; }
+        .seg-evaluate { bottom: 30px; left: 50%; transform: translateX(-50%); width: 120px; height: 40px; background: #e74c3c; }
+        .seg-reporting { bottom: 70px; left: 50px; width: 100px; height: 35px; background: #27ae60; }
+        .seg-analysis { left: 30px; top: 50%; transform: translateY(-50%); width: 90px; height: 40px; background: #f39c12; }
+        .seg-collection { top: 70px; left: 50px; width: 100px; height: 35px; background: #9b59b6; }
+        
+        .wheel-center {
+            width: 150px;
+            height: 150px;
+            background: #34495e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+            font-size: 1.1em;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .method-comparison {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .method-card {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .analytic-card {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .empirical-card {
+            border-color: #27ae60;
+            background: #f0f8f0;
+        }
+        
+        .heuristic-list {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .heuristic-item {
+            background: #3498db;
+            color: white;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .inspection-process {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .process-step {
+            background: #ecf0f1;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .walkthrough-scenario {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .evaluation-report {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .pros-card {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .cons-card {
+            background: #fdf2f2;
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第二十三章：分析性UX評估數據收集</h1>
+            <div class="quote">
+                "分析評估不依賴於用戶或使用體驗。分析評估基於檢查設計的內在屬性而不是觀察使用中的設計。結果仍然是有關要修復的UX問題的形成性數據。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>分析方法的批評與回應</li>
+                    <li>焦點群組作為評估工具</li>
+                    <li>設計走查作為早期分析評估方法</li>
+                    <li>專家UX檢查方法</li>
+                    <li>啟發式評估原理與實踐</li>
+                    <li>我們的實用UX檢查方法</li>
+                    <li>情感影響檢查</li>
+                    <li>分析評估的實際應用策略</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>23.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>23.1.1 您在這裡</h3>
+                <p>我們在每個流程章節開始都會提供一個「您在這裡」的圖片，顯示該章節主題在整體 Wheel UX 生命週期模板脈絡中的位置。作為前一章節中實證數據收集方法的替代方法，本章討論分析數據收集方法。</p>
+            </div>
+            
+            <div class="ux-wheel">
+                <div class="wheel-center">分析性UX<br>評估數據收集</div>
+                <div class="wheel-segment seg-understand">理解用戶<br>工作和需求</div>
+                <div class="wheel-segment seg-design">創建設計<br>概念</div>
+                <div class="wheel-segment seg-prototype">原型<br>候選方案</div>
+                <div class="wheel-segment seg-realize">實現設計<br>替代方案</div>
+                <div class="wheel-segment seg-evaluate">驗證和精進<br>設計</div>
+                <div class="wheel-segment seg-reporting">UX評估：<br>報告結果</div>
+                <div class="wheel-segment seg-analysis">分析UX評估：<br>數據收集</div>
+                <div class="wheel-segment seg-collection">實證UX評估：<br>數據收集</div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>23.1.2 將分析方法加入組合</h4>
+                <p>在第22章中，我們看到實證評估方法與用戶和使用體驗密切相關。分析評估不依賴於用戶或使用體驗。分析評估基於檢查設計的內在屬性而不是觀察使用中的設計。結果仍然是有關要修復的UX問題的形成性數據。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Analytic vs Empirical -->
+        <div class="slide">
+            <h2>分析與實證方法的比較</h2>
+            
+            <div class="method-comparison">
+                <h3>兩種評估方法的特徵比較</h3>
+                <div class="comparison-table">
+                    <div class="method-card analytic-card">
+                        <h4>分析評估方法</h4>
+                        <ul>
+                            <li>基於專家意見而非實證使用數據</li>
+                            <li>需要UX和主題領域的專家</li>
+                            <li>在尋找重要質化數據方面有效</li>
+                            <li>適合處理深層概念性問題</li>
+                            <li>可在任何原型保真度水平使用</li>
+                            <li>較不正式，協議較少</li>
+                            <li>過程變異性更大</li>
+                            <li>適應條件創造即興空間</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="method-card empirical-card">
+                        <h4>實證評估方法</h4>
+                        <ul>
+                            <li>需要識別和招募用戶參與者</li>
+                            <li>安排參與者會議並帶來參與者</li>
+                            <li>進行長時間基於任務的評估會議</li>
+                            <li>基於實際使用體驗</li>
+                            <li>提供真實使用數據</li>
+                            <li>較為正式和結構化</li>
+                            <li>需要更多時間和資源</li>
+                            <li>結果更可靠和客觀</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>分析方法的發展背景</h3>
+                <p>儘管可能以高嚴謹性執行分析方法並因此降低速度，但它們被開發為更快速和成本更低的方法來產生實證結果的近似值或預測器。它們往往更快速且成本更低的原因是它們不需要識別和招募用戶參與者、安排參與者會議並帶來參與者，或進行長時間基於任務的評估會議。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Criticism of Analytic Methods -->
+        <div class="slide">
+            <h2>23.1.3 分析方法的批評：折扣方法？</h2>
+            
+            <div class="warning-box">
+                <h4>學術界的批評</h4>
+                <p>分析UX評估方法，包括大多數檢查方法，在人機互動文獻中受到批評。有時被貶稱為"折扣方法"，分析方法被批評為不夠徹底和不科學。時間證明這些批評是錯誤的，現在這些方法被證明是實用的，如果不是敏捷UX實踐的主要內容和基礎的話。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>實務價值的驗證</h3>
+                <p>我們在本章討論的快速方法是從高嚴謹性中交換徹底性以獲得低成本、快速應用和效果的結果，這是敏捷UX設計環境中實用使用的愉快妥協。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 分析方法的特色</h4>
+                    <p>因為它們基於專家意見而非實證使用數據，需要在UX和主題領域都有專家（通常是不同的人一起工作）。它們在尋找重要質化數據，即成本效益最高的修復UX問題方面有效。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 敏捷環境的優勢</h4>
+                    <p>在以速度為重的敏捷過程中，更靈活的分析方法一直在取代較慢且笨重的實證評估方法，即使對於複雜領域的大型系統也是如此。專家現在可以檢查這些設計並同樣有效地（至少adequately有效地）識別UX問題。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Focus Groups -->
+        <div class="slide">
+            <h2>23.1.4 焦點群組</h2>
+            
+            <div class="highlight-box">
+                <h3>焦點群組的定義與應用</h3>
+                <p>焦點群組是一個由代表性用戶或利害關係人組成的小型討論群組，旨在識別工作實踐中的廣泛主題和問題。焦點群組由主持人和參與者組成，可以用作UX設計早期評估的分析評估方法。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>👥 群組動力學</h4>
+                    <p>如Martin和Hanington（2012）所說，"焦點群組的力量在於它創造的群組動力學。" 群組成員分享意見並協作討論利弊。當群組成員描述他們的經驗和感受時，他們會講故事並使用隱喻和類比。在會議結束時，主持人引導群組創建討論的摘要。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 適用情況</h4>
+                    <p>焦點群組主要適用於評估高層次問題的群組評估，例如品牌或對產品組成的感知與競爭對手的比較。因為它們執行成本高，需要相當多的計劃和招募，並且通常不能有效獲得詳細回饋，所以現在在UX實踐中很少使用焦點群組。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>使用限制</h4>
+                <p>現今焦點群組在UX實踐中使用相當罕見。因為它們執行成本高，需要相當多的計劃和招募，並且通常不能有效獲得詳細回饋，所以在UX實踐中很少使用焦點群組。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Design Walk-throughs -->
+        <div class="slide">
+            <h2>23.3 設計走查</h2>
+            
+            <div class="highlight-box">
+                <h3>設計走查的定義</h3>
+                <p>設計走查是一種非正式的分析形成性評估方法，是一種設計功能的巡覽。一些UX團隊稱這為設計檢視或批評。實際上，有時設計走查更多用作溝通而非評估。例如，它用於讓軟體工程團隊加速了解新UX設計。</p>
+            </div>
+            
+            <div class="walkthrough-scenario">
+                <h4>設計走查的活動</h4>
+                <p>為UX設計團隊提供論壇來呈現和展示UX設計的活動，其中設計走查旨在從非UX利害關係人（包括客戶、潛在用戶、主題專家、商業代表和其他跨職能利害關係人）那裡獲得高層次設計回饋，讓他們參與深度分析和批評。目標是對設計概念和願景獲得初步反應。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 設計走查的適用場景</h4>
+                    <ul>
+                        <li>系統生態的初步想法</li>
+                        <li>概念設計</li>
+                        <li>產生情感影響的設計想法</li>
+                        <li>開始任務層級設計</li>
+                        <li>整體外觀和感覺</li>
+                        <li>視覺、聽覺、動作設計想法和概念</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 走查準備工作</h4>
+                    <ul>
+                        <li>了解您的設計並避免對其工作方式感到困惑</li>
+                        <li>如果有用，用故事板來說明流程並張貼在旁邊</li>
+                        <li>準備相關用戶、工作角色和用戶類別的描述</li>
+                        <li>與適當的利害關係人安排會議</li>
+                        <li>決定誰將擔任記錄員角色</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Walk-through Process -->
+        <div class="slide">
+            <h2>23.3.1-23.3.3 設計走查過程</h2>
+            
+            <div class="inspection-process">
+                <h3>設計走查的執行步驟</h3>
+                
+                <div class="process-step">
+                    <h4>23.3.1 設計走查的參數</h4>
+                    <p>這個階段的目標是確定參與的利害關係人理解並認可概念願景和高層次流程。您希望確保新興設計解決方案與商業和用戶目標保持一致，並滿足技術角度的任何限制。</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>23.3.2 準備設計走查</h4>
+                    <p>通過執行以下操作來準備設計走查：了解您的設計並避免對其工作方式感到困惑。如果有用，用故事板來說明流程並張貼在旁邊。準備相關用戶、工作角色和用戶類別的描述。與適當的利害關係人安排會議。</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>23.3.3 進行設計走查會議</h4>
+                    <p>非正式會議協議可以包括：呈現者介紹設計及其目的和脈絡。如適當，呈現者給出正在呈現設計的工作流程或更廣泛主題的逐步概覽。呈現者透過敘述行動和進行所需操作來引導設計的巡覽。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>23.3.3.1 點擊原型的價值</h4>
+                <p>點擊原型通常是一個線框原型，顯示由於與輸入提示互動而產生的狀態進展。通過點擊連結，線框螢幕設計可以展示通過從一個線框螢幕變更顯示到另一個螢幕來進行狀態變化或導航的工作流程。儘管設計走查通常在設計原型存在之前使用，但即使是最早期和最低保真度的線框原型也可以通過添加這些連結來製作點擊。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Expert UX Inspection -->
+        <div class="slide">
+            <h2>23.4 專家UX檢查</h2>
+            
+            <div class="highlight-box">
+                <h3>23.4.1 什麼是UX檢查？</h3>
+                <p>UX檢查是一種分析形成性評估方法，最適合在設計成熟到足夠具體時使用。UX檢查涉及UX評估專家檢查和嘗試設計，而非讓參與者在評估者觀察時進行練習。檢查用於查找要修復的現有設計UX問題。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 檢查的適用範圍</h4>
+                    <ul>
+                        <li>通過關鍵用戶任務的用戶工作流程和導航</li>
+                        <li>詳細互動設計，包括任務流程、設計隱喻、資訊物件和設計模式</li>
+                        <li>異常情況、錯誤避免和恢復機制</li>
+                        <li>符合UX標準或風格指南</li>
+                        <li>確保通過設想解決方案空間支持用戶旅程</li>
+                        <li>視覺、聽覺、動作細節</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>👨‍💼 專家類型</h4>
+                    <p>不出所料，Nielsen（1992）發現UX專家（UX從業者或顧問）是這種檢查評估者的最佳類型。這種方法有時也稱為專家評估或專家檢查。為了有效進行檢查，如果檢查者對系統有良好的領域知識會有幫助。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>檢查員數量考量</h4>
+                <p>在實證語言中，可以通過添加更多參與者直到獲得遞減回報來改善評估效果。同樣，在UX檢查中，為了改善效果，可以添加更多檢查員或更多檢查。一個團隊方法是有益的，因為個別問題檢出率可能由一個人發現的問題廣度限制。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Heuristic Evaluation -->
+        <div class="slide">
+            <h2>23.5 啟發式評估，一種UX檢查方法</h2>
+            
+            <div class="highlight-box">
+                <h3>23.5.1 導論</h3>
+                <p>如Nielsen所述，啟發式評估方法具有廣泛、直觀、適應性強和易於激勵從業者執行的優勢，並且在UX過程早期使用很有效。毫不奇怪，在所有檢查方法中，HE方法最為人所知和最受歡迎。執行基於問題清單的UX檢查比進行開放式尋找UX問題的探索更可能成功。</p>
+            </div>
+            
+            <div class="heuristic-list">
+                <h3>23.5.2 啟發式原則</h3>
+                <p>遵循Nielsen的原始啟發式原則，以下是由電腦協會提供的計算機械學會加強後的改良啟發式原則：</p>
+                
+                <div class="heuristic-item">1. 系統狀態的可見性</div>
+                <div class="heuristic-item">2. 系統與現實世界的匹配</div>
+                <div class="heuristic-item">3. 用戶控制和自由</div>
+                <div class="heuristic-item">4. 一致性和標準</div>
+                <div class="heuristic-item">5. 錯誤預防</div>
+                <div class="heuristic-item">6. 識別而非回憶</div>
+                <div class="heuristic-item">7. 使用彈性和效率</div>
+                <div class="heuristic-item">8. 美學和極簡設計</div>
+                <div class="heuristic-item">9. 幫助用戶識別、診斷和從錯誤中恢復</div>
+                <div class="heuristic-item">10. 幫助和文檔</div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Heuristic Evaluation Process -->
+        <div class="slide">
+            <h2>23.5.3 啟發式評估程序</h2>
+            
+            <div class="inspection-process">
+                <h3>標準啟發式評估流程</h3>
+                
+                <div class="process-step">
+                    <h4>步驟1：專案團隊準備</h4>
+                    <p>專案團隊或經理選擇一組評估者，通常三到五人。團隊選擇一個小而易處理的啟發式集合，大約10個，以檢查問題的形式表述的一般化和簡化設計指導原則。</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>步驟2：個別檢查</h4>
+                    <p>每位檢查員個別瀏覽互動設計的每個部分，針對該部分詢問啟發式問題，對每個啟發式問題評估設計的每個部分是否符合、記錄違反啟發式的地方作為候選可用性問題、記錄支持啟發式的地方。</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>步驟3：團隊整合</h4>
+                    <p>所有檢查員聚集在一起，作為團隊：合併問題清單、選擇最重要的要修復的問題、集思廣益建議解決方案、根據最常訪問的螢幕、具有最多可用性問題的螢幕、最常違反的指導原則和可用來進行變更的資源，為設計師決定建議。</p>
+                </div>
+            </div>
+            
+            <div class="evaluation-report">
+                <h4>23.5.4 記錄UX問題</h4>
+                <p>我們發現最好保持HE問題記錄簡單。包含大量字段的長表格可能會讓必須處理大量問題的UX專業人員感到乏味。圖23.2顯示了我們已調整的簡單HE數據捕獲表格，經Brad Myers許可。</p>
+                
+                <div style="margin-top: 10px; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+                    <strong>啟發式評估報告</strong><br>
+                    日期：___________<br>
+                    問題編號：_______ 姓名：_______ 簽名：_______<br>
+                    違反或支持的啟發式：_______<br>
+                    問題螢幕、頁面、問題位置：_______<br>
+                    嚴重性評級：_______<br>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Heuristic Limitations -->
+        <div class="slide">
+            <h2>23.5.5-23.5.6 啟發式評估的變化與限制</h2>
+            
+            <div class="pros-cons">
+                <div class="pros-card">
+                    <h4>✅ 啟發式評估的優勢</h4>
+                    <ul>
+                        <li>對缺乏經驗的從業者有用的指導</li>
+                        <li>方法適應性強，幾乎每個使用它的團隊都會定制</li>
+                        <li>未記錄和未發表的方式</li>
+                        <li>執行速度快，成本相對較低</li>
+                        <li>不需要用戶參與</li>
+                        <li>適合早期設計評估</li>
+                    </ul>
+                </div>
+                
+                <div class="cons-card">
+                    <h4>⚠️ 方法限制</h4>
+                    <ul>
+                        <li>與任何檢查方法一樣，HE方法的主要缺點是新手從業者過度依賴它並認為啟發式足以進行任何評估情況</li>
+                        <li>該方法可能產生檢查員識別的問題實際上並非真實問題或不重要UX問題的情況</li>
+                        <li>HE方法不總是有效找到可用性問題</li>
+                        <li>啟發式非常一般且高層次，在描述性上有限</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>23.5.5 方法變化豐富</h3>
+                <p>關於HE方法和大多數其他分析方法的一個常數是它們在實踐中使用的變化。這些方法適應性強，幾乎每個使用它們的團隊都會定制，通常以未記錄和未發表的方式。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>實際應用考量</h4>
+                <p>儘管對新手從業者有用的指導，我們發現啟發式經常妨礙專家。要公平，啟發式方法的意圖是作為一種幫助新手從業者進行可用性檢查的方法，因此不應與專家可用性檢查方法相比較。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Our Practical Approach -->
+        <div class="slide">
+            <h2>23.6 我們的實用UX檢查方法</h2>
+            
+            <div class="highlight-box">
+                <h3>整合現有方法的實用方案</h3>
+                <p>我們已經將現有UX檢查方法綜合成一個相對簡單直接的方法。與啟發式方法不同，這個方法明確針對UX專家而非新手。有時，我們讓新手坐在旁邊觀察過程，作為一種學徒培訓，但他們不會自己執行這些檢查。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>💡 23.6.1 讓洞察和經驗成為您的指導</h4>
+                    <p>我們不直接依賴明確使用啟發式清單來驅動這種UX檢查。在我們自己的工業和顧問經驗中，我們沒有發現特定啟發式與我們希望的一樣有用。我們運用專家對UX設計指導原則的知識，通過專注於使用情境中的任務和工作活動帶來經驗。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🤝 23.6.2 使用共同發現方法</h4>
+                    <p>專家UX專業人員作為檢查員扮演UX偵探的角色。為了幫助偵探工作，將兩個從業者組成共同發現團隊可能很有用，在一個相互探測板中工作，輪流扮演彼此的努力，保持過程流動，促進檢查員之間持續的思考評論流，並維持飛行中的筆記。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>23.6.3 系統化地探索豐富和全面的使用導向視角</h4>
+                <p>作為檢查員，您不應該只尋找與任務或功能相關的個別問題。使用您的所有經驗和知識來看到大局。保持專家對工作流程的關注，整體功能整合和超越可用性的情感影響因素。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>23.6.4 檢查可以由任務和設計本身驅動</h4>
+                <p>代表性用戶任務幫助我們將自己置於用戶的立場。通過探索任務本身並進行我們自己的思考資料，我們可以想像真實用戶在其使用中可能遇到什麼。階層任務庫存在獲得良好理解任務結構和確保廣泛覆蓋任務範圍方面很有幫助。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Emotional Impact Inspection -->
+        <div class="slide">
+            <h2>23.7 情感影響檢查</h2>
+            
+            <div class="highlight-box">
+                <h3>情感層面的評估需求</h3>
+                <p>過去，評估UX設計的檢查幾乎完全是互動層面的可用性檢查。這種評估也可以非常有效地處理情感影響問題。過程基本相同，但您需要超越任務視角來看整體使用體驗。在要記住的UX檢查的情感影響問題中：</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎨 視覺設計評估</h4>
+                    <ul>
+                        <li>使用是否有趣？</li>
+                        <li>視覺設計是否有吸引力（例如顏色、形狀、佈局）和創意？</li>
+                        <li>設計是否在視覺、聽覺或觸覺上愉悅用戶？</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💝 情感連結評估</h4>
+                    <ul>
+                        <li>如果目標是產品：包裝和產品呈現是否美觀？</li>
+                        <li>開箱體驗是否令人興奮？</li>
+                        <li>產品是否感覺堅固和良好？</li>
+                        <li>產品能否增加用戶的自尊？</li>
+                        <li>產品是否體現環境和可持續實踐？</li>
+                        <li>品牌是否代表進步、社會和公民價值？</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>焦點群組與共同發現的結合應用</h4>
+                <p>您也可以使用焦點群組和/或共同發現來評估情感層面。情感影響評估問卷中的大多數問題都適用於檢查問題。作為範例，使用來自AttrakDiff的屬性（Hassenzahl, Burmester, & Koller, 2003）：</p>
+                <ul>
+                    <li>系統或產品是否有趣？</li>
+                    <li>它令人興奮嗎？</li>
+                    <li>它創新嗎？</li>
+                    <li>它吸引人嗎？</li>
+                    <li>它有動機嗎？</li>
+                    <li>它令人嚮往嗎？</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: Exercise -->
+        <div class="slide">
+            <h2>練習 23.1：您產品或系統的分析評估（UX檢查）</h2>
+            
+            <div class="example-box">
+                <h4>練習目標</h4>
+                <p><strong>目標：</strong>實踐進行UX檢查的練習。</p>
+                <p><strong>活動：</strong>強烈建議您使用在練習18.1中構建的線框原型套件。如果您的原型不適合有效練習UX檢查，則選擇應用程式或適當網站作為檢查目標。執行本章描述的基於團隊的UX檢查。</p>
+                <p><strong>交付成果：</strong>您使用的檢查問題清單（如果您使用了）。您檢查識別的UX問題清單。</p>
+                <p><strong>時程：</strong>約90分鐘。</p>
+            </div>
+            
+            <div class="inspection-process">
+                <h3>建議執行步驟</h3>
+                
+                <div class="process-step">
+                    <h4>準備階段</h4>
+                    <p>選擇要檢查的設計或原型，準備檢查環境，邀請檢查團隊成員，準備檢查記錄表格。</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>檢查執行</h4>
+                    <p>按照本章介紹的方法進行系統性檢查，記錄發現的問題，注重使用者體驗的各個層面。</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4>結果整理</h4>
+                    <p>整合檢查結果，優先排序問題重要性，提出改善建議，準備檢查報告。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Summary -->
+        <div class="slide">
+            <h2>23.8 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>分析與實證方法的整合</h3>
+                <p>在本章和前一章中，我們涵蓋了使用實證和分析方法的UX評估數據收集。在下一章中，我們進入討論分析這些數據的內容。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 分析方法的價值</h4>
+                    <p>分析評估方法提供了快速、成本效益高的UX問題識別途徑，特別適合敏捷開發環境和早期設計階段使用。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 方法選擇策略</h4>
+                    <p>根據專案需求、時間限制和資源狀況，靈活選擇和組合不同的分析評估方法，以達到最佳的評估效果。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>👥 專家知識的運用</h4>
+                    <p>充分利用UX專家的經驗和洞察，透過系統性的檢查過程，有效識別設計問題和改善機會。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 全面性考量</h4>
+                    <p>不僅關注可用性問題，也要重視情感影響等更廣泛的使用者體驗層面，確保設計品質的全面提升。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                分析性評估方法雖然不能完全替代實證研究，但在快節奏的設計開發過程中提供了寶貴的評估工具。關鍵在於理解各種方法的優勢和限制，並在適當的時機運用適當的方法，以支持高品質的用戶體驗設計。
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">15</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

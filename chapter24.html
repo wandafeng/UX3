@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第24章：UX評估：資料分析</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .priority-matrix {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .matrix-visual {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            margin: 20px auto;
+            border: 2px solid #333;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+        
+        .quadrant {
+            border: 1px solid #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .quadrant-a {
+            background: #e74c3c;
+        }
+        
+        .quadrant-b {
+            background: #95a5a6;
+        }
+        
+        .quadrant-c {
+            background: #f39c12;
+        }
+        
+        .quadrant-d {
+            background: #3498db;
+        }
+        
+        .axis-label {
+            position: absolute;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .axis-importance {
+            top: 50%;
+            left: -80px;
+            transform: rotate(-90deg);
+        }
+        
+        .axis-cost {
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .data-analysis-flow {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .flow-step::after {
+            content: '↓';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #3498db;
+        }
+        
+        .flow-step:last-child::after {
+            display: none;
+        }
+        
+        .step-number {
+            background: white;
+            color: #3498db;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .data-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .data-table tr:hover {
+            background: #e8f5e8;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第24章：UX評估：資料分析</h1>
+            <div class="quote">
+                "如果您收集了量化UX資料進行形成性總結評估，現在是分析它的時候了。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>分析量化資料</li>
+                    <li>將結果與UX目標進行比較</li>
+                    <li>決定是否可以停止迭代</li>
+                    <li>分析質性UX問題資料</li>
+                    <li>成本重要性分析以優先處理UX問題</li>
+                    <li>實地經驗與洞察</li>
+                </ul>
+            </div>
+            <div class="example-box">
+                <h4>您現在的位置</h4>
+                <p>在Wheel UX生命週期範本的整體背景下，您現在處於評估UX活動中的資料分析部分。</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>24.1 簡介</h2>
+            
+            <div class="highlight-box">
+                <h3>UX評估資料分析的重要性</h3>
+                <p>我們在每個流程章節開始時都會展示該章節主題在The Wheel（整體UX設計生命週期範本）背景下的位置。在本章中，我們展示如何分析您所收集的UX評估資料。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 分析範圍</h4>
+                    <p>此處描述的技術通常適用於任何形成性評估資料，無論是通過經驗還是分析方法獲得的資料。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 資料類型</h4>
+                    <p>UX評估資料分析是一個簡單的序列：分析量化資料、分析質性資料、執行成本重要性分析</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>分析序列</h4>
+                <ul>
+                    <li><strong>分析量化資料</strong> - 與UX目標比較，判斷是否達到標準</li>
+                    <li><strong>分析質性資料</strong> - 識別問題並找出修復方向</li>
+                    <li><strong>執行成本重要性分析</strong> - 優先處理發現的問題</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: Quantitative Analysis -->
+        <div class="slide">
+            <h2>24.2 分析量化資料</h2>
+            
+            <div class="highlight-box">
+                <h3>使用簡單描述性統計</h3>
+                <p>正如我們所說，我們的非正式量化資料分析不包括推理統計分析。相反，它使用簡單描述性統計（如平均值）來做出關於UX設計是否達到UX目標水準的工程決策。</p>
+            </div>
+            
+            <div class="data-analysis-flow">
+                <h3>量化資料分析步驟</h3>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h4>計算統計量</h4>
+                            <p>計算平均值或您使用的任何指標，用於計時、錯誤計數、問卷評分等</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h4>檢查標準偏差</h4>
+                            <p>標準偏差描述資料點圍繞平均值的分散程度</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h4>與目標比較</h4>
+                            <p>將觀察結果與既定的UX目標水準進行比較</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ 標準偏差的意義</h4>
+                <p>小標準偏差意味著個別資料點相對接近平均值，平均值是資料的良好代表。大標準偏差意味著資料點更分散，平均值不是資料的良好代表。</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Decision Making -->
+        <div class="slide">
+            <h2>24.2.4 重大決策：我們能停止迭代嗎？</h2>
+            
+            <div class="highlight-box">
+                <h3>迭代決策考量</h3>
+                <p>現在是時候做出重大專案管理決策了：您是否應該繼續迭代？這個決策應該在全球層面做出，而不僅僅考慮量化資料。需要考慮以下問題：</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 目標達成</h4>
+                    <ul>
+                        <li>您是否同時達到所有目標水準？</li>
+                        <li>團隊對概念設計的總體感受如何？</li>
+                        <li>用戶體驗是否符合觀察預期？</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚖️ 資源考量</h4>
+                    <ul>
+                        <li>管理層和行銷的壓力在此決策中扮演什麼角色？</li>
+                        <li>資源限制是否排除UX設計的進一步迭代？</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>決策指引</h4>
+                <p><strong>如果您可以接受當前設計：</strong>應該停止迭代。如果資源不足，希望您能在下一版本中修復剩餘的已知缺陷。停止迭代時，不要丟棄定性資料。您付費獲得了這些資料，請保留以備下次使用。</p>
+                
+                <p><strong>如果未達到UX目標：</strong>最可能的情況是測試後的第一個週期，這意味著需要分析UX問題並返回生命週期以找到解決問題的方法。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>品質用戶體驗的收斂</h4>
+                <p>隨著您的迭代，應該關注多次迭代中的量化結果。UX水準是否有可能在正確方向上變得更糟？如果您沒有向改進收斂，為什麼？</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Qualitative Analysis -->
+        <div class="slide">
+            <h2>24.3 分析質性資料</h2>
+            
+            <div class="highlight-box">
+                <h3>質性資料分析概述</h3>
+                <p>形成性質性資料分析，適用於實證和分析資料，是形成性UX評估的主要支柱。形成性資料分析的目標是識別UX問題和原因（設計缺陷），以便可以修復它們，從而改善產品用戶體驗。</p>
+            </div>
+            
+            <div class="data-analysis-flow">
+                <h3>質性資料分析步驟</h3>
+                <div class="flow-steps">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h4>收集原始資料</h4>
+                            <p>包括關鍵事件評論、用戶思考聲音評論、UX檢查註記</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h4>組成元素資料註記</h4>
+                            <p>每個註記僅涉及一個問題，將複雜問題分解為多個元素註記</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h4>編輯問題描述</h4>
+                            <p>將每個元素資料註記編輯成UX問題描述</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div>
+                            <h4>整合相關問題</h4>
+                            <p>將同一UX問題的多個註記合併</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <h4>群組化相關問題</h4>
+                            <p>將相關UX問題描述分組以便一起修復</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Problem Description Elements -->
+        <div class="slide">
+            <h2>UX問題描述的關鍵要素</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📝 問題名稱</h4>
+                    <p>讓人們在其他情況和討論中可以參考它的名稱</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 問題陳述</h4>
+                    <p>作為對用戶體驗的影響或結果的簡潔摘要，而不是建議的解決方案</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 用戶目標和任務資訊</h4>
+                    <p>提供問題情境，了解遇到問題時用戶試圖做什麼</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 發生原因</h4>
+                    <p>解釋實際發生的情況以及關於設計如何導致問題的錯誤假設</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💡 原因和潛在解決方案</h4>
+                    <p>雖然一開始可能不知道問題原因或潛在解決方案，但應該解釋是否有想法</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>範例：票務系統問題描述</h4>
+                <p><strong>情境：</strong>參與者在基準測試任務中需要訂購三張Three Tenors音樂會的票。當她進行任務時，在某一點上她找不到按鈕（位於摺疊下方）來完成交易。</p>
+                
+                <p><strong>問題識別：</strong>「提交」按鈕位於不立即可見的位置，「提交」按鈕上的標籤對於幫助用戶做出自信決策不夠清楚。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>群組相關問題以便一起修復</h3>
+                <p>UX問題可以通過許多不同方式相關，這些方式要求您考慮在同一時間修復它們：物理或邏輯接近性、相同任務中涉及的物件或動作、一致性問題等。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Cost-Importance Analysis -->
+        <div class="slide">
+            <h2>24.4 成本重要性分析：問題修復優先順序</h2>
+            
+            <div class="highlight-box">
+                <h3>什麼是成本重要性分析</h3>
+                <p>成本重要性分析是一種基於優先比率（通過將修復重要性除以成本計算）來優先處理UX評估中發現的UX問題的時間和精力的方法。</p>
+            </div>
+            
+            <div class="priority-matrix">
+                <h3>重要性與成本的關係</h3>
+                <div class="matrix-visual">
+                    <div class="axis-label axis-importance">重要性</div>
+                    <div class="axis-label axis-cost">成本</div>
+                    
+                    <div class="quadrant quadrant-a">
+                        <div>
+                            <strong>A</strong><br>
+                            優先修復<br>
+                            <small>高重要性<br>低成本</small>
+                        </div>
+                    </div>
+                    
+                    <div class="quadrant quadrant-d">
+                        <div>
+                            <strong>D</strong><br>
+                            困難選擇<br>
+                            <small>高重要性<br>高成本</small>
+                        </div>
+                    </div>
+                    
+                    <div class="quadrant quadrant-c">
+                        <div>
+                            <strong>C</strong><br>
+                            可能修復<br>
+                            <small>低重要性<br>低成本</small>
+                        </div>
+                    </div>
+                    
+                    <div class="quadrant quadrant-b">
+                        <div>
+                            <strong>B</strong><br>
+                            可能不修復<br>
+                            <small>低重要性<br>高成本</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>優先順序決策</h4>
+                <p><strong>象限A和B</strong>在優先排名中表現良好；<strong>象限C和D</strong>可能需要更多考慮。象限C代表修復成本低但重要性也低的問題。象限D最困難，雖然修復重要性高，但成本也最昂貴。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Importance Rating -->
+        <div class="slide">
+            <h2>24.4.2 修復重要性</h2>
+            
+            <div class="highlight-box">
+                <h3>重要性評估</h3>
+                <p>次欄是我們對修復問題重要性的估計，與成本無關。重要性可以包括問題對用戶表現、用戶體驗和整體系統完整性一致性的影響。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔴 重要性 = M：必須修復</h4>
+                    <ul>
+                        <li>涉及的UX功能對任務至關重要</li>
+                        <li>對任務或用戶滿意度有重大影響</li>
+                        <li>用戶無法完成關鍵任務或只能非常困難地完成</li>
+                        <li>預期經常發生和/或可能導致昂貴錯誤</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🟡 重要性 = 5：最重要的修復問題</h4>
+                    <p>「必須修復」類別之後最重要的修復問題</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🟠 重要性 = 3：中等影響問題</h4>
+                    <ul>
+                        <li>用戶可以完成任務，但有一定困難</li>
+                        <li>問題導致中等程度不滿</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🟢 重要性 = 1：低影響問題</h4>
+                    <ul>
+                        <li>問題對任務表現或不滿影響不大</li>
+                        <li>輕微用戶困惑或煩惱，但仍值得列出</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>重要性評估調整</h4>
+                <p>我們還需要一些靈活性來分配中間值，因此我們允許重要性評分調整因素，主要是問題發生的預估頻率。如果預期問題發生頻率很高，可以將重要性評分向上調整。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Solutions and Cost -->
+        <div class="slide">
+            <h2>24.4.3 解決方案和24.4.4 修復成本</h2>
+            
+            <div class="highlight-box">
+                <h3>解決方案欄</h3>
+                <p>成本重要性表格的下一欄是針對問題的一個或多個候選解決方案。因此您應該使用與原始設計相同的方法和資源，包括諮詢您的UX研究資料。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>💡 解決方案來源</h4>
+                    <ul>
+                        <li>設計原則和指導原則</li>
+                        <li>理想化和草圖研究</li>
+                        <li>其他類似設計的研究</li>
+                        <li>用戶和專家建議的解決方案</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚠️ 避免的解決方案</h4>
+                    <p>幾乎從不建議將更多培訓或更好的文檔作為UX問題解決方案——這是在修復用戶，而不是UX設計。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>票務系統解決方案範例</h4>
+                <p><strong>問題：</strong>用戶不知道需要點擊「提交」按鈕來進行付款</p>
+                <p><strong>解決方案：</strong>更改標籤用詞以更好地表示如果用戶點擊該按鈕，互動將去向何處。也許「進行付款」會讓用戶更有意義。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>成本估算</h3>
+                <p>成本欄是您估算修復此問題成本的地方，以人工時數為單位。這是您與跨功能產品和工程利害關係人密切合作評估實際修復成本的地方。</p>
+                <ul>
+                    <li>紙質原型修復成本低</li>
+                    <li>中等到高保真度原型成本較高</li>
+                    <li>程式化原型和程式化原型成本可能大幅更高</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: Priority Calculation -->
+        <div class="slide">
+            <h2>24.4.5 優先比率和24.4.6 優先排名</h2>
+            
+            <div class="highlight-box">
+                <h3>優先比率計算</h3>
+                <p>成本重要性表格的下一欄——優先比率——是我們用來建立修復問題優先順序的指標。我們希望獎勵高重要性但懲罰高成本。</p>
+                
+                <div class="quote">
+                    <strong>優先比率 = (重要性 / 成本) × 1,000</strong>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>問題</th>
+                            <th>重要性</th>
+                            <th>解決方案</th>
+                            <th>成本</th>
+                            <th>優先比率</th>
+                            <th>優先排名</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>用戶不知道需要點擊「提交」按鈕</td>
+                            <td>4</td>
+                            <td>更改標籤用詞為「進行付款」</td>
+                            <td>1</td>
+                            <td>4,000</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>座位可用性色彩編碼問題</td>
+                            <td>3</td>
+                            <td>使用更厚字體改善標籤</td>
+                            <td>2</td>
+                            <td>1,500</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>搜尋功能缺失</td>
+                            <td>5</td>
+                            <td>新增搜尋功能</td>
+                            <td>20</td>
+                            <td>250</td>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="example-box">
+                <h4>優先排名邏輯</h4>
+                <p>下一步是按優先比率對表格進行排序以獲得最終優先排名。首先，將所有重要性值為M的問題移至表格頂部。然後按優先比率的降序排序表格其餘部分。</p>
+                
+                <p><strong>結果：</strong>高重要性、低成本的問題（象限A）位於優先列表頂部。這些是首先修復的問題，因為它們會帶來最大收益。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>現實考量</h4>
+                <p>沒有公式能幫助；您需要良好的工程判斷。也許是時候要求更多資源，以便這些重要問題能夠得到修復——這通常是長期值得的解決方案。</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Cumulative Cost -->
+        <div class="slide">
+            <h2>24.4.7 累積成本和24.4.8 可負擔性線</h2>
+            
+            <div class="highlight-box">
+                <h3>累積成本計算</h3>
+                <p>按優先比率排序表格後，下一步是填入累積成本，即修復每個問題的成本加上修復表格中其上方所有問題的成本。</p>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>問題</th>
+                            <th>重要性</th>
+                            <th>成本</th>
+                            <th>累積成本</th>
+                            <th>優先比率</th>
+                            <th>解決方案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #e8f5e8;">
+                            <td>標籤用詞問題</td>
+                            <td>4</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>4,000</td>
+                            <td>更改為「進行付款」</td>
+                        </tr>
+                        <tr style="background: #e8f5e8;">
+                            <td>色彩編碼問題</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>1,500</td>
+                            <td>改善字體</td>
+                        </tr>
+                        <tr style="background: #fff3cd;">
+                            <td>搜尋功能缺失</td>
+                            <td>5</td>
+                            <td>20</td>
+                            <td>23</td>
+                            <td>250</td>
+                            <td>新增搜尋功能</td>
+                        </tr>
+                        <tr style="background: #fdf2f2;">
+                            <td>進階篩選問題</td>
+                            <td>2</td>
+                            <td>15</td>
+                            <td>38</td>
+                            <td>133</td>
+                            <td>重新設計篩選介面</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="example-box">
+                <h4>可負擔性線設定</h4>
+                <p><strong>團隊負責人或專案經理應該確定您的資源限制</strong>，即您能負擔得起分配給當前迭代週期設計變更的人時數。</p>
+                
+                <p>假設票務系統只有相當少的時間可用於日程安排，大約16人工時。可負擔性線出現在累積成本首次超過資源限制的表格行上方。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>決策結果</h4>
+                <ul>
+                    <li><strong>保留到觀望清單</strong> - 暫時擱置</li>
+                    <li><strong>列表直到下一版本</strong> - 延後處理</li>
+                    <li><strong>無限期推遲；可能永遠不會修復</strong> - 成本過高</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Drawing Conclusions -->
+        <div class="slide">
+            <h2>24.4.9 得出結論：每個問題的解決方案</h2>
+            
+            <div class="highlight-box">
+                <h3>問題處理決策</h3>
+                <p>是時候通過決定如何處理每個問題來確定成本重要性分析的回報了。首先，您必須處理「必須修復」的問題，即阻礙者。如果您有足夠的資源，應該全部修復。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>✅ 立即修復</h4>
+                    <p>可負擔性線以上的所有問題，優先排名最高的問題</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⏰ 時間允許時修復</h4>
+                    <p>接近可負擔性線但稍微超出的問題</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 暫緩或推遲</h4>
+                    <p>可負擔性線以下的問題，根據資源和重要性決定</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ 成本過高問題的處理</h4>
+                <p>「必須修復」問題的極端成本可能使在當前版本中修復變得不可行。例外情況肯定會導致成本超支，這可能需要由企業政策、管理層或行銷決定。</p>
+                
+                <p><strong>重要提醒：</strong>不要因為某些感知限制而現在就放棄——投入修復問題的好錢是值得的。品質在預算和時程被遺忘後仍被長久記住。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>最終檢視</h4>
+                <p>最後，看看您的表格；看看可負擔性線以下剩下什麼。這是您所期望的嗎？您能否接受在那條線以下不進行修復？您可能必須面對這樣的事實：一些重要問題現在無法修復，僅僅因為它們太昂貴。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Special Cases -->
+        <div class="slide">
+            <h2>24.4.10 特殊情況</h2>
+            
+            <div class="highlight-box">
+                <h3>處理特殊優先排名情況</h3>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>⚖️ 平手問題</h4>
+                    <p>有時您會在優先排名中遇到平手。如果它們不接近可負擔性線，則不需要對它們做任何事情。在它們跨越可負擔性線的情況下，您可以通過幾乎任何實際方式打破平手。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 多重解決方案</h4>
+                    <p>有時，您會想到多個解決問題的方案。如果經過深思熟慮，您仍然有一個問題的多種可能性，您可以通過成本和/或有效性來區分替代解決方案。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 群組問題</h4>
+                    <p>如果您有一組相關問題正好位於可負擔性線上，那麼工程答案是在資源耗盡之前盡您所能。如有必要，將群組分解並盡可能多地進行。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💥 情感影響問題</h4>
+                    <p>修復情感影響問題的優先順序可能很難評估。它們通常非常重要，因為它們可能代表產品或系統形象和聲譽問題，也可能代表高成本修復。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>安全關鍵系統考量</h4>
+                <p>在更要求的目標系統（例如空中交通管制系統）的情況下，避免問題的重要性，特別是危險的用戶錯誤，比成本更重要，您可以通過在優先比率公式中將重要性權重調整得高於成本來打破優先順序的平衡。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Lessons from Field -->
+        <div class="slide">
+            <h2>24.6 實地經驗教訓</h2>
+            
+            <div class="highlight-box">
+                <h3>洋蔥層效應</h3>
+                <p>有很多原因要對設計進行多次迭代→評估→重新設計部分的UX生命週期。主要原因當然是繼續發現和修復您的目標值。另一個原因是確保您的修復沒有導致新問題。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>🧅 洋蔥層類比</h4>
+                <p>在修復問題時，您可以發現被原始問題掩蓋的新UX問題，阻止參與者和評估者看到新問題，直到通過解決外部問題剝離洋蔥的頂層。</p>
+                
+                <div class="technique-grid">
+                    <div class="technique-card">
+                        <h4>🔍 持續發現</h4>
+                        <p>每次修復都可能揭露之前隱藏的問題</p>
+                    </div>
+                    
+                    <div class="technique-card">
+                        <h4>🔄 迭代改進</h4>
+                        <p>需要多輪評估和修復週期</p>
+                    </div>
+                    
+                    <div class="technique-card">
+                        <h4>✅ 驗證修復</h4>
+                        <p>確保修復沒有產生新問題</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>質量目標收斂</h4>
+                <p>遵循我們反覆出現的使用您自己的思維和經驗來補充遵循流程的主題，我們指出這是使用您直覺的好地方。當您迭代時，應該關注多次迭代的量化結果。</p>
+                
+                <p><strong>關鍵問題：</strong>UX水準是否有可能變得更糟而不是朝正確方向發展？如果您沒有向改進收斂，為什麼沒有？</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Exercise -->
+        <div class="slide">
+            <h2>練習24.1：您的產品或系統的UX評估資料分析</h2>
+            
+            <div class="highlight-box">
+                <h3>實作練習目標</h3>
+                <p><strong>目標：</strong>練習非常簡單的形成性UX評估的分析部分。</p>
+                <p><strong>參考章節：</strong>第24章全部</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 準備工作</h4>
+                    <ul>
+                        <li>填入UX目標表格「觀察結果」欄</li>
+                        <li>與團隊一起編譯和比較量化結果</li>
+                        <li>檢查您的原始關鍵事件註記</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 分析步驟</h4>
+                    <ul>
+                        <li>為每個觀察問題分配重要性評級</li>
+                        <li>提出解決方案（無需完全重新設計）</li>
+                        <li>將相關問題分組並列為單一問題</li>
+                        <li>為每個解決方案分配成本值</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 成果交付</h4>
+                    <ul>
+                        <li>計算優先比率</li>
+                        <li>填入累積成本欄</li>
+                        <li>假設可用時間資源的假設值</li>
+                        <li>劃出可負擔性截止線</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📈 最終決策</h4>
+                    <ul>
+                        <li>確定管理決策：現在和下一版本的變更</li>
+                        <li>準備向班級或工作群組簡報評估結果</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>預期學習成果</h4>
+                <p><strong>時程：</strong>根據您處理的系統複雜性，我們預期您從這個練習中學到所需的內容在1小時或更短時間內完成。</p>
+                
+                <p><strong>交付物：</strong></p>
+                <ul>
+                    <li>量化結果摘要</li>
+                    <li>原始關鍵事件清單</li>
+                    <li>包含三個UX問題的成本重要性表格</li>
+                    <li>向班級簡報評估結果</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: Summary -->
+        <div class="slide">
+            <h2>24.7 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>本章重點回顧</h3>
+                <p>在本章中，我們討論了分析UX評估資料。在下一章中，我們將深入探討向各個利害關係人報告發現和建議。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 量化分析</h4>
+                    <ul>
+                        <li>使用簡單描述性統計</li>
+                        <li>與UX目標比較結果</li>
+                        <li>決定是否停止迭代</li>
+                        <li>標準偏差的重要性</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 質性分析</h4>
+                    <ul>
+                        <li>識別和描述UX問題</li>
+                        <li>組成元素資料註記</li>
+                        <li>整合相關問題描述</li>
+                        <li>群組化處理策略</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚖️ 成本重要性分析</h4>
+                    <ul>
+                        <li>優先比率計算方法</li>
+                        <li>重要性評級系統</li>
+                        <li>成本估算技巧</li>
+                        <li>可負擔性線設定</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 實務應用</h4>
+                    <ul>
+                        <li>決策框架建立</li>
+                        <li>特殊情況處理</li>
+                        <li>洋蔥層效應認知</li>
+                        <li>持續改進策略</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="quote">
+                成功的UX評估資料分析需要結合量化指標、質性洞察和實務判斷，以做出明智的設計決策和資源分配
+            </div>
+            
+            <div class="example-box">
+                <h4>下一步行動</h4>
+                <p>完成資料分析後，下一個關鍵步驟是將發現轉化為可行的建議，並有效地向不同利害關係人傳達結果，這將是我們下一章討論的重點。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">16</span>
+    </div>
+
+    <a href="index.html" class="home-link">Home</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

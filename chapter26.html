@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第26章：連接敏捷UX與敏捷軟體開發</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .methodology-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .method-card {
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .waterfall-method {
+            background: #fdf2f2;
+            border-color: #e74c3c;
+        }
+        
+        .iterative-method {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .agile-method {
+            background: #e8f5e8;
+            border-color: #27ae60;
+        }
+        
+        .sprint-diagram {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .sprint-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .sprint-step {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            min-width: 120px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+        
+        .process-flow {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+        
+        .checklist-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .checklist-table th,
+        .checklist-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .checklist-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .checklist-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .workflow-diagram {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .workflow-steps {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .workflow-step {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            min-width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第26章：連接敏捷UX與敏捷軟體開發</h1>
+            <div class="quote">
+                "敏捷UX設計師必須成為開發時程管理的專家，靈活地在過去、現在和未來的開發活動間移動"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>敏捷軟體工程方法基礎知識</li>
+                    <li>從UX角度理解敏捷SE的挑戰</li>
+                    <li>整合敏捷UX與敏捷SE的綜合方法</li>
+                    <li>UX規劃與衝刺整合策略</li>
+                    <li>同步兩個敏捷工作流程的實務技巧</li>
+                    <li>早期交付與持續交付的價值</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>26.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>敏捷UX漏斗模型的應用</h3>
+                <p>在第四章中，我們介紹了敏捷UX漏斗模型，在後續的所有流程章節中，我們大多假設採用敏捷UX流程。現在我們討論敏捷UX流程如何與敏捷軟體工程（SE）流程在真實專案環境中連接的細節。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>敏捷SE方法的演進</h4>
+                <p>敏捷SE方法現在已廣為人知並普遍使用，是頻繁交付軟體給客戶的增量式測試驅動方法。過去，敏捷SE方法並未將UX納入考量，因為傳統UX流程並不適合SE限制條件。在一天結束時，整個系統開發團隊需要一個包含敏捷UX的整體方法，同時保持敏捷SE方法的基本特色。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>⚠️ 敏捷性不等於速度</h4>
+                <p>許多人將敏捷與快速混淆。雖然敏捷流程經常是快速的，但敏捷性並非由速度定義。快速進行只是意味著工作得更快；敏捷是關於為小範圍設計和交付分塊，這樣我們可以對通過使用學到的新教訓做出反應。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Agile SE Basics -->
+        <div class="slide">
+            <h2>26.2 敏捷軟體工程方法基礎</h2>
+            
+            <div class="highlight-box">
+                <h3>敏捷宣言核心原則</h3>
+                <p>敏捷軟體工程的核心原則包括：</p>
+                <ul>
+                    <li>透過早期和持續交付有價值軟體來滿足客戶</li>
+                    <li>歡迎需求變更，即使在開發後期</li>
+                    <li>頻繁交付可運行軟體，偏好較短的時間尺度</li>
+                    <li>業務人員與開發者必須在整個專案中每日協作</li>
+                    <li>讓可運行軟體成為進展的主要衡量標準</li>
+                </ul>
+            </div>
+            
+            <div class="methodology-comparison">
+                <div class="method-card waterfall-method">
+                    <h4>🌊 瀑布式</h4>
+                    <p>線性順序流程，每個階段完成後才進入下一階段，變更困難且昂貴</p>
+                </div>
+                
+                <div class="method-card iterative-method">
+                    <h4>🔄 迭代式</h4>
+                    <p>在整個系統上重複所有生命週期活動的循環</p>
+                </div>
+                
+                <div class="method-card agile-method">
+                    <h4>⚡ 敏捷式</h4>
+                    <p>為系統的一個功能執行所有生命週期活動，然後移到下一個功能</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Agile SE Characteristics -->
+        <div class="slide">
+            <h2>26.2.2 敏捷軟體工程方法特徵</h2>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 客戶故事導向</h4>
+                    <p>使用客戶故事來描述功能需求，這些故事代表用戶想要的系統能力。客戶故事是關於能力而非抽象系統需求的用戶故事。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🏃‍♂️ 短時間衝刺</h4>
+                    <p>工作被組織成稱為衝刺或迭代的短時間段（通常1-4週），每個衝刺產生可運行的軟體增量。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🤝 持續協作</h4>
+                    <p>開發團隊與客戶、用戶和其他利害關係人保持持續溝通和協作，確保需求理解準確。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 避免大型前期設計</h4>
+                    <p>避免大型設計前期工作（BDUF），偏好儘快開始編寫程式碼，然後透過客戶回饋反應來解決問題。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>成對程式設計</h4>
+                <p>SE從業人員透過成對程式設計的實踐來驗證他們正確編寫程式碼。程式碼由兩個程式設計師共同編寫，分享一個電腦和一個螢幕；也就是說，一個學院總是在另一個程式設計師的肩膀上觀看。</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Agile Sprints -->
+        <div class="slide">
+            <h2>26.3.3 敏捷軟體工程方法中的衝刺</h2>
+            
+            <div class="sprint-diagram">
+                <h3>敏捷軟體工程衝刺結構</h3>
+                <div class="sprint-flow">
+                    <div class="sprint-step">驗收測試<br>創建</div>
+                    <div class="sprint-step">技術基礎<br>任務識別</div>
+                    <div class="sprint-step">結對<br>程式設計</div>
+                    <div class="sprint-step">程式碼<br>測試改進</div>
+                    <div class="sprint-step">客戶<br>驗收測試</div>
+                </div>
+                <p><em>每個SE衝刺包含的活動類型</em></p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>衝刺活動詳述</h3>
+                <ul>
+                    <li><strong>驗收測試創建：</strong>客戶編寫功能驗收測試</li>
+                    <li><strong>單元程式碼測試創建：</strong>團隊透過指派客戶故事進行下個衝刺的工作</li>
+                    <li><strong>實作編碼：</strong>程式設計配對合作編寫支援所選客戶故事功能的模組程式碼</li>
+                    <li><strong>程式碼測試：</strong>程式設計配對運行為剛實作模組設計的單元程式碼測試</li>
+                    <li><strong>回歸測試：</strong>運行所有現有功能的程式碼，確保新模組不會破壞先前實作的模組</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 6: UX Challenges in Agile SE -->
+        <div class="slide">
+            <h2>26.4 從UX角度看敏捷軟體工程方法的挑戰</h2>
+            
+            <div class="warning-box">
+                <h4>敏捷方法對UX的挑戰</h4>
+                <p>敏捷方法讓SE從業人員感到有生產力和控制感，因為他們和客戶（而非總體設計）驅動流程。這些方法價格低廉、快速且輕量，具有早期可交付成果。然而，敏捷SE方法是由程式設計師為程式設計師開發的程式設計方法，從UX角度來看存在一些挑戰。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔍 缺乏前期分析</h4>
+                    <p>敏捷SE方法避開BDUF，因此沒有前期分析來建立系統概念觀和用戶工作實踐。團隊中的一個客戶代表不被期望代表所有觀點、需求和要求。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>👥 用戶代表問題</h4>
+                    <p>可能沒有真實的用戶數據前期，編碼最終基於對用戶需求的假設。客戶代表作為唯一的應用領域專家，許多客戶代表也不是用戶，無法代表工作實踐或其他人。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 設計整合困難</h4>
+                    <p>敏捷SE方法不涉及UX設計，因此流程中沒有設計構思的空間。幾乎不可能開發統一的用戶介面，專門通過分段和自下而上的方法。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>協作挑戰</h4>
+                <p>在第26.6.1中我們展示了UX和SE應該如何在設計和實作中一起工作的一般圖景。然而現實中，SE團隊經常很好地融入其流程中，當UX團隊被引入專案時，UX團隊注定要趕上專案的其餘部分，專案永遠無法從UX團隊本可以完成的工作中受益。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Integration Approach -->
+        <div class="slide">
+            <h2>26.7 整合敏捷UX和敏捷SE的綜合方法</h2>
+            
+            <div class="highlight-box">
+                <h3>整合的必要性</h3>
+                <p>關於將UX納入敏捷SE開發流程的早期文獻大多基於調整UX設計方法以某種方式跟上現有敏捷SE方法，或嘗試在僵化敏捷SE方法存在的情況下做UX設計流程的選定部分。我們嘗試綜合一種方法，允許我們的敏捷UX流程與敏捷SE環境融合，而不在基本UX需求上妥協。</p>
+            </div>
+            
+            <div class="workflow-diagram">
+                <h3>UX與SE協作工作流程</h3>
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <strong>客戶故事</strong><br>
+                        互動功能
+                    </div>
+                    <div class="workflow-step">
+                        <strong>UX</strong><br>
+                        設計表示<br>
+                        草圖、線框圖等
+                    </div>
+                    <div class="workflow-step">
+                        <strong>SE</strong><br>
+                        編碼實作
+                    </div>
+                </div>
+                <p><em>UX和軟體工程（SE）如何協作</em></p>
+            </div>
+            
+            <div class="example-box">
+                <h4>實務分類</h4>
+                <p>在實務中，客戶故事可以分為兩個類別：描述具有互動功能的產品功能的故事，以及描述非互動系統或軟體問題（如安全性或資料庫設計）的故事。UX團隊可以專注於前者類型的客戶故事，生成設計規格並將其傳遞給SE團隊。</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: UX Planning Integration -->
+        <div class="slide">
+            <h2>26.7.1 將UX整合到規劃中</h2>
+            
+            <div class="process-flow">
+                <h3>早期敏捷UX漏斗規劃流程</h3>
+                <div class="flow-step">
+                    <strong>用戶研究：</strong>進行小型前期分析和設計，包括工作領域的理解、概念模型和初始高層概念設計
+                </div>
+                <div class="flow-step">
+                    <strong>故事創建：</strong>UX角色協助客戶編寫用戶故事，確保完整性、適當範圍、一致性和凝聚力
+                </div>
+                <div class="flow-step">
+                    <strong>故事優先順序：</strong>協助客戶代表優先排序用戶故事，引導結果朝向有效的故事集合
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>早期漏斗工作目標</h3>
+                <p>早期漏斗工作的目標包括：</p>
+                <ul>
+                    <li>理解用戶的工作及其情境</li>
+                    <li>識別關鍵工作角色、工作活動和用戶任務</li>
+                    <li>在現有企業和系統中建模工作流程和活動</li>
+                    <li>建立初始高層概念設計</li>
+                    <li>識別反映工作實踐情境中用戶需求的選定用戶故事輸入</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h4>敏捷UX研究的簡潔性</h4>
+                <p>資料捕獲、敏捷UX研究可以簡潔或詳細。我們建議面訪和觀察至少一到兩個關鍵工作角色中的工作實踐。UX從業人員直接在小索引卡上手寫筆記，避免記錄的冗長性。</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Sprint Integration -->
+        <div class="slide">
+            <h2>26.7.2 將UX整合到衝刺中</h2>
+            
+            <div class="sprint-diagram">
+                <h3>UX衝刺對應</h3>
+                <div class="sprint-flow">
+                    <div class="sprint-step">構思與草圖<br>支持故事</div>
+                    <div class="sprint-step">設計、原型製作<br>與概念設計一致</div>
+                    <div class="sprint-step">線框圖實作<br>這個發布的設計</div>
+                </div>
+                <p><em>敏捷軟體工程衝刺的UX對應</em></p>
+            </div>
+            
+            <div class="example-box">
+                <h4>UX衝刺活動</h4>
+                <p>當SE人員進行衝刺時，UX人員和客戶執行他們自己版本的衝刺。他們開始挑選一個故事或一組相關用戶故事的功能。考慮到概念設計，UX設計師開始構思和草圖互動設計來支持用戶故事的功能。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎨 設計走查</h4>
+                    <p>在這個小範圍內，緊密耦合的設計創建-原型製作-評估週期經常以多個靜態線框圖草圖開始，在UX團隊內進行任務級設計創建的構思。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 原型製作</h4>
+                    <p>當UX團隊滿足他們有最佳初始設計時，在與所有利害關係人的走查評估中展示點擊通過線框圖原型的形式。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 規格交付</h4>
+                    <p>然後同樣的走查評估與SE開發者一起進行，以獲得可行性、一致性、平台問題等的回饋。這可能導致多輪修復和精煉，導致開發者實作的交接。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Synchronization -->
+        <div class="slide">
+            <h2>26.7.3 兩個敏捷工作流程的同步</h2>
+            
+            <div class="highlight-box">
+                <h3>交錯活動方法</h3>
+                <p>Miller (2005) 提出了一種「交錯」方法來並行追蹤敏捷開發，其特色是UX活動和SE活動跨多個敏捷開發週期的交錯互動。我們展示了UX人員和SE人員如何透過跨逐步迭代的活動交錯替換來同步他們的工作。</p>
+            </div>
+            
+            <div class="workflow-diagram">
+                <h3>交替UX和軟體工程工作流程</h3>
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <strong>衝刺 0</strong><br>
+                        早期漏斗UX研究<br>
+                        概念設計
+                    </div>
+                    <div class="workflow-step">
+                        <strong>衝刺 1-n</strong><br>
+                        UX設計 ↔ SE實作<br>
+                        交錯進行
+                    </div>
+                    <div class="workflow-step">
+                        <strong>持續</strong><br>
+                        即將到來版本的<br>
+                        持續規劃
+                    </div>
+                </div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔄 詳細工作活動</h4>
+                    <p>跟隨單一版本的生命週期，版本n，我們看到在衝刺n-1中，UX角色為版本n設計，在衝刺n中由SE人員實作。SE人員在衝刺n中評估版本n，並在衝刺n+1和n+2中重新發布。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚡ 早期交付價值</h4>
+                    <p>第一個功能的回饋可以超越該功能及其用法。這是團隊獲得任何真實回饋的第一個機會，包括流程運作方式的回饋、設計的整體風格等。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Late Funnel Checklist -->
+        <div class="slide">
+            <h2>後期漏斗迷你UX流程檢查清單</h2>
+            
+            <table class="checklist-table">
+                <thead>
+                    <tr>
+                        <th>活動步驟</th>
+                        <th>執行日期</th>
+                        <th>負責人員</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>在JIRA中查看用戶故事</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>任務級UX研究和建模：識別工作角色、階層任務庫存、情境、任務序列、業務規則、現有應用程式/系統、工作流程</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>如需要：定義術語、資料庫架構</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>初始UX設計的構思和草圖</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>如適當，繪製狀態流程圖</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>在Sketch中繪製線框圖</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>在InVision和Craft中連接線框圖與導航連結</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>與UX小組：設計走查，迭代</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>獲得UX協議</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>與SE：初始（預實作）設計走查</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>根據SE回饋更新線框圖原型</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>如有用，提高原型保真度</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>與非UX利害關係人：設計走查，如需要則迭代</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>與SE：設計走查和交接</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 12: Communication & Continuous Delivery -->
+        <div class="slide">
+            <h2>26.7.3.3 持續交付</h2>
+            
+            <div class="highlight-box">
+                <h3>持續交付的價值</h3>
+                <p>向客戶和用戶的交付是持續但增量的。在任何給定衝刺（稱為衝刺n）結束時，客戶看到即將到來版本的UX原型；在下一個衝刺n+1中，客戶看到該原型的完整功能實作；在衝刺n+2中，客戶看到該相同原型的UX評估發現；在衝刺n+3中，客戶看到最終重新設計。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>回歸測試的重要性</h4>
+                <p>回歸測試是敏捷SE流程中用於整合最新測試和通過模組與之前開發的所有模組的步驟。沒有回歸測試，敏捷方法只不過是增量瀑布方法。在UX方面，這是一個完全不同的故事。在UX方面進行回歸測試需要在每個衝刺後運行評估，並使用所有測量工具針對來自所有先前衝刺的功能以及當前衝刺的功能進行測試。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📞 同步期間的溝通</h4>
+                    <p>這種交織開發流程帶來了分離的風險。這強化了持續溝通的需要，讓每個人都知道其他人在做什麼、其他人正在取得什麼進展，以及正在遇到什麼問題。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔄 跨迭代規劃</h4>
+                    <p>圖26.9在底部顯示單一框中的規劃，持續延伸至所有衝刺。也就是說，傳達我們不會在離散的小框中進行規劃的想法。規劃更像是一個總體活動，分佈在時間上。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Summary -->
+        <div class="slide">
+            <h2>26.8 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 本章重點回顧</h3>
+                <ul>
+                    <li><strong>敏捷整合：</strong>成功將敏捷UX與敏捷SE整合需要理解兩種方法的核心原則</li>
+                    <li><strong>工作流程同步：</strong>透過交錯活動和持續溝通實現UX與SE團隊的有效協作</li>
+                    <li><strong>早期交付價值：</strong>早期和頻繁的交付提供寶貴的學習機會和回饋循環</li>
+                    <li><strong>規劃整合：</strong>將UX研究和設計活動納入敏捷規劃流程</li>
+                    <li><strong>持續改進：</strong>透過回歸測試和持續評估確保品質</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                本章總結了我們在第6部分和第26章中的討論，展示了敏捷UX流程概念。接下來，在第7部分，我們將進入支持UX設計的UX可負擔性理論和UX設計指南。
+            </div>
+            
+            <div class="highlight-box">
+                <h3>📈 實務建議</h3>
+                <p>成功的敏捷UX實施需要平衡理論與實務，確保在保持敏捷原則的同時不犧牲用戶體驗品質。團隊應該根據專案需求靈活調整流程，同時保持持續學習和改進的心態。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">13</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>

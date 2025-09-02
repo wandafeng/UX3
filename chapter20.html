@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二十章：UX評估目標、指標與目標值</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            min-height: 600px;
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+            display: none;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .slide ul, .slide ol {
+            padding-left: 20px;
+        }
+        
+        .slide li {
+            margin-bottom: 8px;
+            list-style-type: disc;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .ux-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .ux-table th {
+            background: #3498db;
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .ux-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #ecf0f1;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .ux-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .work-role-col {
+            background: #e8f5e8;
+            font-weight: bold;
+            text-align: left;
+        }
+        
+        .example-row {
+            background: #fdf6e3;
+        }
+        
+        .target-table {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .target-table h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            text-align: center;
+        }
+        
+        .ux-wheel {
+            background: #f8f9fa;
+            border-radius: 50%;
+            width: 350px;
+            height: 350px;
+            margin: 20px auto;
+            position: relative;
+            border: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wheel-segment {
+            position: absolute;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+            padding: 5px;
+        }
+        
+        .seg-understand { top: 30px; left: 50%; transform: translateX(-50%); width: 120px; height: 40px; background: #3498db; }
+        .seg-design { top: 70px; right: 50px; width: 100px; height: 35px; background: #2980b9; }
+        .seg-prototype { right: 30px; top: 50%; transform: translateY(-50%); width: 90px; height: 40px; background: #3498db; }
+        .seg-realize { bottom: 70px; right: 50px; width: 100px; height: 35px; background: #2980b9; }
+        .seg-evaluate { bottom: 30px; left: 50%; transform: translateX(-50%); width: 120px; height: 40px; background: #e74c3c; }
+        .seg-reporting { bottom: 70px; left: 50px; width: 100px; height: 35px; background: #27ae60; }
+        .seg-analysis { left: 30px; top: 50%; transform: translateY(-50%); width: 90px; height: 40px; background: #f39c12; }
+        .seg-collection { top: 70px; left: 50px; width: 100px; height: 35px; background: #9b59b6; }
+        
+        .wheel-center {
+            width: 150px;
+            height: 150px;
+            background: #34495e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+            font-size: 1.1em;
+        }
+        
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .technique-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .technique-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .technique-card p {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .goal-hierarchy {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .goal-level {
+            background: #3498db;
+            color: white;
+            margin: 10px auto;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            width: fit-content;
+            min-width: 300px;
+        }
+        
+        .goal-high { background: #e74c3c; }
+        .goal-medium { background: #f39c12; }
+        .goal-low { background: #27ae60; }
+        
+        .measurement-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .flow-step {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            font-weight: bold;
+        }
+        
+        .flow-arrow {
+            font-size: 1.5em;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .benchmark-task {
+            background: #f8f9fa;
+            border: 1px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #3498db;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .home-link:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>第二十章：UX評估目標、指標與目標值</h1>
+            <div class="quote">
+                "UX目標、指標和目標值有助於建立支撐架構，支持評估規劃，這將揭示用戶表現和情感滿意度的問題。如果使用得當，UX目標、指標和目標值會在評估準備的早期階段就設定好。"
+            </div>
+            <div class="highlight-box">
+                <p><strong>本章重點：</strong></p>
+                <ul>
+                    <li>UX目標、指標和目標值的概念</li>
+                    <li>UX目標表格的建構與應用</li>
+                    <li>工作角色與用戶類別的定義</li>
+                    <li>UX目標的設定原則</li>
+                    <li>UX測量工具與基準任務</li>
+                    <li>測量儀器：基準任務與用戶滿意度問卷</li>
+                    <li>UX指標的選擇與設定</li>
+                    <li>基線水平與目標水平的建立</li>
+                    <li>實際應用技巧與注意事項</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Introduction -->
+        <div class="slide">
+            <h2>20.1 導論</h2>
+            
+            <div class="highlight-box">
+                <h3>20.1.1 您在這裡</h3>
+                <p>我們在每個流程章節開始都會提供一個「您在這裡」的圖片，顯示該章節主題在整體 Wheel UX 生命週期模板脈絡中的位置。在本章中，我們建立量化操作目標，用於測量用戶體驗，以評估您設計中成功的水平，這樣您就知道可以進入下一次迭代。</p>
+            </div>
+            
+            <div class="ux-wheel">
+                <div class="wheel-center">UX評估<br>目標、指標<br>與目標值</div>
+                <div class="wheel-segment seg-understand">理解用戶<br>工作和需求</div>
+                <div class="wheel-segment seg-design">創建設計<br>概念</div>
+                <div class="wheel-segment seg-prototype">原型<br>候選方案</div>
+                <div class="wheel-segment seg-realize">實現設計<br>替代方案</div>
+                <div class="wheel-segment seg-evaluate">評估UX</div>
+                <div class="wheel-segment seg-reporting">UX評估：<br>報告結果</div>
+                <div class="wheel-segment seg-analysis">分析UX評估：<br>數據收集</div>
+                <div class="wheel-segment seg-collection">實證UX評估：<br>數據收集</div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>20.1.2 UX指標和目標值的專案脈絡</h4>
+                <p>在早期階段，評估通常專注於找到UX問題的質化數據。後來，您可以使用量化指標來了解您的表現。或者，特別是在敏捷環境中，您可能希望完全放棄UX指標和目標值。</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: UX Target Tables -->
+        <div class="slide">
+            <h2>20.1.3 UX目標表格</h2>
+            
+            <div class="highlight-box">
+                <h3>UX目標表格的價值</h3>
+                <p>通過多年與現實世界的UX專業人員合作並進行我們自己的UX評估，我們已經完善了UX目標表格的概念，這是從可用性規格表格的原始概念衍生而來的。試算表是實施這些表格的明顯方式。</p>
+            </div>
+            
+            <div class="target-table">
+                <h4>表格 20.1 我們的UX目標表格範例</h4>
+                <table class="ux-table">
+                    <thead>
+                        <tr>
+                            <th>工作角色/<br>用戶類別</th>
+                            <th>UX目標</th>
+                            <th>UX測量</th>
+                            <th>測量儀器</th>
+                            <th>UX指標</th>
+                            <th>基線水平</th>
+                            <th>目標水平</th>
+                            <th>觀察結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="work-role-col">UX目標</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="example-box">
+                <h4>高階UX目標範例</h4>
+                <p>從我們的UX研究數據中，我們可以定義票務系統買家的主要高階UX目標：</p>
+                <ul>
+                    <li><strong>快速且輕鬆的初次使用體驗</strong>，無需用戶培訓</li>
+                    <li><strong>快速學習</strong>，使新用戶在有限經驗後的表現與有經驗用戶相當</li>
+                    <li><strong>高客戶滿意度</strong>，導致高回購客戶率</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Work Role and User Classes -->
+        <div class="slide">
+            <h2>20.2 工作角色與用戶類別</h2>
+            
+            <div class="highlight-box">
+                <h3>定義用戶群體</h3>
+                <p>表格 20.1 的第一欄是工作角色和相關用戶類別（計畫承擔此工作角色的用戶群體），您的UX目標適用於該工作角色。表格 20.1 中的下兩欄是相關的UX目標和相關的UX測量，它們組合在一起，因為每個UX測量都是針對支持UX目標而指定的。</p>
+            </div>
+            
+            <div class="target-table">
+                <h4>表格 20.2 為UX目標選擇工作角色和用戶類別</h4>
+                <table class="ux-table">
+                    <thead>
+                        <tr>
+                            <th>工作角色：用戶<br>類別</th>
+                            <th>UX目標</th>
+                            <th>UX測量</th>
+                            <th>測量儀器</th>
+                            <th>UX指標</th>
+                            <th>基線水平</th>
+                            <th>目標水平</th>
+                            <th>觀察結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 票務系統範例</h4>
+                    <p>對於票務系統，我們首先專注於票券買家的用戶工作角色。對於這個工作角色，用戶類別可能包括來自中堡大學的休閒城市居民用戶或學生用戶。在這個例子中，我們特色了休閒城市用戶。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>👥 用戶類別細分</h4>
+                    <p>用戶類別的定義需要考慮用戶的經驗水平、使用頻率、技術能力等因素。不同的用戶類別可能對同一個功能有不同的期望和需求。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: UX Goals -->
+        <div class="slide">
+            <h2>20.3 UX目標</h2>
+            
+            <div class="highlight-box">
+                <h3>UX目標的定義</h3>
+                <p>UX目標是UX設計的高階目標，以用戶體驗願望的形式陳述。UX目標可以由商業目標驅動，並反映產品的實際使用並識別對組織、其客戶和用戶重要的事物。</p>
+            </div>
+            
+            <div class="goal-hierarchy">
+                <div class="goal-level goal-high">快速且輕鬆的初次使用體驗</div>
+                <div class="goal-level goal-medium">高學習能力以便進階任務</div>
+                <div class="goal-level goal-low">吸引力、參與度</div>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 目標設定原則</h4>
+                    <p>UX目標範例包括所有用戶的易用性、間歇用戶的易於記憶、專家的強大表現、安全關鍵系統的避免錯誤、新用戶的高客戶滿意度和輕鬆學習等等。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 商業導向目標</h4>
+                    <p>UX目標應該與商業目標保持一致，反映組織的策略重點和用戶的真實需求。好的UX目標既具體又可測量。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>練習 20.1：為您的產品或系統識別UX評估目標</h4>
+                <p><strong>目標：</strong>獲得設定UX目標的經驗。<br>
+                <strong>活動：</strong>檢視您的UX研究數據分析的工作產品，針對您選擇的系統，記錄與UX目標相關的用戶或客戶關注點。<br>
+                <strong>交付成果：</strong>您選擇系統的一個用戶類別的UX目標簡短列表。<br>
+                <strong>時程：</strong>大約30分鐘的相當簡單的練習。</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: UX Measures -->
+        <div class="slide">
+            <h2>20.4 UX測量</h2>
+            
+            <div class="highlight-box">
+                <h3>UX測量的定義</h3>
+                <p>在UX目標內，UX測量是要測量的一般用戶體驗特徵，與您的UX設計使用相關。UX測量範例包括初始任務表現、長期任務表現、第一印象和初始滿意度。初始表現和第一印象是幾乎每個UX設計的適當UX測量。</p>
+            </div>
+            
+            <div class="measurement-flow">
+                <div class="flow-step">UX目標</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">UX測量</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">測量儀器</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">UX指標</div>
+            </div>
+            
+            <div class="target-table">
+                <h4>表格 20.4 為票務系統選擇初始表現和第一印象作為UX測量</h4>
+                <table class="ux-table">
+                    <thead>
+                        <tr>
+                            <th>工作角色：用戶<br>類別</th>
+                            <th>UX目標</th>
+                            <th>UX測量</th>
+                            <th>測量儀器</th>
+                            <th>UX指標</th>
+                            <th>基線水平</th>
+                            <th>目標水平</th>
+                            <th>觀察結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td>輕鬆易用的<br>新用戶</td>
+                            <td>初始用戶<br>表現</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td>輕鬆易用的<br>新用戶</td>
+                            <td>第一印象</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 7: Measuring Instruments -->
+        <div class="slide">
+            <h2>20.5 測量儀器</h2>
+            
+            <div class="highlight-box">
+                <h3>測量儀器的作用</h3>
+                <p>在UX目標內，測量儀器是產生特定UX測量值的手段；它是創造被測量值的工具。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 基準任務</h4>
+                    <p>基準任務是一個代表性任務，您將讓用戶參與者嘗試在評估中完成，同時您觀察他們的表現和行為。基準任務是標準化任務，可用於比較不同用戶和不同設計版本的表現。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📝 用戶滿意度問卷</h4>
+                    <p>作為主觀UX測量的測量儀器，針對各種UX設計功能的問卷調查可用於確定用戶對UX設計的滿意度。測量用戶滿意度為相關UX測量提供主觀但仍然量化的UX指標。</p>
+                </div>
+            </div>
+            
+            <div class="benchmark-task">
+                <h4>基準任務範例：票務系統</h4>
+                <p><strong>BT1：</strong>前往票務系統並為怪獸卡車拉力賽購買三張票，選擇盡可能靠近舞台前方的三個座位。用主要信用卡付款。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>基準任務設計原則</h4>
+                <ul>
+                    <li>選擇跨系統預期被每個工作角色用戶類別使用的實際任務</li>
+                    <li>任務應該代表真實任務的橫截面，考慮表現頻率和對用戶目標的關鍵性</li>
+                    <li>確保生態有效性：撰寫基準任務以匹配用戶的真實工作情境</li>
+                    <li>使基準任務在合理的時間內可完成，但不要太短以至於無意義</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Benchmark Task Guidelines -->
+        <div class="slide">
+            <h2>20.5.1-20.5.2 基準任務設計指南</h2>
+            
+            <div class="warning-box">
+                <h4>20.5.1.1 選擇基準任務</h4>
+                <p>選擇跨系統預期被每個工作角色用戶類別使用的實際任務。為了為您的評估投資獲得最佳覆蓋，您的選擇應該代表真實任務相對於表現頻率和對設想產品用戶目標的關鍵性的橫截面。基準任務也被選擇來評估新功能、邊際情況和商業或任務關鍵任務。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>✍️ 基準任務描述製作</h4>
+                    <ul>
+                        <li>用清晰、精確、具體和可重複的指示消除任何歧義</li>
+                        <li>告訴用戶要做什麼任務，但不要告訴他們如何做</li>
+                        <li>避免在基準任務中使用在UX設計中專門出現的詞語</li>
+                        <li>使用以工作情境和使用為中心的措辭，而非以系統為導向的措辭</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 任務設計最佳實踐</h4>
+                    <ul>
+                        <li>為用戶保留一些神秘感；避免過於具體</li>
+                        <li>確保生態有效性：撰寫基準任務以匹配用戶的真實工作情境</li>
+                        <li>使基準任務在合理時間內可完成但不會太短而無意義</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>基準任務指導範例</h4>
+                <p><strong>要做的：</strong>「為即將到來的愛麗絲演唱會購買兩張學生票，選擇舞台前方盡可能靠近的相鄰座位並用信用卡付款。」</p>
+                <p><strong>不要做的：</strong>「點擊首頁上的特殊活動按鈕。然後選擇更多螢幕底部。選擇愛麗絲演唱會並點擊座位選項...」</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: UX Metrics -->
+        <div class="slide">
+            <h2>20.6 UX指標</h2>
+            
+            <div class="highlight-box">
+                <h3>UX指標的定義</h3>
+                <p>UX指標描述了您為給定UX目標獲得值的特定特徵。它是您為給定UX目標獲得的值的名稱。例如，在表格 20.7中，測量第一印象的「用戶評級平均超過前五個問題」是指標。一個給定測量可以有多於一個指標。</p>
+            </div>
+            
+            <div class="target-table">
+                <h4>表格 20.7 為UX測量選擇UX指標</h4>
+                <table class="ux-table">
+                    <thead>
+                        <tr>
+                            <th>工作角色：用戶<br>類別</th>
+                            <th>UX目標</th>
+                            <th>UX測量</th>
+                            <th>測量儀器</th>
+                            <th>UX指標</th>
+                            <th>基線水平</th>
+                            <th>目標水平</th>
+                            <th>觀察結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td>輕鬆易用的<br>新用戶</td>
+                            <td>初始用戶<br>表現</td>
+                            <td>BT1：購買怪獸<br>卡車拉力賽票券</td>
+                            <td>完成任務<br>平均時間</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td>輕鬆易用的<br>新用戶</td>
+                            <td>初始客戶<br>滿意度</td>
+                            <td>前五個問題中<br>的用戶介面滿意度<br>問卷（QUIS）</td>
+                            <td>所有用戶<br>評級平均</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 客觀指標</h4>
+                    <p>最常見的UX指標是客觀的、表現導向的，並且在參與者執行基準任務時進行。其他UX指標可以是主觀的，基於從問卷調查結果計算的評級或分數。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>💭 主觀指標</h4>
+                    <p>典型的主觀UX指標將代表來自問卷調查的數字結果，通常基於簡單的算術統計測量，如數字平均值。記住您只是為了用戶體驗的工程指標，而不是統計意義。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Baseline Level -->
+        <div class="slide">
+            <h2>20.7 基線水平</h2>
+            
+            <div class="highlight-box">
+                <h3>基線水平的概念</h3>
+                <p>基線水平是UX指標的假設基準水平；它是與其他水平進行比較的談話點水平。對於此，評估者使用自系統當前版本測量的水平（自動或手動）。有時設定基線水平可能是一個挑戰。答案需要確定系統目前支持的用戶表現和用戶體驗水平。</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>票務系統基線水平範例</h4>
+                <p>為了確定票務系統的前兩個UX基線水平值，我們可以讓某人使用中堡大學票務交易服務（MUTTS）（舊系統）票務櫃台執行基準任務。在任務上的結果時間可能與您期望用戶能夠使用我們的新系統實現的時間大不相同，但至少它是比較的東西。測量基線水平確實使實際上可測量的指標。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🔄 競爭對手基線</h4>
+                    <p>假設我們發現使用怪獸卡車拉力賽活動的當前MUTTS櫃台購買票券大約需要3分鐘。那麼這是第一個UX目標的合理基線水平。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📋 問卷基線</h4>
+                    <p>為了建立第一印象UX測量第二目標的基線值，我們可以對一些MUTTS用戶進行問卷調查。假設我們已經做過，平均分數是6分（滿分10分）作為第一印象UX測量。</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>基線設定注意事項</h4>
+                <p>明顯地，水平值往往是最佳猜測，隨著實踐，UX人員變得相當熟練於建立合理和可信的目標水平和設定合理的值。作為範例，對於初始表現測量，有經驗的UX從業者將設定目標水平，允許熟悉用戶有足夠的時間閱讀選單和標籤，思考一下，並在每個螢幕上環顧四周以獲得他們的方位。</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Target Level -->
+        <div class="slide">
+            <h2>20.8 目標水平</h2>
+            
+            <div class="highlight-box">
+                <h3>目標水平規格</h3>
+                <p>目標水平規格是期望用戶體驗成功的操作定義標準，是UX指標的預期聲明或希望的值。UX指標的目標水平是指示用戶體驗成功達成的最小值。因此，目標水平通常設定為改善對應基線水平。記住目標水平是平均所有相應測量參與者的平均值。</p>
+            </div>
+            
+            <div class="target-table">
+                <h4>表格 20.8 為UX測量設定基線水平</h4>
+                <table class="ux-table">
+                    <thead>
+                        <tr>
+                            <th>工作角色：用戶<br>類別</th>
+                            <th>UX目標</th>
+                            <th>UX測量</th>
+                            <th>測量儀器</th>
+                            <th>UX指標</th>
+                            <th>基線水平</th>
+                            <th>目標水平</th>
+                            <th>觀察結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td>輕鬆易用的<br>新用戶</td>
+                            <td>初始用戶<br>表現</td>
+                            <td>BT1：購買怪獸<br>卡車拉力賽票券</td>
+                            <td>完成任務<br>平均時間</td>
+                            <td>3分鐘，測量<br>於中堡大學<br>既有票務服務<br>(MUTTS)</td>
+                            <td>2.5分鐘</td>
+                            <td></td>
+                        </tr>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td>輕鬆易用的<br>新用戶</td>
+                            <td>初始客戶<br>滿意度</td>
+                            <td>前五個問題中<br>的用戶介面滿意度<br>問卷（QUIS）</td>
+                            <td>所有用戶<br>評級平均</td>
+                            <td>6/10</td>
+                            <td>8/10</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="example-box">
+                <h4>目標水平設定範例</h4>
+                <p>對於第一個初始表現UX測量，我們設定第一個目標水平為2.5分鐘，相對於我們3分鐘基線水平的合理選擇。我們將此值輸入到表格 20.9中第一個UX目標的「目標水平」欄中。鑒於我們第二個目標基於MUTTS用戶的基線水平，我們應該渴望顯著改善並輸入，比如說，8的目標水平。</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Complete UX Target Table -->
+        <div class="slide">
+            <h2>20.9 完整的UX目標表格</h2>
+            
+            <div class="target-table">
+                <h4>表格 20.9 為UX指標設定目標水平</h4>
+                <table class="ux-table">
+                    <thead>
+                        <tr>
+                            <th>工作角色：用戶<br>類別</th>
+                            <th>UX目標</th>
+                            <th>UX測量</th>
+                            <th>測量儀器</th>
+                            <th>UX指標</th>
+                            <th>基線水平</th>
+                            <th>目標水平</th>
+                            <th>觀察結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td>輕鬆易用的<br>新用戶</td>
+                            <td>初始用戶<br>表現</td>
+                            <td>BT1：購買怪獸<br>卡車拉力賽票券</td>
+                            <td>完成任務<br>平均時間</td>
+                            <td>3分鐘</td>
+                            <td>2.5分鐘</td>
+                            <td></td>
+                        </tr>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：城市<br>居民，偶爾用戶，<br>個人使用</td>
+                            <td>輕鬆易用的<br>新用戶</td>
+                            <td>初始客戶<br>滿意度</td>
+                            <td>前五個問題中<br>的用戶介面滿意度<br>問卷（QUIS）</td>
+                            <td>所有用戶<br>評級平均</td>
+                            <td>6/10</td>
+                            <td>8/10</td>
+                            <td></td>
+                        </tr>
+                        <tr class="example-row">
+                            <td class="work-role-col">票券買家：小型<br>音樂會表演</td>
+                            <td>精確度</td>
+                            <td>經驗豐富的用戶<br>錯誤率</td>
+                            <td>BT3：購買票券</td>
+                            <td>任務錯誤的<br>平均數量</td>
+                            <td>少於1個錯誤</td>
+                            <td>0</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>目標水平考慮</h3>
+                <p>考慮第三個目標的目標水平，基線水平少於一個錯誤對於音樂會票券購買任務，它將會被試圖將目標水平設定為零，因為用戶不應該在如此簡單任務上犯錯誤。然而，目標水平為零，作為評估中所有用戶參與者的平均值，不允許任何人犯錯誤。因此，讓我們設定水平為少於一個，作為第三個UX目標表格 20.9中錯誤率的目標水平。</p>
+            </div>
+            
+            <div class="warning-box">
+                <h4>通過用戶體驗測試意味著同時達到所有目標水平</h4>
+                <p>因為通過用戶體驗測試意味著同時達到所有目標水平，您必須確保整個表格中所有UX測量的目標水平同時可達成。明顯地，水平值往往是最佳猜測，然而隨著實踐，UX人員變得相當熟練於建立合理和可信的目標水平並設定合理的值。</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Observed Results -->
+        <div class="slide">
+            <h2>20.9 觀察結果</h2>
+            
+            <div class="highlight-box">
+                <h3>結果記錄與分析</h3>
+                <p>表格 20.9中的最後一欄是觀察結果，這是為記錄在執行規定任務的形成性評估會話期間測量觀察用戶表現的值而保留的空間。因為您通常會有來自多位用戶的觀察結果，您可以在單一觀察結果欄中記錄多個值，或設計更多欄位用於觀察結果，並使用此欄位記錄觀察值的平均。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📊 數據記錄方式</h4>
+                    <p>如果您在試算表中維護您的UX目標表格，如我們推薦的，管理觀察數據和結果稍後在UX評估分析中變得更容易。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔍 結果比較分析</h4>
+                    <p>作為UX目標表格的一部分，此欄提供直接比較指定水平和測試結果之間的方式。這是量化評估研究最有價值的產出之一。</p>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>觀察結果範例</h4>
+                <p>如果您進行多輪評估測試，觀察結果欄可以記錄每輪的結果，幫助追蹤設計改善的進展。例如：</p>
+                <ul>
+                    <li>第一輪測試：平均時間 3.2分鐘</li>
+                    <li>第二輪測試：平均時間 2.8分鐘</li>
+                    <li>最終測試：平均時間 2.4分鐘（達到目標）</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h4>重要提醒</h4>
+                <p>雖然任務時間往往是有用的UX指標，但在某些情況下顯然不適合。例如，如果任務表現時間受到用戶控制之外的因素影響，那麼任務時間就不是用戶表現的良好測量。此例外包括長期和/或不可預測的通訊和回應時間延遲的情況，如在某些網站使用中可能遇到的情況。</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Exercise and Practical Tips -->
+        <div class="slide">
+            <h2>練習 20.2：為您的系統創建基準任務和UX目標</h2>
+            
+            <div class="example-box">
+                <h4>練習目標與步驟</h4>
+                <p><strong>目標：</strong>獲得撰寫有效基準任務和可測量UX目標的經驗。</p>
+                <p><strong>活動：</strong>我們已經為您展示了票務系統的相當完整的基準任務和UX目標範例集合。您的工作是為您選擇的系統做類似的事情。</p>
+                <p><strong>時程：</strong>高效工作並在約90分鐘內完成。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>📋 實施步驟</h4>
+                    <ul>
+                        <li>首先識別您正在針對的工作角色和用戶類別</li>
+                        <li>創建三個或更多UX目標作為UX表格條目（行），包括您基於基準任務的UX目標和至少一個基於問卷調查的目標</li>
+                        <li>創建並撰寫大約三個基準任務以配合表格中的UX目標</li>
+                    </ul>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🎯 設計考量</h4>
+                    <ul>
+                        <li>使任務逐漸複雜</li>
+                        <li>包含一些導航</li>
+                        <li>創建您稍後可以在低保真度快速原型中實施的任務</li>
+                        <li>在適當UX目標的測量儀器欄中包含問卷調查問題號碼</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <h4>注意事項和提示</h4>
+                <ul>
+                    <li>不要在此練習中花太多時間在設計上；我們專注於UX目標和指標</li>
+                    <li>不要計畫給用戶任何培訓</li>
+                    <li>交付成果：兩個用戶基準任務，每個在單獨的紙張上</li>
+                    <li>三個或更多UX目標輸入到空白UX目標表格</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 15: Summary -->
+        <div class="slide">
+            <h2>20.10 總結</h2>
+            
+            <div class="highlight-box">
+                <h3>本章重要概念回顧</h3>
+                <p>在本章中，我們討論了為UX評估設定目標、指標和目標值。在下一章中，我們將進入實證評估研究。</p>
+            </div>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>🎯 目標設定架構</h4>
+                    <p>學會使用UX目標表格系統化地組織評估活動，從工作角色定義開始，逐步建立測量體系。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>📊 測量體系建構</h4>
+                    <p>掌握UX目標、UX測量、測量儀器、UX指標之間的關係，建立完整的量化評估框架。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>⚖️ 基線與目標設定</h4>
+                    <p>學習如何設定合理的基線水平和具挑戰性但可達成的目標水平，為評估提供明確標準。</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>🔧 實務應用技巧</h4>
+                    <p>理解基準任務設計原則，創建生態有效且可測量的評估情境，支持有效的UX評估。</p>
+                </div>
+            </div>
+            
+            <div class="quote">
+                有效的UX評估需要明確的目標和可測量的成功標準。UX目標表格提供了一個結構化的方法來組織和管理評估活動，確保評估結果能夠為設計決策提供有意義的指導。
+            </div>
+            
+            <div class="highlight-box">
+                <h3>下一步：實證評估研究</h3>
+                <p>在建立了清楚的評估目標和指標體系後，我們將學習如何進行實際的實證UX評估研究，包括參與者招募、會話執行、數據收集和結果分析等核心技能。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">15</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // 鍵盤導航
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+        
+        // 初始化
+        showSlide(0);
+    </script>
+</body>
+</html>
