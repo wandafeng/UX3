@@ -47,7 +47,7 @@
             padding: 0;
             /* 使用Grid佈局實現左右排列 */
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 預設每行顯示3個項目 */
+            grid-template-columns: repeat(5, 1fr); /* 每行顯示5個項目 */
             gap: 20px; /* 項目之間的間距 */
             justify-items: center; /* 讓每個網格項目內容置中 */
         }
@@ -67,30 +67,31 @@
         }
 
         .chapter-list li {
-            background: #f8f9fa;
-            border: 2px solid #3498db;
-            border-radius: 10px;
-            padding: 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
             width: 100%; /* 確保項目填滿網格單元 */
             box-sizing: border-box; /* 讓padding和border包含在width內 */
         }
         
-        .chapter-list li:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
         .chapter-list a {
             text-decoration: none;
             color: #34495e;
             font-size: 1.2em;
             font-weight: bold;
             display: block; /* 讓連結填滿整個li區域 */
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .chapter-list a:hover {
             color: #2980b9;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background-color: #e3f2fd;
         }
 
     </style>
@@ -117,6 +118,17 @@
                 <li><a href="chapter16.html">CH16</a></li>
                 <li><a href="chapter17.html">CH17</a></li>
                 <li><a href="chapter18.html">CH18</a></li>
+                <li><a href="chapter19.html">CH19</a></li>
+                <li><a href="chapter20.html">CH20</a></li>
+                <li><a href="chapter21.html">CH21</a></li>
+                <li><a href="chapter22.html">CH22</a></li>
+                <li><a href="chapter23.html">CH23</a></li>
+                <li><a href="chapter24.html">CH24</a></li>
+                <li><a href="chapter25.html">CH25</a></li>
+                <li><a href="chapter26.html">CH26</a></li>
+                <li><a href="chapter27.html">CH27</a></li>
+                <li><a href="chapter28.html">CH28</a></li>
+                <li><a href="chapter29.html">CH29</a></li>
             </ul>
         </div>
     </div>
