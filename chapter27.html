@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第27章：UX設計中的易供性</title>
+    <title>第27章：UX設計中的示能性</title>
     <style>
         body {
             font-family: 'Microsoft JhengHei', Arial, sans-serif;
@@ -20,7 +20,7 @@
             background: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             border-radius: 10px;
-            overflow: visible;
+            overflow: hidden;
         }
         
         .slide {
@@ -58,6 +58,12 @@
             margin-bottom: 10px;
         }
         
+        .slide h4 {
+            color: #2980b9;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+        
         .slide p, .slide li {
             font-size: 1.1em;
             margin-bottom: 10px;
@@ -80,6 +86,90 @@
             border-radius: 5px;
         }
         
+        .definition-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box {
+            background: #fdf2e9;
+            border: 1px solid #f39c12;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .affordance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .affordance-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .affordance-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .affordance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .affordance-table th,
+        .affordance-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .affordance-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .design-checklist {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .checklist-item::before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+        
         .quote {
             font-style: italic;
             text-align: center;
@@ -89,149 +179,6 @@
             padding: 15px;
             background: #f8f9fa;
             border-radius: 5px;
-        }
-        
-        .example-box {
-            background: #e8f5e8;
-            border: 1px solid #27ae60;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        
-        .example-box h4 {
-            color: #27ae60;
-            margin-top: 0;
-        }
-        
-        .warning-box {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        
-        .warning-box h4 {
-            color: #856404;
-            margin-top: 0;
-        }
-        
-        .technique-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .technique-card {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 15px;
-        }
-        
-        .technique-card h4 {
-            color: #2c3e50;
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-        
-        .technique-card p {
-            font-size: 0.9em;
-            color: #6c757d;
-        }
-        
-        .affordance-types {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .types-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .type-card {
-            background: white;
-            border-left: 4px solid;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        
-        .cognitive-card {
-            border-left-color: #e74c3c;
-        }
-        
-        .physical-card {
-            border-left-color: #3498db;
-        }
-        
-        .sensory-card {
-            border-left-color: #f39c12;
-        }
-        
-        .functional-card {
-            border-left-color: #27ae60;
-        }
-        
-        .emotional-card {
-            border-left-color: #9b59b6;
-        }
-        
-        .affordance-diagram {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        .diagram-visual {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .diagram-element {
-            background: #3498db;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 120px;
-            text-align: center;
-            font-weight: bold;
-        }
-        
-        .checklist-container {
-            background: #e8f5e8;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .checklist-item {
-            background: white;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 5px solid #27ae60;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .check-icon {
-            font-size: 1.5em;
-            color: #27ae60;
         }
         
         .navigation {
@@ -262,45 +209,66 @@
             cursor: not-allowed;
         }
         
-        .navigation-container {
+        .slide-counter {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 1000;
+            background: rgba(52, 73, 94, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
         }
         
         .home-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
+            padding: 10px 15px;
             background: #3498db;
             border-radius: 20px;
             font-weight: bold;
             transition: all 0.3s;
             font-size: 0.9em;
-            white-space: nowrap;
         }
         
         .home-link:hover {
             background: #2980b9;
         }
         
-        .slide-counter {
-            background: rgba(52, 73, 94, 0.9);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            white-space: nowrap;
+        .concept-flow {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
         }
         
-        .navigation {
+        .flow-diagram {
             display: flex;
-            gap: 10px;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .flow-item {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 5px;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .flow-arrow {
+            color: #3498db;
+            font-size: 20px;
+            margin: 0 10px;
         }
     </style>
 </head>
@@ -308,609 +276,581 @@
     <div class="presentation-container">
         <!-- Slide 1: Title -->
         <div class="slide active">
-            <h1>第27章：UX設計中的易供性</h1>
+            <h1>第27章：UX設計中的示能性</h1>
             <div class="quote">
-                "在UX設計中，我們專注於幫助用戶，易供性是幫助用戶理解、行動、感知或感受某事的東西。"
+                "示能性是設計中最根本的概念之一，它決定了使用者能否理解和有效使用產品或系統。"
             </div>
             <div class="highlight-box">
                 <p><strong>本章重點：</strong></p>
                 <ul>
-                    <li>易供性的概念</li>
-                    <li>五種不同類型的易供性及其在UX設計中的使用</li>
-                    <li>認知易供性</li>
-                    <li>物理易供性</li>
-                    <li>感知易供性</li>
-                    <li>功能易供性</li>
-                    <li>情感易供性</li>
-                    <li>在UX設計中整合易供性</li>
-                    <li>易供性的UX設計檢核表</li>
-                    <li>用戶創建的易供性作為設計師的提醒</li>
+                    <li>示能性的概念與定義</li>
+                    <li>五種不同類型的示能性及其在UX設計中的應用</li>
+                    <li>認知示能性的重要作用</li>
+                    <li>物理示能性與使用者互動</li>
+                    <li>感官示能性的設計考量</li>
+                    <li>功能示能性與系統效能</li>
+                    <li>情感示能性與使用者體驗</li>
+                    <li>將示能性整合到設計中</li>
+                    <li>UX設計示能性檢核清單</li>
+                    <li>使用者創建示能性作為設計師的警醒</li>
                 </ul>
             </div>
         </div>
 
         <!-- Slide 2: Introduction -->
         <div class="slide">
-            <h2>27.1 簡介</h2>
+            <h2>27.1 導言</h2>
             
-            <div class="highlight-box">
-                <h3>27.1.1 資料來源致謝</h3>
-                <p>我們感謝地承認Taylor & Francis, Ltd.於倫敦發表的《行為與資訊技術》期刊中的一篇論文，作為本章材料的主要來源。</p>
+            <div class="definition-box">
+                <h3>27.1.2 示能性的概念</h3>
+                <p><strong>示能性（Affordance）</strong>是指物件或環境提供給使用者的行動可能性。在UX設計中，示能性是幫助使用者理解、感知、感受某些事物的設計特徵。</p>
             </div>
             
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>📖 易供性概念</h4>
-                    <p>字典對"to afford"的相關部分說，它意味著提供、產生、給予或提供某物。例如，房子中的特定窗戶可能提供戶外的美好景色；窗戶幫助人們看到那個美好的景色。</p>
+            <div class="concept-flow">
+                <h3>示能性的發展歷程</h3>
+                <div class="flow-diagram">
+                    <div class="flow-item">J.J. Gibson 生態學理論</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">Norman 設計理論</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">HCI/UX應用</div>
                 </div>
-                
-                <div class="technique-card">
-                    <h4>🧠 UX設計中的易供性</h4>
-                    <p>在UX設計中，我們專注於幫助用戶，易供性是幫助用戶理解、行動、感知或感受某事的東西。</p>
-                </div>
-            </div>
-            
-            <div class="warning-box">
-                <h4>早期人機互動和UX中的易供性混淆</h4>
-                <p>Norman (1990)正確地認為易供性的概念在可用性和互動設計中是有用的。然而問題是，人們在人機互動（HCI）文獻中鬆散地使用這個術語。它變得被過度使用、誤用、混淆和濫用。</p>
+                <p>從生態心理學概念發展為人機互動設計的核心原理</p>
             </div>
             
             <div class="example-box">
-                <h4>郵箱作為符號認知易供性的範例</h4>
-                <p>作者之一Pardha Pyla在印度長大，當他看到早期軟體電腦系統使用如圖27.1所示的郵件程式圖示時，他會想知道："那是什麼東西？"大多數在印度的家庭沒有這樣的郵箱；在印度，郵遞員直接敲門並將郵件直接交給居住者。</p>
+                <h4>🔑 文化共識與示能性理解</h4>
+                <p>示能性的理解往往依賴於文化共識。例如，郵箱作為象徵性認知示能性的例子：印度的Pardha Pyla初次看到美國的郵箱時，無法理解其用途，直到了解了文化背景才明白其功能。</p>
             </div>
         </div>
 
-        <!-- Slide 3: Five Types of Affordances -->
+        <!-- Slide 3: Types of Affordances -->
         <div class="slide">
-            <h2>27.1.6 UX設計中的五種不同易供性</h2>
+            <h2>27.1.6 UX設計中的五種示能性類型</h2>
             
-            <div class="highlight-box">
-                <h3>易供性類型概述</h3>
-                <p>每種易供性類型在互動中支持用戶方面都扮演不同角色，反映用戶處理過程和用戶在任務執行中所做的行動類型。</p>
-            </div>
-            
-            <div class="affordance-types">
-                <div class="types-grid">
-                    <div class="type-card cognitive-card">
-                        <h4>🧠 認知易供性</h4>
-                        <p>幫助用戶進行認知行動：思考、決策、學習、記憶和了解事物的設計特徵</p>
-                        <p><strong>範例：</strong>幫助用戶知道點擊後會發生什麼的按鈕標籤</p>
-                    </div>
-                    
-                    <div class="type-card physical-card">
-                        <h4>👆 物理易供性</h4>
-                        <p>幫助用戶進行物理行動：點擊、觸摸、手勢和移動事物的設計特徵</p>
-                        <p><strong>範例：</strong>大小足夠讓用戶能夠準確點擊的按鈕</p>
-                    </div>
-                    
-                    <div class="type-card sensory-card">
-                        <h4>👁️ 感知易供性</h4>
-                        <p>幫助用戶進行感知行動：看見、聽見、感覺（和品嚐、嗅覺）事物的設計特徵</p>
-                        <p><strong>範例：</strong>大到足以被識別的標籤字體大小</p>
-                    </div>
-                    
-                    <div class="type-card functional-card">
-                        <h4>⚙️ 功能易供性</h4>
-                        <p>幫助用戶利用產品或系統完成工作的設計特徵（即系統功能的實用性）</p>
-                        <p><strong>範例：</strong>內部系統對一系列數字進行排序的能力（通過用戶點擊排序按鈕呼叫）</p>
-                    </div>
-                    
-                    <div class="type-card emotional-card">
-                        <h4>❤️ 情感易供性</h4>
-                        <p>為用戶體驗增加情感影響並幫助用戶欣賞和享受互動的設計特徵</p>
-                        <p><strong>範例：</strong>網頁上美觀的美學，讓互動變得有趣的東西</p>
-                    </div>
+            <div class="affordance-grid">
+                <div class="affordance-card">
+                    <h4>🧠 認知示能性</h4>
+                    <p><strong>定義：</strong>幫助使用者進行認知行為的設計特徵，如思考、決策、學習、記憶和了解事物</p>
+                    <p><strong>範例：</strong>按鈕標籤告知使用者點擊後會發生什麼</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>🤏 物理示能性</h4>
+                    <p><strong>定義：</strong>幫助使用者進行物理行為的設計特徵，如點擊、觸摸、指向、手勢和移動物件</p>
+                    <p><strong>範例：</strong>按鈕的尺寸足夠大，使用者能準確點擊</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>👁️ 感官示能性</h4>
+                    <p><strong>定義：</strong>幫助使用者進行感官行為的設計特徵，如看見、聽見、觸覺感知</p>
+                    <p><strong>範例：</strong>標籤字型大小足以被辨識</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>⚙️ 功能示能性</h4>
+                    <p><strong>定義：</strong>幫助使用者完成工作的設計特徵，連接使用者行為與系統功能</p>
+                    <p><strong>範例：</strong>系統內部排序數列的能力（透過使用者點擊排序按鈕啟動）</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>💝 情感示能性</h4>
+                    <p><strong>定義：</strong>為使用者體驗增添情感衝擊的設計特徵，增強互動的趣味性和美感</p>
+                    <p><strong>範例：</strong>網頁上的美麗視覺效果，讓互動變得有趣</p>
                 </div>
             </div>
             
-            <div class="example-box">
-                <h4>門把手範例</h4>
-                <p>考慮一個按鈕在用戶介面上可用於點擊。感知易供性幫助您感知（在這種情況下，看到或注意到）它。認知易供性幫助您理解按鈕的用途（在這種情況下，通過理解其標籤的意義）。物理易供性幫助您可靠地點擊這個按鈕。</p>
-            </div>
+            <table class="affordance-table">
+                <thead>
+                    <tr>
+                        <th>示能性類型</th>
+                        <th>設計特徵描述</th>
+                        <th>範例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>認知示能性</td>
+                        <td>幫助使用者進行認知行為：思考、決策、學習、記憶和了解事物</td>
+                        <td>按鈕標籤告知使用者點擊後會發生什麼</td>
+                    </tr>
+                    <tr>
+                        <td>物理示能性</td>
+                        <td>幫助使用者進行物理行為：點擊、觸摸、指向、手勢和移動物件</td>
+                        <td>按鈕的尺寸足夠大，使用者能準確點擊</td>
+                    </tr>
+                    <tr>
+                        <td>感官示能性</td>
+                        <td>幫助使用者進行感官行為：看見、聽見、觸覺感知和嗅覺、味覺感知</td>
+                        <td>標籤字型大小足以被辨識</td>
+                    </tr>
+                    <tr>
+                        <td>功能示能性</td>
+                        <td>幫助使用者完成工作，連接使用者行為與系統或後端功能</td>
+                        <td>系統內部排序數列的能力（透過使用者點擊排序按鈕啟動）</td>
+                    </tr>
+                    <tr>
+                        <td>情感示能性</td>
+                        <td>為使用者體驗增添情感衝擊，連接到樂趣和美感的直覺欣賞，以及身份感和個人成長挑戰</td>
+                        <td>網頁上的美麗視覺效果，讓互動變得有趣</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <!-- Slide 4: Cognitive Affordances -->
         <div class="slide">
-            <h2>27.2 認知易供性</h2>
+            <h2>27.2 認知示能性</h2>
             
-            <div class="highlight-box">
-                <h3>27.2.1 認知易供性的定義</h3>
-                <p>認知易供性是一個設計特徵，幫助、協助、支持、促進或使思考、學習、理解和了解某事成為可能。因此，認知易供性是當今以用戶為中心的設計特徵中最重要的之一。</p>
+            <div class="definition-box">
+                <h3>27.2.1 認知示能性的定義</h3>
+                <p>認知示能性是幫助、輔助、支持、促進或啟用思考、學習、理解和了解事物的設計特徵。這是現今互動式系統、螢幕型或其他類型使用者導向設計特徵中最重要的特徵之一。</p>
             </div>
             
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🔑 認知支持的關鍵</h4>
-                    <p>回答Norman (1999)代表用戶提出的問題："你如何知道該做什麼（以及如何做）？"知道該採取什麼行動來回應環境並預測行動結果對我們的認知和人腦運作是基礎的。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🎯 語意與含義</h4>
-                    <p>認知易供性與UI物品的語意或含義相關聯。作為一個簡單的例子，圖示符號清楚地傳達其含義可能是一個認知易供性，使用戶能夠理解圖示的功能。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>💭 回饋機制</h4>
-                    <p>認知易供性的另一個用途是回饋中——幫助用戶知道用戶行動的結果（例如，知道按鈕點擊後發生了什麼以及相應系統功能的執行）。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🎓 學習支援</h4>
-                    <p>認知易供性在UX設計中扮演主要角色，特別是對需要理解和學習幫助的經驗較少的用戶。</p>
-                </div>
+            <div class="highlight-box">
+                <h3>認知示能性的重要作用</h3>
+                <p>認知示能性在UX設計中扮演關鍵角色，特別對缺乏經驗的使用者而言，他們需要幫助來理解和學習。認知示能性是回答Norman(1999)代表使用者提出問題的關鍵：「我如何知道該做什麼（以及如何做）？」</p>
             </div>
             
             <div class="example-box">
-                <h4>郵件圖示作為認知易供性範例</h4>
-                <p>圖27.4顯示一個清楚的郵件圖示範例，這是一個圖形認知易供性，代表世界中的知識。這個圖示是一個清楚簡潔的方式，使用簡單圖像來傳達對應按鍵背後的意義——這就是您發送郵件的方式。</p>
+                <h4>📧 郵件圖示作為認知示能性範例</h4>
+                <p>圖27.4顯示的郵件圖示是圖形認知示能性的一個例子，代表世界中的知識。這個圖示是使用簡單影像傳達相應關鍵意義的清晰簡潔方式，但前提是發送者和使用者對圖示的意義有相同理解。</p>
             </div>
-        </div>
-
-        <!-- Slide 5: Shared Cultural Conventions -->
-        <div class="slide">
-            <h2>27.2.3 在共享慣例中發現的認知易供性含義</h2>
             
-            <div class="highlight-box">
-                <h3>文化慣例的重要性</h3>
-                <p>認知易供性的一個重要功能是從設計師到用戶的溝通，這取決於對意義的協議，但易供性的含義通常不是其外觀固有的。符號本身可能沒有固有意義。</p>
+            <div class="concept-flow">
+                <h3>使用者獲取認知支持資訊的方式</h3>
+                <div class="flow-diagram">
+                    <div class="flow-item">頭腦中的知識</div>
+                    <span class="flow-arrow">+</span>
+                    <div class="flow-item">世界中的知識</div>
+                    <span class="flow-arrow">+</span>
+                    <div class="flow-item">設計中的知識</div>
+                </div>
+                <p>認知示能性整合這三種知識來源，幫助使用者做出正確決策</p>
             </div>
             
             <div class="warning-box">
-                <h4>⚠️ 錯誤認知易供性的問題</h4>
-                <p>Gibson (1977)稱之為"易供性中的錯誤資訊"。作為一個例子，考慮一個看起來像門但實際上不提供通道的玻璃面板。Draper和Barton (1993)稱之為"易供性錯誤"。</p>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🚪 開門設備範例</h4>
-                    <p>按照《日常事物的設計》(Norman, 1990)的傳統，我們用一個簡單普遍的非電腦設備——開門設備來說明。五金店同時出售圓形門把手和槓桿式門把手。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔍 視覺設計傳達</h4>
-                    <p>兩種的視覺設計都傳達了內建的認知易供性，幫助用戶思考或了解使用方式，透過其外觀給用戶的暗示訊息。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🏠 推拉操作</h4>
-                    <p>在用戶必須推門打開的情況下，設計師經常通過安裝黃銅板來幫助用戶理解，顯示一個人應該推而不是拉的地方。即使這個板子也可能有助於避免手印。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🌍 文化差異考量</h4>
-                    <p>有時門的物理易供性是由門本身提供的；人們可以透過推門來打開某些擺動門。類似地，有時擺動門的用戶必須通過拉動來打開它。門本身通常不會為拉動動作提供足夠的物理易供性，因此添加了拉手。</p>
-                </div>
-            </div>
-            
-            <div class="example-box">
-                <h4>練習27.1：基於文化慣例的意義理解</h4>
-                <p>您能想到任何情況嗎，其中一個物體的意義根據共享慣例在一種文化中被理解，但在另一種文化中要麼沒有意義，要麼具有完全不同的意義？這些差異如何影響來自另一種文化的人的行為？</p>
+                <h4>⚠️ 虛假認知示能性的危險</h4>
+                <p>虛假認知示能性會誤導和迷惑使用者。例如看起來像門但實際不提供通道的玻璃面板，或是看起來像按鈕但沒有功能性的連結。Gibson(1977)稱此為「示能性中的錯誤資訊」。</p>
             </div>
         </div>
 
-        <!-- Slide 6: Physical Affordances -->
+        <!-- Slide 5: Physical Affordances -->
         <div class="slide">
-            <h2>27.3 物理易供性</h2>
+            <h2>27.3 物理示能性</h2>
             
-            <div class="highlight-box">
-                <h3>27.3.1 物理易供性的定義</h3>
-                <p>物理易供性是一個設計特徵，幫助、協助、支持、促進或使物理動作成為可能，通常是為了操作UI物件。物理動作包括點擊、抓取、拖動、觸摸和滑動等。</p>
+            <div class="definition-box">
+                <h3>27.3.1 物理示能性的定義</h3>
+                <p>物理示能性是幫助、輔助、支持、促進或啟用物理行為的設計特徵，通常用於操縱UI物件。適當的尺寸和易於接觸的位置可能是介面按鈕設計的物理示能性特徵。</p>
             </div>
             
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🎯 經驗用戶的角色</h4>
-                    <p>如我們所說，認知易供性對新手用戶扮演主要角色。物理易供性也扮演主要角色，只是對經驗豐富或資深用戶。他們的生產力和任務表現都關乎物理動作的速度。</p>
+            <div class="affordance-grid">
+                <div class="affordance-card">
+                    <h4>🎯 針對經驗豐富或高效能使用者的重要角色</h4>
+                    <p>物理示能性對於新手使用者和經驗豐富的使用者都很重要，但對經驗豐富或高效能使用者來說扮演關鍵角色。他們的生產力和任務效能都關乎物理行為的速度。</p>
                 </div>
                 
-                <div class="technique-card">
-                    <h4>⚡ 速度與效率</h4>
-                    <p>能夠快速且無錯誤地進行物理動作。因為資深用戶已經理解該做什麼行動，他們對認知易供性的需求較少。</p>
+                <div class="affordance-card">
+                    <h4>🔧 物理性概念</h4>
+                    <p>物理性是指與真實物理硬體裝置的直接物理互動，如抓握和移動旋鈕和控制桿。這不是關於點擊軟觸控顯示控制，而是關於推拉、觸摸和轉動真實硬體裝置。</p>
                 </div>
                 
-                <div class="technique-card">
-                    <h4>📱 設備差異</h4>
-                    <p>您決定某個物理易供性比另一個更好的方式可能取決於個別用戶。圖27.11顯示了老式BlackBerry手機，少數具有完整硬體鍵盤的智慧手機之一。</p>
+                <div class="affordance-card">
+                    <h4>📏 手部靈活度與菲茨定律</h4>
+                    <p>影響物理示能性的特徵包括物件的尺寸和位置。菲茨定律是基於經驗的數學公式理論，管理HCI/UX中的物理移動，預測從初始位置移動到目標物件的時間。</p>
                 </div>
                 
-                <div class="technique-card">
-                    <h4>🔄 使用者偏好</h4>
-                    <p>有些人就是喜歡有真實鍵盤，能夠給予觸覺回饋。這是BlackBerry製造商在設計中長時間保留它的一個原因。</p>
+                <div class="affordance-card">
+                    <h4>🎚️ 物理過度射擊</h4>
+                    <p>物理行為過度射擊是指在移動物件、游標、滑桿、控制桿或開關時，物理行為超出預期位置。可以通過建立物理約束來設計控制過度射擊。</p>
                 </div>
             </div>
             
             <div class="example-box">
-                <h4>購物車按鈕作為物理易供性</h4>
-                <p>當我們將按鈕分析為物理易供性時，我們問："點擊這個按鈕有多容易？"答案當然是，點擊這個按鈕非常容易——畢竟，他們希望您盡可能多地添加到您的購物車中。</p>
+                <h4>🚗 汽車變速桿的物理性範例</h4>
+                <p>圖27.17顯示的汽車變速桿是物理性的典型例子。變速桿本身看起來可抓握，位置適合駕駛員的手，皮革外層提供良好的抓握質感。幾乎每個人都喜歡這種變速桿提供的物理性，在換檔時提供確實的抓握感和滿意的控制感。</p>
             </div>
             
             <div class="warning-box">
-                <h4>物理過度操作</h4>
-                <p>物理動作過度操作是當您移動物件、游標、滑塊、槓桿或開關時，您在進行物理動作時超出了您的意圖。在電腦介面中的範例是當您拉動滑塊條時設定過遠。</p>
+                <h4>物理示能性設計問題</h4>
+                <ul>
+                    <li>幫助使用者執行物理行為</li>
+                    <li>適應身體障礙</li>
+                    <li>避免物理行為的笨拙性</li>
+                    <li>支援人體工學和槓桿菲茨定律</li>
+                    <li>協助手部靈活度和推拉操作</li>
+                    <li>避免物理行為過度射擊的特徵</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 7: Sensory Affordances -->
+        <!-- Slide 6: Sensory Affordances -->
         <div class="slide">
-            <h2>27.4 感知易供性</h2>
+            <h2>27.4 感官示能性</h2>
             
-            <div class="highlight-box">
-                <h3>27.4.1 感知易供性的定義</h3>
-                <p>感知易供性是一個設計特徵，幫助、協助、支持、促進或使用戶感知（例如，看見、聽見、觸摸、感覺）互動物件，如認知、物理或情感易供性。</p>
+            <div class="definition-box">
+                <h3>27.4.1 感官示能性的定義</h3>
+                <p>感官示能性是幫助、輔助、支持、促進或啟用使用者感官行為（如看見、聽見、觸摸、感覺）互動物件的設計特徵。感官示能性的設計問題包括UI物件的呈現以及可注意性、可辨別性、易讀性和可聽性等特徵。</p>
             </div>
             
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>👁️ 視覺設計問題</h4>
+            <div class="highlight-box">
+                <h3>27.4.2 感官示能性在支援其他示能性中的設計</h3>
+                <p>感官示能性被用作認知示能性和物理示能性呈現設計中的支援示能性。為了讓認知示能性和物理示能性發揮各自的作用，使用者必須能夠感知（看見、聽見或觸摸）它們，這意味著認知示能性和物理示能性的呈現和外觀都是關於感官示能性的。</p>
+            </div>
+            
+            <div class="affordance-grid">
+                <div class="affordance-card">
+                    <h4>👁️ 視覺感官示能性設計問題</h4>
                     <ul>
                         <li>可見性</li>
-                        <li>注意性</li>
-                        <li>辨識性</li>
-                        <li>文字清晰度</li>
-                        <li>區分性</li>
+                        <li>可注意性</li>
+                        <li>可辨別性</li>
+                        <li>文字易讀性</li>
+                        <li>可區別性</li>
                         <li>顏色</li>
                         <li>呈現時機</li>
                     </ul>
                 </div>
                 
-                <div class="technique-card">
-                    <h4>🎵 聽覺設計問題</h4>
+                <div class="affordance-card">
+                    <h4>👂 聽覺感官問題</h4>
                     <ul>
-                        <li>聽覺性問題（可見性問題的對應）</li>
-                        <li>用戶能聽到聲音嗎？</li>
-                        <li>音頻提示的注意性</li>
-                        <li>音頻提示音量（注意性的主要因素）</li>
-                        <li>用戶控制音量的能力</li>
+                        <li>可聽性問題（與可見性問題相對）</li>
+                        <li>音訊提示的可注意性</li>
+                        <li>音訊提示的音量（可注意性的主要因素）</li>
+                        <li>音訊的可理解性、可辨別性、可區別性</li>
+                        <li>音訊品質</li>
+                        <li>頻率、音調、聲音組成</li>
+                        <li>音訊提示的時機</li>
+                        <li>音訊提示的語調</li>
                     </ul>
                 </div>
                 
-                <div class="technique-card">
-                    <h4>✋ 觸覺感知問題</h4>
+                <div class="affordance-card">
+                    <h4>🤚 觸覺和觸感感官問題</h4>
                     <ul>
-                        <li>注意性：觸覺信號是否足夠強烈讓用戶感覺到？</li>
-                        <li>辨識性：用戶能辨識出給定的觸覺信號嗎？</li>
-                        <li>區分性：是否有足夠的觸覺表現差異讓用戶區分？</li>
-                        <li>一致性：觸覺和haptic表現在意義上是否一致？</li>
+                        <li>可注意性：觸覺訊號是否足夠強烈讓使用者感受到？</li>
+                        <li>可辨別性：使用者能分辨出給定的觸覺訊號是什麼嗎？</li>
+                        <li>可區別性：是否有足夠的差異讓使用者區分？</li>
+                        <li>一致性：觸覺和觸感表示在意義上是否一致？</li>
+                        <li>語調：觸覺和其他感官刺激是否不會造成刺激？</li>
                     </ul>
                 </div>
+            </div>
+            
+            <div class="example-box">
+                <h4>🧴 洗髮精和潤髮乳瓶子區別範例</h4>
+                <p>在淋浴時，考慮圖27.24中的兩個瓶子，一個用於洗髮精，一個用於潤髮乳。這些瓶子用途不同，但外觀如此相似，使用者無法輕易區分。重要的區別標籤隱藏在其他文字中，字型非常小，特別是對於眼中有肥皂水的使用者來說難以辨識。</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Functional and Emotional Affordances -->
+        <div class="slide">
+            <h2>27.5 功能示能性與27.6 情感示能性</h2>
+            
+            <div class="affordance-grid">
+                <div class="affordance-card">
+                    <h4>⚙️ 功能示能性</h4>
+                    <p><strong>定義：</strong>幫助使用者完成工作的設計特徵，透過連接物理使用者行為與系統或後端功能來實現。</p>
+                    <p><strong>重點：</strong>功能示能性是使用者希望執行某項行為的原因；他們希望存取功能來完成某些工作。</p>
+                    <div class="example-box">
+                        <p><strong>範例：</strong>購物車按鈕的功能示能性在於後端軟體執行按鈕標籤所暗示的功能，將選定的項目放入虛擬購物車中。</p>
+                    </div>
+                </div>
                 
-                <div class="technique-card">
-                    <h4>🏪 可見性範例</h4>
-                    <p>除臭劑商店範例：購物者有購買除臭劑的簡單任務。商店已重新組織，所以他無法依靠記憶來定位除臭劑。他希望在架子上尋找標誌，但沒有匹配他搜索目標的東西。</p>
+                <div class="affordance-card">
+                    <h4>💝 情感示能性</h4>
+                    <p><strong>定義：</strong>幫助使用者在使用者體驗中建立情感連結的設計特徵。情感示能性包括連接到樂趣和美感直覺欣賞以及身份感和個人成長挑戰的設計特徵。</p>
+                    <div class="example-box">
+                        <p><strong>意義感支援：</strong>意義感是情感衝擊中產生的現象，演變成人類與已成為使用者生活方式一部分的產品之間發展並持續的個人關係。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="concept-flow">
+                <h3>示能性整合設計方法</h3>
+                <div class="flow-diagram">
+                    <div class="flow-item">功能性</div>
+                    <span class="flow-arrow">+</span>
+                    <div class="flow-item">可用性</div>
+                    <span class="flow-arrow">+</span>
+                    <div class="flow-item">可感知性</div>
+                    <span class="flow-arrow">+</span>
+                    <div class="flow-item">可操作性</div>
+                    <span class="flow-arrow">+</span>
+                    <div class="flow-item">情感體驗</div>
+                </div>
+                <p>整合所有示能性類型以創造完整的使用者體驗</p>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🎯 UX設計中示能性的整合方法</h3>
+                <p>整合UX設計中不同類型示能性的方法促使我們將所有五種示能性角色一起考慮在互動藝術品的設計中：</p>
+                <ol>
+                    <li>這個互動物件或藝術品的功能性是什麼？</li>
+                    <li>設計是否包含關於如何使用藝術品或系統結果的清晰、可理解的線索？</li>
+                    <li>使用者能否輕易感知到藝術品操作的視覺（或其他）線索？</li>
+                    <li>目標使用者群體中的所有使用者是否都能輕易操作該藝術品？</li>
+                    <li>使用者是否能輕易感知到用於操作的藝術品？</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 8: Design Checklist -->
+        <div class="slide">
+            <h2>27.7 UX設計示能性檢核清單</h2>
+            
+            <div class="design-checklist">
+                <h3>UX設計示能性檢核清單</h3>
+                <div class="checklist-item">功能示能性</div>
+                <div class="checklist-item">認知示能性</div>
+                <div class="checklist-item">物理示能性</div>
+                <div class="checklist-item">感官示能性</div>
+                <div class="checklist-item">情感示能性</div>
+            </div>
+            
+            <div class="affordance-grid">
+                <div class="affordance-card">
+                    <h4>🔧 功能示能性考量</h4>
+                    <p>設計師應該問：如果使用者意圖的功能是適當的、可用的，如果沒有，其他示能性都不會有用處。如果功能示能性沒問題，那麼我們檢查此項目並繼續。</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>🧠 認知示能性考量</h4>
+                    <p>檢核清單上的下一項是認知示能性考量。標籤中表達的意義是否清晰？標籤是否清楚地說明了觸發排序功能的目的？</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>🤏 物理示能性考量</h4>
+                    <p>設計師接下來考慮按鈕設計中物理示能性如何得到支援。按鈕的尺寸是否足夠大，能夠輕易點擊？按鈕的位置是否方便使用者點擊？</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>👁️ 感官示能性考量</h4>
+                    <p>設計師被要求在支援認知示能性和物理示能性的按鈕設計中考慮感官示能性。按鈕必須是使用者能夠感知的顏色、尺寸和形狀。</p>
                 </div>
             </div>
             
             <div class="example-box">
-                <h4>黑色背景上的黑色圖示</h4>
-                <p>這些符號既不容易辨識也不具視覺吸引力，即使在良好的光線下。符號也沒有凸起到足以成為觸覺輸入。這也是關於在情境中使用設計的好例子。</p>
-            </div>
-        </div>
-
-        <!-- Slide 8: Functional Affordances -->
-        <div class="slide">
-            <h2>27.5 功能易供性</h2>
-            
-            <div class="highlight-box">
-                <h3>功能易供性的定義</h3>
-                <p>功能易供性是一個設計特徵，通過連接物理用戶行動到系統或後端功能來幫助用戶完成工作。功能易供性是用戶進行行動的原因；他們希望獲得功能來做某事。</p>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🔗 連接用戶與系統</h4>
-                    <p>功能易供性將用戶連接到通過UI背後軟體的有用性元件的用戶體驗。例如，如果您查看圖27.29中顯示"添加到購物車"的按鈕，功能易供性與該按鈕位於後端應用程式中的軟體相關。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>⚙️ 後端功能</h4>
-                    <p>執行按鈕標籤所暗示功能的軟體——在這種情況下，它將選定的項目放入Amazon.com上的虛擬購物車中。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🎯 合法評估</h4>
-                    <p>功能易供性的存在和有效性可以成為UX評估的合法部分。除此之外，功能易供性主要在軟體設計師和程式設計師的領域。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔧 實作考量</h4>
-                    <p>功能易供性將用戶與他們通過UI所需功能連接起來。功能易供性是關於為用戶提供所需功能的，而不是關於呈現或操作該功能。</p>
-                </div>
-            </div>
-            
-            <div class="example-box">
-                <h4>添加到購物車功能</h4>
-                <p>圖27.29顯示一個"添加到購物車"按鈕，被視為導致後端軟體功能易供性的物理易供性。如果您查看圖27.29中說"添加到購物車"的按鈕，功能易供性與該按鈕在後端軟體中的處理相關聯。</p>
-            </div>
-        </div>
-
-        <!-- Slide 9: Emotional Affordances -->
-        <div class="slide">
-            <h2>27.6 情感易供性</h2>
-            
-            <div class="highlight-box">
-                <h3>27.6.1 情感易供性的定義</h3>
-                <p>情感易供性是一個設計特徵，幫助用戶與用戶體驗建立情感連接，從而產生情感影響。情感易供性包括連接到我們對樂趣和美學直覺欣賞的設計特徵，以及我們對身份和個人成長挑戰的感知。</p>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>💎 超越功能性</h4>
-                    <p>許多UX設計滿足所有功能要求但不是很令人興奮或有趣。它們勾選所有方框但不點亮燈光。差異在於情感影響。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>📱 行動裝置世界</h4>
-                    <p>情感影響已成為大多數UX設計中用戶體驗的重要組成部分。行動裝置世界正引領嘗試利用情感易供性來吸引客戶的努力。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🚗 汽車設計範例</h4>
-                    <p>情感影響是汽車設計世界的核心概念。今天的汽車製造商競相追求駕駛樂趣和使用電子娛樂系統的趣味。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🤖 情感智能設備</h4>
-                    <p>有些人甚至提出了能夠感知和理解用戶情感的電腦和設備（Norman & Picard, 2010）。</p>
-                </div>
-            </div>
-            
-            <div class="example-box">
-                <h4>支持意義性的易供性</h4>
-                <p>意義性是一個來自情感影響並發展成人與已成為用戶生活方式一部分的產品之間個人關係的現象。很難分離出能賦予意義性的單一設計特徵。</p>
-            </div>
-        </div>
-
-        <!-- Slide 10: Putting Affordances Together -->
-        <div class="slide">
-            <h2>27.7 在設計中整合易供性</h2>
-            
-            <div class="highlight-box">
-                <h3>用戶工作目標需要易供性共同工作</h3>
-                <p>用戶工作目標需要易供性一起工作（圖27.30）。以下是UX設計易供性一起工作以滿足用戶需求的方式：</p>
-            </div>
-            
-            <div class="affordance-diagram">
-                <h3>易供性整合設計方法</h3>
-                <div class="diagram-visual">
-                    <div class="diagram-element">認知</div>
-                    <div class="diagram-element">物理</div>
-                    <div class="diagram-element">感知</div>
-                    <div class="diagram-element">功能</div>
-                    <div class="diagram-element">情感</div>
-                </div>
-                <p><em>用戶互動需求直接關聯到設計中的易供性</em></p>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🧠 理解需求</h4>
-                    <p>用戶必須理解互動物件（通過認知易供性）</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🖱️ 操作需求</h4>
-                    <p>用戶必須能夠操作互動物件（通過物理易供性）</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>👀 感知需求</h4>
-                    <p>用戶必須能夠感知互動物件（通過感知易供性）</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>⚙️ 功能需求</h4>
-                    <p>用戶必須有他們需要的功能存取權（通過功能易供性）</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>❤️ 情感需求</h4>
-                    <p>用戶希望在過程中產生良好的情感體驗（通過情感易供性）</p>
-                </div>
+                <h4>💡 排序功能示能性範例</h4>
+                <p>考慮調用某種排序功能按鈕的設計。這個簡單範例幫助您了解檢核清單的運作方式。</p>
             </div>
             
             <div class="warning-box">
-                <h4>易供性設計平衡</h4>
-                <p>考慮一個易供性角色但忽略另一個可能導致有缺陷的設計。例如，如果回饋訊息的用詞經過精心設計，清楚、有用且有幫助（好的認知易供性），但用戶沒有注意到訊息，因為它顯示在他們的注意力焦點之外（差的感知易供性）。</p>
+                <h4>⚠️ 設計平衡的重要性</h4>
+                <p>只考慮一種示能性角色而忽略另一種可能導致設計缺陷。例如，如果回饋訊息的文字經過精心設計（良好的認知示能性），但使用者因為顯示在他們注意力焦點之外而不注意到（差的感官示能性），或是使用者無法閱讀因為字型太小（差的感官示能性），網路設計將無效。</p>
             </div>
         </div>
 
-        <!-- Slide 11: UX Design Checklist -->
+        <!-- Slide 9: User-Created Affordances -->
         <div class="slide">
-            <h2>27.7.2 易供性的UX設計檢核表</h2>
+            <h2>27.8 使用者創建示能性作為設計師的警醒</h2>
+            
+            <div class="definition-box">
+                <h3>使用者創建示能性的定義</h3>
+                <p>使用者創建示能性是指使用者為了更好的使用體驗而添加到原始設計中的示能性（例如在標籤上貼膠帶）。</p>
+            </div>
             
             <div class="highlight-box">
-                <h3>設計檢核工具</h3>
-                <p>易供性集合將為您提供一種UX設計檢核表，對照該檢核表檢查您設計的每個部分（圖27.31）。</p>
+                <h3>🚨 設計師的警醒訊號</h3>
+                <p>如果日常世界中的設備不適合使用者，我們經常會看到使用者修改設備，簡要而不知不覺地切換到設計師角色。我們在裝置上看到所有這些小小的認知或物理示能性添加，都是使用者創建的。這些使用者創建示能性的痕跡就像喚醒訊息，告訴設計師使用者認為在設計中遺漏了什麼。</p>
             </div>
             
-            <div class="checklist-container">
-                <h3>UX設計易供性檢核表</h3>
-                
-                <div class="checklist-item">
-                    <span class="check-icon">✓</span>
-                    <div>
-                        <h4>功能易供性</h4>
-                        <p>設計師應該問意圖功能性，功能易供性是否適當。如果可以，沒有其他易供性將有用。如果功能易供性沒問題，那麼我們將這個項目從清單中勾掉。</p>
-                    </div>
+            <div class="affordance-grid">
+                <div class="affordance-card">
+                    <h4>🗂️ 複印機黑暗度圖示範例</h4>
+                    <p>圖27.35顯示的是家用辦公室複印機上亮度和黑暗度設定的圖示。這些圖示含義模糊：更淺的複印件是白色，但白色的複印件可以解讀為複印件的一部分，看起來密度較高。</p>
                 </div>
                 
-                <div class="checklist-item">
-                    <span class="check-icon">✓</span>
-                    <div>
-                        <h4>認知易供性</h4>
-                        <p>設計師接下來被引導考慮認知易供性考量。標籤中表達的意義是否清楚，在這種情況下，在標籤或選單選擇中調用排序功能？</p>
-                    </div>
+                <div class="affordance-card">
+                    <h4>🚗 汽車杯架範例</h4>
+                    <p>圖27.36顯示汽車車主如何創建藝術品來替換不適當的物理示能性——內建飲料架太小，無法容納現今的超大尺寸飲料。在一次旅行中，使用者用鞋子即興創作，產生這個有趣的使用者安裝藝術品範例。</p>
                 </div>
                 
-                <div class="checklist-item">
-                    <span class="check-icon">✓</span>
-                    <div>
-                        <h4>物理易供性</h4>
-                        <p>設計師接下來被引導考慮如何在按鈕設計中支援物理易供性。我們之前範例中的排序按鈕設計是否提供足夠的物理易供性？</p>
-                    </div>
+                <div class="affordance-card">
+                    <h4>🖨️ 信紙列印範例</h4>
+                    <p>考慮偶爾用來在信頭文具上列印的桌上型印表機。將文具插在印表機現有普通紙供應上方並不容易，確定要插入的紙張的正確方向並不容易。</p>
                 </div>
                 
-                <div class="checklist-item">
-                    <span class="check-icon">✓</span>
-                    <div>
-                        <h4>感知易供性</h4>
-                        <p>現在，設計師被要求考慮感知易供性，以支持按鈕設計中的認知易供性和物理易供性。按鈕必須有顏色、大小和形狀，能夠在螢幕佈局中識別。</p>
-                    </div>
-                </div>
-                
-                <div class="checklist-item">
-                    <span class="check-icon">✓</span>
-                    <div>
-                        <h4>情感易供性</h4>
-                        <p>最後，我們詢問這個設計中的情感易供性。儘管從我們之前的範例中作為排序功能有些困難，您可以讓它變得更有趣一點，透過顯示排序如何工作的動畫。</p>
-                    </div>
+                <div class="affordance-card">
+                    <h4>📄 文具方向指示</h4>
+                    <p>使用者創建了認知示能性來幫助使用者了解如何將空白信頭文具插入印表機。圖27.37顯示使用者貼在印表機上的白色標籤。</p>
                 </div>
             </div>
-        </div>
-
-        <!-- Slide 12: User-Created Affordances -->
-        <div class="slide">
-            <h2>27.8 用戶創建的易供性作為設計師的警示</h2>
-            
-            <div class="highlight-box">
-                <h3>用戶自製解決方案</h3>
-                <p>用戶創建的易供性是原始設計中用戶添加的易供性（例如，通過在標籤上貼膠帶），因為用戶需要該易供性來獲得更好的用戶體驗。</p>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🏃‍♂️ 人行道設計</h4>
-                    <p>人行道設計師通常喜歡讓人行道圖案規則、對稱和直線。然而，人們從一個地方到另一個地方的最有效路徑往往不是很規則，但更多曲線。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔧 軟體世界限制</h4>
-                    <p>在軟體世界中，大多數應用程式對用戶設定偏好的能力非常有限。對軟體用戶來說，如果他們可以像應用小片膠帶、便利貼或在這裡和那裡添加額外塗料一樣輕鬆地修改UX設計會很好嗎？</p>
-                </div>
-            </technique-grid>
-            
-            <div class="example-box">
-                <h4>困惑的玻璃門範例</h4>
-                <p>圖27.34顯示便利商店中的玻璃門，作為添加認知易供性的範例。玻璃和不鏽鋼設計優雅；完全對稱的佈局和幾乎不顯眼的鉸鏈有助於整潔美觀的外觀。</p>
-                <p>店主注意到許多人對不鏽鋼棒的哪一側推拉開門不確定，經常先嘗試錯誤一側。為了幫助顧客瞭解一開始就應該要推拉哪一側，他貼了一個明亮的黃色紙箱箭頭指向玻璃，指出正確操作門的地方。</p>
-            </div>
-            
-            <div class="warning-box">
-                <h4>設計失敗的警示</h4>
-                <p>如Norman (1990)所說，"當簡單的東西需要圖片、標籤或指示時，設計已失敗"（第9頁）。</p>
-            </div>
-        </div>
-
-        <!-- Slide 13: History of Affordances -->
-        <div class="slide">
-            <h2>27.9 易供性概念的小歷史</h2>
-            
-            <div class="highlight-box">
-                <h3>Donald Norman的貢獻</h3>
-                <p>Norman是將易供性概念引入HCI和UX的人，在他1988年的書《日常事物的心理學》中使用了這個術語，該書在1990年更名為《日常事物的設計》。他是心理學家，正確地看到了使用和可用性是關於心理學的。</p>
-            </div>
-            
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🦅 J.J. Gibson的原始概念</h4>
-                    <p>Gibson認為，幾乎總是在設定——物件構成環境方面——生態學心理學家Gibson看到動物感知，特別是人類感知。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🔍 William Gaver的影響</h4>
-                    <p>在Gibson和Norman之後，Gaver (1991)對我們關於易供性的思考產生了影響，他看到易供性在設計中作為專注於技術所提供給使用它們的人的可能性的一種方式。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>📚 文獻持續發展</h4>
-                    <p>現在，關於易供性的文獻持續增長。例如，它在CHI 2012（HCI和UX年會）中佔顯著地位。在大多數相關文獻中，認知易供性的設計都被承認是關於可用性新和中級用戶最需要幫助的認知部分。</p>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>🧠 感知易供性發展</h4>
-                    <p>感知易供性在文獻中甚至被更多忽視。大多數其他作者，包括感知易供性，僅隱含地和/或與認知易供性結合，而不是作為單獨明確概念。</p>
-                </div>
-            </technique-grid>
             
             <div class="quote">
-                在下一章中，我們討論互動週期，一個推理和設計用戶在產品或系統使用中經歷不同階段的框架
+                正如Norman(1990)所說：「當簡單的東西需要圖片、標籤或說明書時，設計就失敗了」
             </div>
         </div>
 
-        <!-- Slide 14: Summary -->
+        <!-- Slide 10: Affordances History -->
+        <div class="slide">
+            <h2>27.9 示能性概念的簡史</h2>
+            
+            <div class="concept-flow">
+                <h3>示能性理論發展歷程</h3>
+                <div class="flow-diagram">
+                    <div class="flow-item">J.J. Gibson<br>生態心理學<br>(1977)</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">Donald Norman<br>設計應用<br>(1988-1990)</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">William Gaver<br>技術擴展<br>(1991)</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">HCI/UX<br>廣泛應用<br>(現在)</div>
+                </div>
+            </div>
+            
+            <div class="affordance-grid">
+                <div class="affordance-card">
+                    <h4>🧠 J.J. Gibson的貢獻</h4>
+                    <p>Gibson是生態心理學家，將動物感知，特別是人類感知，視為環境的設定。他關注構成環境的物件，以及動物如何在該環境中提供不同的能力。</p>
+                    <p><strong>核心概念：</strong>示能性是環境中物件相對於個人感知的屬性和物件，以及它們在該環境中可以直接感知的「價值」和「意義」。</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>📚 Donald Norman的應用</h4>
+                    <p>Norman將示能性概念引入HCI和UX，在1988年的著作《The Psychology of Everyday Things》中使用這個術語，後來在1990年改名為《The Design of Everyday Things》。</p>
+                    <p><strong>重要觀點：</strong>正確地看出，使用性和可用性與心理學有關，但他書籍的真正重點是設計。</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>⚙️ William Gaver的擴展</h4>
+                    <p>Gaver(1991)對我們關於示能性的思考產生了影響，因為他將示能性視為專注於技術方面提供給使用它們的人的能力和弱點的方式。</p>
+                    <p><strong>貢獻：</strong>他擴展了這個概念，展示了複雜行為如何用示能性群組來描述，按時間和空間順序和嵌套。</p>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>🔬 當前發展</h4>
+                    <p>現在，關於示能性的文獻持續增長。例如，它在CHI 2012（HCI和UX年度會議）中得到重要展現。</p>
+                    <p><strong>趨勢：</strong>在大多數相關文獻中，認知示能性的設計被承認是關於使用性認知部分的設計，無論在新手和中級使用者需要最多幫助的知識方面被稱為什麼。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Summary -->
         <div class="slide">
             <h2>27.10 總結</h2>
             
             <div class="highlight-box">
-                <h3>本章重點回顧</h3>
-                <p>在本章中，我們涵蓋了易供性理論。在下一章中，我們討論互動週期，一個推理和設計用戶在產品或系統使用中經歷不同階段的框架。</p>
+                <h3>🎯 本章重點回顧</h3>
+                <ul>
+                    <li><strong>示能性理論：</strong>從Gibson的生態心理學發展到Norman的設計應用，成為UX設計的核心概念</li>
+                    <li><strong>五種示能性類型：</strong>認知、物理、感官、功能和情感示能性各有其獨特作用</li>
+                    <li><strong>設計整合：</strong>成功的UX設計需要平衡和整合所有類型的示能性</li>
+                    <li><strong>使用者回饋：</strong>使用者創建的示能性為設計改進提供重要線索</li>
+                    <li><strong>實務應用：</strong>示能性檢核清單為設計師提供系統化的評估工具</li>
+                </ul>
             </div>
             
-            <div class="technique-grid">
-                <div class="technique-card">
-                    <h4>🧠 認知易供性</h4>
-                    <ul>
-                        <li>幫助用戶理解和學習</li>
-                        <li>提供清楚的意義和回饋</li>
-                        <li>支持決策過程</li>
-                        <li>特別重要對新手用戶</li>
-                    </ul>
+            <div class="concept-flow">
+                <h3>示能性在UX設計流程中的應用</h3>
+                <div class="flow-diagram">
+                    <div class="flow-item">使用者研究</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">示能性分析</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">設計開發</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">可用性測試</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-item">迭代改進</div>
                 </div>
-                
-                <div class="technique-card">
-                    <h4>👆 物理易供性</h4>
-                    <ul>
-                        <li>支持物理互動動作</li>
-                        <li>考慮Fitts定律和操作性</li>
-                        <li>防止過度操作問題</li>
-                        <li>重要對經驗豐富的用戶</li>
-                    </ul>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>👁️ 感知易供性</h4>
-                    <ul>
-                        <li>確保元素的可見性和注意性</li>
-                        <li>包括視覺、聽覺、觸覺設計</li>
-                        <li>支持其他易供性的基礎</li>
-                        <li>考慮無障礙設計需求</li>
-                    </ul>
-                </div>
-                
-                <div class="technique-card">
-                    <h4>⚙️ 功能和情感易供性</h4>
-                    <ul>
-                        <li>功能易供性連接UI到後端功能</li>
-                        <li>情感易供性創造意義性連結</li>
-                        <li>兩者共同提升整體體驗</li>
-                        <li>考慮美學和實用性平衡</li>
-                    </ul>
-                </div>
-            </technique-grid>
+                <p>將示能性概念融入整個設計流程中，確保使用者體驗品質</p>
+            </div>
             
             <div class="quote">
-                易供性的概念提供了一個強大的設計框架，幫助我們創造既實用又有意義的用戶體驗
+                在本章中，我們涵蓋了示能性理論。在下一章中，我們討論互動循環，這是一個推理和設計不同階段框架，使用者在使用產品或系統時會經歷這些階段。
             </div>
             
             <div class="example-box">
-                <h4>實務應用重點</h4>
-                <p>成功的UX設計需要平衡所有五種易供性類型。使用易供性檢核表確保您的設計在每個層面都支持用戶需求，從基本的感知能力到複雜的情感連結。記住，用戶創建的易供性往往指出原始設計中的缺陷，可以作為改進的寶貴線索。</p>
+                <h4>💡 實務建議</h4>
+                <p>成功的UX設計師應該：</p>
+                <ul>
+                    <li>在每個設計決策中考慮所有五種示能性</li>
+                    <li>使用示能性檢核清單系統化評估設計</li>
+                    <li>關注使用者創建的示能性作為改進機會</li>
+                    <li>平衡功能性與美感，確保完整的使用者體驗</li>
+                    <li>持續學習示能性理論的最新發展</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Key Takeaways -->
+        <div class="slide">
+            <h2>重要概念總結</h2>
+            
+            <div class="affordance-grid">
+                <div class="affordance-card">
+                    <h4>🧠 認知示能性要點</h4>
+                    <ul>
+                        <li>最重要的UX設計特徵之一</li>
+                        <li>依賴共享文化慣例</li>
+                        <li>避免虛假認知示能性</li>
+                        <li>專注於清晰度和完整性</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>🤏 物理示能性要點</h4>
+                    <ul>
+                        <li>對經驗豐富的使用者至關重要</li>
+                        <li>考慮菲茨定律和手部靈活度</li>
+                        <li>防止物理過度射擊</li>
+                        <li>支援無障礙設計</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>👁️ 感官示能性要點</h4>
+                    <ul>
+                        <li>支援其他示能性的呈現</li>
+                        <li>重視可見性和可辨別性</li>
+                        <li>考慮多重感官通道</li>
+                        <li>確保適當的對比和尺寸</li>
+                    </ul>
+                </div>
+                
+                <div class="affordance-card">
+                    <h4>⚙️ 功能與情感示能性要點</h4>
+                    <ul>
+                        <li>功能示能性連接使用者行為與系統功能</li>
+                        <li>情感示能性提升使用體驗品質</li>
+                        <li>平衡實用性與愉悅性</li>
+                        <li>支援意義感的建立</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="design-checklist">
+                <h3>設計師實務檢核重點</h3>
+                <div class="checklist-item">每個設計元素都應考慮相關的示能性類型</div>
+                <div class="checklist-item">使用示能性檢核清單進行系統化評估</div>
+                <div class="checklist-item">觀察和學習使用者創建的示能性</div>
+                <div class="checklist-item">平衡所有示能性類型以達到最佳使用者體驗</div>
+                <div class="checklist-item">持續關注示能性理論的發展和應用</div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🔗 與敏捷UX的連結</h3>
+                <p>示能性概念與敏捷UX漏斗模型完美結合：</p>
+                <ul>
+                    <li><strong>早期漏斗階段：</strong>建立整體概念設計時考慮所有示能性類型</li>
+                    <li><strong>後期漏斗階段：</strong>在小範圍迭代中精煉具體示能性實現</li>
+                    <li><strong>持續改進：</strong>透過使用者回饋不斷優化示能性設計</li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <div class="navigation-container">
-        <a href="index.html" class="home-link">回到首頁</a>
-        
-        <div class="slide-counter">
-            <span id="current-slide">1</span> / <span id="total-slides">14</span>
-        </div>
-        
-        <div class="navigation">
-            <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
-            <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
-        </div>
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">12</span>
+    </div>
+
+    <a href="index.html" class="home-link">首頁</a>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">上一頁</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">下一頁</button>
     </div>
 
     <script>
