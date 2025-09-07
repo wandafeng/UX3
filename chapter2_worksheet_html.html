@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第2章學習單：輪盤框架 - UX流程、生命週期、方法與技術</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .worksheet-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+        }
+        
+        .header-info span {
+            font-weight: bold;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .section-title {
+            color: #34495e;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .question-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .answer-space {
+            border-bottom: 1px solid #ddd;
+            padding: 5px 0;
+            margin: 10px 0;
+            min-height: 30px;
+        }
+        
+        .answer-long {
+            min-height: 60px;
+        }
+        
+        .answer-multiple {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+            align-items: center;
+            margin: 5px 0;
+        }
+        
+        .points {
+            color: #e67e22;
+            font-weight: bold;
+            float: right;
+        }
+        
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .scoring-rubric {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .learning-objectives {
+            background: #e1f5fe;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #03a9f4;
+        }
+        
+        .checkbox-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .checkbox-list li {
+            margin: 8px 0;
+        }
+        
+        .checkbox-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .scenario-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #b3d9ff;
+        }
+        
+        @media (max-width: 768px) {
+            .worksheet-container {
+                padding: 20px;
+            }
+            
+            .header-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .worksheet-container {
+                box-shadow: none;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="worksheet-container">
+        <h1>第2章學習單：輪盤框架 - UX流程、生命週期、方法與技術</h1>
+        
+        <div class="header-info">
+            <span>學生姓名：<span class="answer-space" style="display: inline-block; width: 150px;"></span></span>
+            <span>學號：<span class="answer-space" style="display: inline-block; width: 120px;"></span></span>
+            <span>日期：<span class="answer-space" style="display: inline-block; width: 120px;"></span></span>
+        </div>
+
+        <!-- 第一部分：概念理解 -->
+        <div class="section">
+            <div class="section-title">第一部分：概念理解 <span class="points">(30分)</span></div>
+            
+            <div class="question">
+                <div class="question-title">1. 流程的必要性 <span class="points">(10分)</span></div>
+                <p>請說明為什麼UX設計需要有系統性的流程？列出至少三個原因並簡要說明。</p>
+                
+                <div class="answer-multiple">
+                    <strong>1.</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    說明：<div class="answer-space answer-long"></div>
+                </div>
+                
+                <div class="answer-multiple">
+                    <strong>2.</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    說明：<div class="answer-space answer-long"></div>
+                </div>
+                
+                <div class="answer-multiple">
+                    <strong>3.</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                <div style="margin-left: 20px;">
+                    說明：<div class="answer-space answer-long"></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">2. 術語層次結構 <span class="points">(10分)</span></div>
+                <p>請將下列術語按照層次結構從高到低排列，並給出一個具體範例：</p>
+                <p><strong>術語：</strong> UX技術、UX生命週期活動、UX方法、UX流程</p>
+                
+                <div class="answer-multiple">
+                    <strong>1.</strong>
+                    <div class="answer-space" style="width: 200px;"></div>
+                    (範例：<div class="answer-space" style="width: 300px; display: inline-block;"></div>)
+                </div>
+                <div class="answer-multiple">
+                    <strong>2.</strong>
+                    <div class="answer-space" style="width: 200px;"></div>
+                    (範例：<div class="answer-space" style="width: 300px; display: inline-block;"></div>)
+                </div>
+                <div class="answer-multiple">
+                    <strong>3.</strong>
+                    <div class="answer-space" style="width: 200px;"></div>
+                    (範例：<div class="answer-space" style="width: 300px; display: inline-block;"></div>)
+                </div>
+                <div class="answer-multiple">
+                    <strong>4.</strong>
+                    <div class="answer-space" style="width: 200px;"></div>
+                    (範例：<div class="answer-space" style="width: 300px; display: inline-block;"></div>)
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">3. 輪盤模型核心 <span class="points">(10分)</span></div>
+                <p>輪盤模型包含四個主要的UX設計生命週期活動，請填寫並簡述每個活動的主要目的：</p>
+                
+                <div style="margin: 15px 0;">
+                    <strong>1. 理解需求</strong><br>
+                    目的：<div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>2. </strong><div class="answer-space" style="width: 200px; display: inline-block;"></div><br>
+                    目的：<div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>3. </strong><div class="answer-space" style="width: 200px; display: inline-block;"></div><br>
+                    目的：<div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>4. </strong><div class="answer-space" style="width: 200px; display: inline-block;"></div><br>
+                    目的：<div class="answer-space answer-long"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二部分：技術應用 -->
+        <div class="section">
+            <div class="section-title">第二部分：技術應用 <span class="points">(40分)</span></div>
+            
+            <div class="question">
+                <div class="question-title">4. UX技術分類配對 <span class="points">(20分)</span></div>
+                <p>請將下列UX技術與其所屬類別進行配對（每個類別可能有多個技術）：</p>
+                <p><strong>技術列表：</strong> 觀察、腦力激盪、親和圖、訪談、筆記記錄、說故事、構想原型製作、素描</p>
+                
+                <div style="margin: 15px 0;">
+                    <strong>研究與探索技術：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>組織資料與想法技術：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>生成、構想與精煉技術：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>溝通技術：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">5. 生活技能連結 <span class="points">(20分)</span></div>
+                <p>選擇一個日常生活情境（如：搬家、規劃旅行、購買電子產品等），說明在這個情境中你會如何運用至少四種UX技術。</p>
+                
+                <div style="margin: 15px 0;">
+                    <strong>選擇的生活情境：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>1. 技術名稱：</strong><div class="answer-space" style="width: 200px; display: inline-block;"></div><br>
+                    <strong>如何運用：</strong><div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>2. 技術名稱：</strong><div class="answer-space" style="width: 200px; display: inline-block;"></div><br>
+                    <strong>如何運用：</strong><div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>3. 技術名稱：</strong><div class="answer-space" style="width: 200px; display: inline-block;"></div><br>
+                    <strong>如何運用：</strong><div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>4. 技術名稱：</strong><div class="answer-space" style="width: 200px; display: inline-block;"></div><br>
+                    <strong>如何運用：</strong><div class="answer-space answer-long"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第三部分：實務應用 -->
+        <div class="section">
+            <div class="section-title">第三部分：實務應用 <span class="points">(30分)</span></div>
+            
+            <div class="question">
+                <div class="question-title">6. 設計情境分析 <span class="points">(15分)</span></div>
+                <p>假設你需要為一個大學圖書館設計一個新的借書系統APP。請根據專案參數，分析這個設計情境並提出適合的方法選擇：</p>
+                
+                <div class="scenario-box">
+                    <strong>專案背景：</strong><br>
+                    • 目標用戶：大學生、研究生、教職員<br>
+                    • 時程限制：4個月<br>
+                    • 團隊規模：5人（2名UX設計師、2名程式設計師、1名專案經理）<br>
+                    • 預算：中等
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>1. 主要挑戰：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>2. 建議的UX方法（至少3個）：</strong><br>
+                    • <div class="answer-space" style="width: 150px; display: inline-block;"></div>：原因 <div class="answer-space answer-long"></div>
+                    • <div class="answer-space" style="width: 150px; display: inline-block;"></div>：原因 <div class="answer-space answer-long"></div>
+                    • <div class="answer-space" style="width: 150px; display: inline-block;"></div>：原因 <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>3. 預期的限制因素：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">7. 方法調適練習 <span class="points">(15分)</span></div>
+                <p>以上述圖書館APP專案為例，假設在執行過程中遇到以下變化，請說明你會如何調適原有的方法：</p>
+                
+                <div class="scenario-box">
+                    <strong>情境變化：</strong><br>
+                    • 時程縮短為2個月<br>
+                    • 預算減少30%<br>
+                    • 新增需求：必須支援視覺障礙用戶
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>1. 時程壓縮的應對：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>2. 預算限制的應對：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>3. 無障礙需求的應對：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>4. 整體方法調整：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第四部分：批判思考 -->
+        <div class="section">
+            <div class="section-title">第四部分：批判思考 <span class="points">(20分)</span></div>
+            
+            <div class="question">
+                <div class="question-title">8. 框架與重新框架 <span class="points">(10分)</span></div>
+                <p>以下是一個設計問題：「學生在圖書館找不到座位」</p>
+                <p>請用三種不同的框架方式重新定義這個問題，並說明每種框架可能導向的不同解決方案：</p>
+                
+                <div style="margin: 15px 0;">
+                    <strong>框架1：</strong><div class="answer-space answer-long"></div>
+                    <strong>可能解決方案：</strong><div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>框架2：</strong><div class="answer-space answer-long"></div>
+                    <strong>可能解決方案：</strong><div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>框架3：</strong><div class="answer-space answer-long"></div>
+                    <strong>可能解決方案：</strong><div class="answer-space answer-long"></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">9. 反思與整合 <span class="points">(10分)</span></div>
+                <p>根據本章內容，請回答以下問題：</p>
+                
+                <div style="margin: 15px 0;">
+                    <strong>1. 你認為輪盤模型與傳統瀑布式開發的最大差異是什麼？</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>2. 在實際專案中，你認為哪個UX技術最容易被忽略？為什麼？</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>3. 如何確保選擇的UX方法真正適合專案需求，而不是只是使用你最熟悉的方法？</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加分題 -->
+        <div class="section">
+            <div class="section-title">加分題 <span class="points">(10分)</span></div>
+            
+            <div class="question">
+                <div class="question-title">10. 創新應用</div>
+                <p>設計一個創新的UX技術組合，用於解決「遠距教學中學生參與度低」的問題。你的組合應該包含至少三種不同類別的技術，並說明如何整合運用。</p>
+                
+                <div style="margin: 15px 0;">
+                    <strong>技術組合設計：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>整合運用策略：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>預期效果：</strong>
+                    <div class="answer-space answer-long"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 評分標準 -->
+        <div class="scoring-rubric">
+            <h3>評分標準</h3>
+            <ul>
+                <li><strong>概念理解</strong>：概念掌握準確性、定義清晰度</li>
+                <li><strong>技術應用</strong>：技術分類正確性、實際應用能力</li>
+                <li><strong>實務應用</strong>：情境分析深度、方法選擇合理性</li>
+                <li><strong>批判思考</strong>：問題重新框架能力、反思深度</li>
+                <li><strong>表達清晰度</strong>：論述邏輯性、文字表達清楚</li>
+            </ul>
+            <p><strong>總分：120分（含加分題130分）</strong></p>
+        </div>
+
+        <!-- 學習目標檢核 -->
+        <div class="learning-objectives">
+            <h3>學習目標檢核</h3>
+            <p>完成此學習單後，學生應能夠：</p>
+            <ul class="checkbox-list">
+                <li><input type="checkbox"> 理解UX設計流程的重要性和輪盤模型的核心概念</li>
+                <li><input type="checkbox"> 識別並分類不同的UX技術</li>
+                <li><input type="checkbox"> 根據專案情境選擇適當的UX方法</li>
+                <li><input type="checkbox"> 具備調適和整合UX方法的能力</li>
+                <li><input type="checkbox"> 培養批判性思考和問題重新框架的技能</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三章課程活動解答指引</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: "🔑";
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 2em;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .answer-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 6px solid;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .answer-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .task1 {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f9f0 100%);
+            border-left-color: #27ae60;
+        }
+
+        .task2 {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+            border-left-color: #2196f3;
+        }
+
+        .task3 {
+            background: linear-gradient(135deg, #fff3e0 0%, #fff8f0 100%);
+            border-left-color: #ff9800;
+        }
+
+        .task4 {
+            background: linear-gradient(135deg, #fce4ec 0%, #fef0f5 100%);
+            border-left-color: #e91e63;
+        }
+
+        .answer-section h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+        }
+
+        .task-icon {
+            width: 35px;
+            height: 35px;
+            margin-right: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .task1 .task-icon { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .task2 .task-icon { background: linear-gradient(135deg, #2196f3, #3498db); }
+        .task3 .task-icon { background: linear-gradient(135deg, #ff9800, #f39c12); }
+        .task4 .task-icon { background: linear-gradient(135deg, #e91e63, #e74c3c); }
+
+        .answer-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e0e6ed;
+            transition: all 0.3s ease;
+        }
+
+        .answer-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .case-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .case-item {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .banking { border-left-color: #e74c3c; }
+        .lms { border-left-color: #3498db; }
+        .social { border-left-color: #2ecc71; }
+        .design { border-left-color: #f39c12; }
+
+        .complexity-position {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .high-high { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .high-low { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .low-low { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .low-high { background: linear-gradient(135deg, #f39c12, #e67e22); }
+
+        .rigor-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .rigor-scenario {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid;
+        }
+
+        .mvp { border-top-color: #f39c12; }
+        .medical { border-top-color: #e74c3c; }
+        .enterprise { border-top-color: #3498db; }
+        .consumer { border-top-color: #2ecc71; }
+
+        .rigor-level {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .rigor-bar {
+            width: 100px;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+
+        .rigor-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .low { width: 30%; background: linear-gradient(to right, #f39c12, #e67e22); }
+        .medium { width: 60%; background: linear-gradient(to right, #3498db, #2980b9); }
+        .high { width: 90%; background: linear-gradient(to right, #e74c3c, #c0392b); }
+
+        .scope-strategy {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .strategy-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .grading-rubric {
+            background: #2c3e50;
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .rubric-category {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .rubric-category h4 {
+            color: #ecf0f1;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .score-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .score-level {
+            background: rgba(255,255,255,0.15);
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .score-level h5 {
+            color: #f39c12;
+            margin-bottom: 8px;
+        }
+
+        .key-insights {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .insight-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+
+        .reflection-answers {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .reflection-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .teaching-notes {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px dashed #dee2e6;
+        }
+
+        .note-icon {
+            color: #6c757d;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .case-analysis,
+            .rigor-matrix,
+            .score-levels {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .collapsible {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .collapsible:after {
+            content: ' ▼';
+            font-size: 0.8em;
+            color: #7f8c8d;
+        }
+
+        .collapsible.active:after {
+            content: ' ▲';
+        }
+
+        .collapsible-content {
+            display: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .collapsible-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>第三章課程活動解答指引</h1>
+            <p>設計情境分析：標準答案與評量標準</p>
+        </div>
+
+        <div class="content">
+            <div class="answer-section task1">
+                <h2>
+                    <span class="task-icon">1</span>
+                    任務一：案例分析活動解答
+                </h2>
+
+                <div class="answer-card">
+                    <h3 class="collapsible">📋 標準案例分析範例</h3>
+                    <div class="collapsible-content">
+                        <div class="case-analysis">
+                            <div class="case-item banking">
+                                <h4>🏦 電子銀行系統</h4>
+                                <p><strong>複雜性定位：</strong> <span class="complexity-position high-high">高交互 + 高領域</span></p>
+                                <p><strong>交互複雜性分析：</strong></p>
+                                <ul>
+                                    <li>多步驟認證流程</li>
+                                    <li>複雜的交易類型選擇</li>
+                                    <li>風險管理介面</li>
+                                    <li>多帳戶管理功能</li>
+                                </ul>
+                                <p><strong>領域複雜性分析：</strong></p>
+                                <ul>
+                                    <li>金融法規遵循要求</li>
+                                    <li>安全性極高標準</li>
+                                    <li>專業術語使用</li>
+                                    <li>監管報告需求</li>
+                                </ul>
+                                <p><strong>設計建議：</strong>需要最高等級的嚴謹性，完整的用戶研究、詳細的原型測試</p>
+                            </div>
+
+                            <div class="case-item lms">
+                                <h4>📚 學習管理系統</h4>
+                                <p><strong>複雜性定位：</strong> <span class="complexity-position high-low">高交互 + 中等領域</span></p>
+                                <p><strong>交互複雜性分析：</strong></p>
+                                <ul>
+                                    <li>多角色用戶介面（學生/教師/管理員）</li>
+                                    <li>豐富的內容組織功能</li>
+                                    <li>複雜的評估與追蹤系統</li>
+                                    <li>協作工具整合</li>
+                                </ul>
+                                <p><strong>領域複雜性分析：</strong></p>
+                                <ul>
+                                    <li>教育理論基礎</li>
+                                    <li>學習分析需求</li>
+                                    <li>課程設計原則</li>
+                                    <li>評量方法多樣性</li>
+                                </ul>
+                                <p><strong>設計建議：</strong>中高等嚴謹性，重視使用者體驗研究和迭代測試</p>
+                            </div>
+
+                            <div class="case-item social">
+                                <h4>📱 社群媒體平台</h4>
+                                <p><strong>複雜性定位：</strong> <span class="complexity-position low-low">中交互 + 低領域</span></p>
+                                <p><strong>交互複雜性分析：</strong></p>
+                                <ul>
+                                    <li>直觀的內容瀏覽</li>
+                                    <li>簡單的互動操作</li>
+                                    <li>個人化推薦算法</li>
+                                    <li>社交連結功能</li>
+                                </ul>
+                                <p><strong>領域複雜性分析：</strong></p>
+                                <ul>
+                                    <li>一般社交概念</li>
+                                    <li>基本隱私理解</li>
+                                    <li>內容分享常識</li>
+                                    <li>社群互動規範</li>
+                                </ul>
+                                <p><strong>設計建議：</strong>中等嚴謹性，快速原型和用戶測試，重視數據驅動優化</p>
+                            </div>
+
+                            <div class="case-item design">
+                                <h4>🎨 專業設計軟件</h4>
+                                <p><strong>複雜性定位：</strong> <span class="complexity-position high-high">高交互 + 高領域</span></p>
+                                <p><strong>交互複雜性分析：</strong></p>
+                                <ul>
+                                    <li>大量工具與功能</li>
+                                    <li>複雜的圖層管理</li>
+                                    <li>精密的參數控制</li>
+                                    <li>高度可自訂介面</li>
+                                </ul>
+                                <p><strong>領域複雜性分析：</strong></p>
+                                <ul>
+                                    <li>設計理論知識</li>
+                                    <li>色彩與構圖原理</li>
+                                    <li>印刷與數位媒體理解</li>
+                                    <li>專業工作流程</li>
+                                </ul>
+                                <p><strong>設計建議：</strong>最高嚴謹性，深度用戶研究、專家訪談、長期使用測試</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="teaching-notes">
+                    <h4><span class="note-icon">💡</span>教學重點</h4>
+                    <ul>
+                        <li><strong>引導學生思考：</strong>為什麼同樣是「複雜」系統，設計方法會有差異？</li>
+                        <li><strong>討論要點：</strong>交互複雜性與領域複雜性的相對重要性</li>
+                        <li><strong>延伸思考：</strong>如何驗證複雜性分析的準確性？</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="answer-section task2">
+                <h2>
+                    <span class="task-icon">2</span>
+                    任務二：嚴謹性評估練習解答
+                </h2>
+
+                <div class="answer-card">
+                    <h3 class="collapsible">⚖️ 嚴謹性決策分析</h3>
+                    <div class="collapsible-content">
+                        <div class="rigor-matrix">
+                            <div class="rigor-scenario mvp">
+                                <h4>🚀 情境A：新創MVP產品</h4>
+                                <div class="rigor-level">
+                                    <div class="rigor-bar">
+                                        <div class="rigor-fill low"></div>
+                                    </div>
+                                    <span>低度嚴謹性 (30%)</span>
+                                </div>
+                                <p><strong>建議方法：</strong></p>
+                                <ul>
+                                    <li>快速用戶訪談 (5-8位)</li>
+                                    <li>低保真原型測試</li>
+                                    <li>基本可用性測試</li>
+                                    <li>簡化的分析報告</li>
+                                </ul>
+                                <p><strong>理由：</strong>時間與資源限制，重點在於快速驗證核心假設</p>
+                            </div>
+
+                            <div class="rigor-scenario medical">
+                                <h4>🏥 情境B：醫療設備介面</h4>
+                                <div class="rigor-level">
+                                    <div class="rigor-bar">
+                                        <div class="rigor-fill high"></div>
+                                    </div>
+                                    <span>高度嚴謹性 (90%)</span>
+                                </div>
+                                <p><strong>建議方法：</strong></p>
+                                <ul>
+                                    <li>廣泛的情境研究</li>
+                                    <li>專家深度訪談</li>
+                                    <li>高保真原型</li>
+                                    <li>多輪嚴格測試</li>
+                                    <li>詳細文檔記錄</li>
+                                </ul>
+                                <p><strong>理由：</strong>安全性關鍵，錯誤成本極高，法規要求嚴格</p>
+                            </div>
+
+                            <div class="rigor-scenario enterprise">
+                                <h4>🏢 情境C：企業管理系統</h4>
+                                <div class="rigor-level">
+                                    <div class="rigor-bar">
+                                        <div class="rigor-fill medium"></div>
+                                    </div>
+                                    <span>中高度嚴謹性 (70%)</span>
+                                </div>
+                                <p><strong>建議方法：</strong></p>
+                                <ul>
+                                    <li>業務流程分析</li>
+                                    <li>多角色用戶研究</li>
+                                    <li>階段性原型測試</li>
+                                    <li>工作流程驗證</li>
+                                </ul>
+                                <p><strong>理由：</strong>複雜業務邏輯，多利害關係人，需要平衡效率與準確性</p>
+                            </div>
+
+                            <div class="rigor-scenario consumer">
+                                <h4>📱 情境D：消費性App改版</h4>
+                                <div class="rigor-level">
+                                    <div class="rigor-bar">
+                                        <div class="rigor-fill medium"></div>
+                                    </div>
+                                    <span>中度嚴謹性 (60%)</span>
+                                </div>
+                                <p><strong>建議方法：</strong></p>
+                                <ul>
+                                    <li>大量用戶數據分析</li>
+                                    <li>A/B測試設計</li>
+                                    <li>代表性用戶測試</li>
+                                    <li>漸進式發布策略</li>
+                                </ul>
+                                <p><strong>理由：</strong>用戶基數大，需要數據驗證，但可承受迭代風險</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-insights">
+                    <h3>🎯 嚴謹性決策關鍵因素</h3>
+                    <div class="insight-item">
+                        <h4>1. 風險評估矩陣</h4>
+                        <p><strong>高風險項目：</strong>醫療、金融、安全相關系統 → 高嚴謹性</p>
+                        <p><strong>中風險項目：</strong>企業工具、教育平台 → 中等嚴謹性</p>
+                        <p><strong>低風險項目：</strong>娛樂、社交應用 → 較低嚴謹性</p>
+                    </div>
+                    <div class="insight-item">
+                        <h4>2. 資源分配策略</h4>
+                        <p><strong>時間壓力：</strong>緊急項目可降低嚴謹性，但不可忽略關鍵驗證</p>
+                        <p><strong>預算限制：</strong>選擇最具影響力的研究方法</p>
+                        <p><strong>團隊經驗：</strong>經驗豐富團隊可適度降低某些嚴謹性要求</p>
+                    </div>
+                    <div class="insight-item">
+                        <h4>3. 迭代機會評估</h4>
+                        <p><strong>可迭代系統：</strong>可採用較低初始嚴謹性，後續優化</p>
+                        <p><strong>一次性部署：</strong>必須採用高嚴謹性，確保初次成功</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-section task3">
+                <h2>
+                    <span class="task-icon">3</span>
+                    任務三：範圍規劃討論解答
+                </h2>
+
+                <div class="answer-card">
+                    <h3 class="collapsible">🎓 大學線上學習平台改版策略</h3>
+                    <div class="collapsible-content">
+                        <div class="scope-strategy">
+                            <h4>🔄 大範圍設計適用領域</h4>
+                            <div class="strategy-item">
+                                <h5>1. 核心架構設計</h5>
+                                <p><strong>原因：</strong>系統架構一旦確定，後續修改成本極高</p>
+                                <p><strong>包含：</strong>導航結構、資訊架構、用戶權限系統</p>
+                                <p><strong>方法：</strong>完整的使用者旅程分析、卡片分類法、樹狀測試</p>
+                            </div>
+                            <div class="strategy-item">
+                                <h5>2. 視覺設計系統</h5>
+                                <p><strong>原因：</strong>確保整體一致性，避免後續視覺衝突</p>
+                                <p><strong>包含：</strong>設計語言、組件庫、品牌指導原則</p>
+                                <p><strong>方法：</strong>設計系統建立、風格指南制定</p>
+                            </div>
+                            <div class="strategy-item">
+                                <h5>3. 跨角色核心功能</h5>
+                                <p><strong>原因：</strong>影響所有用戶群體的基礎功能</p>
+                                <p><strong>包含：</strong>登入系統、通知機制、搜尋功能</p>
+                                <p><strong>方法：</strong>全面的需求分析、跨角色工作坊</p>
+                            </div>
+                        </div>
+
+                        <div class="scope-strategy">
+                            <h4>🔄 小範圍迭代適用領域</h4>
+                            <div class="strategy-item">
+                                <h5>1. 特定功能模組</h5>
+                                <p><strong>原因：</strong>可獨立測試優化，不影響整體系統</p>
+                                <p><strong>包含：</strong>作業提交、討論區、成績查詢</p>
+                                <p><strong>方法：</strong>敏捷迭代、用戶測試、數據驅動優化</p>
+                            </div>
+                            <div class="strategy-item">
+                                <h5>2. 個人化功能</h5>
+                                <p><strong>原因：</strong>用戶偏好差異大，需要持續調整</p>
+                                <p><strong>包含：</strong>儀表板客製化、學習偏好設定</p>
+                                <p><strong>方法：</strong>A/B測試、使用行為分析</p>
+                            </div>
+                            <div class="strategy-item">
+                                <h5>3. 內容呈現優化</h5>
+                                <p><strong>原因：</strong>容易調整，可快速響應反饋</p>
+                                <p><strong>包含：</strong>課程列表排序、內容推薦算法</p>
+                                <p><strong>方法：</strong>快速原型、用戶反饋收集</p>
+                            </div>
+                        </div>
+
+                        <div class="scope-strategy">
+                            <h4>👥 多用戶群體設計策略</h4>
+                            <div class="strategy-item">
+                                <h5>學生群體 (70%用戶)</h5>
+                                <p><strong>優先級：</strong>高 - 主要用戶群體</p>
+                                <p><strong>設計重點：</strong>學習效率、介面簡潔、行動端優化</p>
+                                <p><strong>範圍策略：</strong>核心學習功能採大範圍設計，個人化功能採小範圍迭代</p>
+                            </div>
+                            <div class="strategy-item">
+                                <h5>教師群體 (25%用戶)</h5>
+                                <p><strong>優先級：</strong>高 - 內容創建者</p>
+                                <p><strong>設計重點：</strong>課程管理效率、教學工具豐富性</p>
+                                <p><strong>範圍策略：</strong>教學工具整合採大範圍設計，個別功能採迭代優化</p>
+                            </div>
+                            <div class="strategy-item">
+                                <h5>管理員群體 (5%用戶)</h5>
+                                <p><strong>優先級：</strong>中 - 系統維護者</p>
+                                <p><strong>設計重點：</strong>操作效率、數據視覺化、權限管理</p>
+                                <p><strong>範圍策略：</strong>核心管理功能採大範圍設計，報表功能採迭代開發</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="teaching-notes">
+                    <h4><span class="note-icon">💡</span>範圍規劃關鍵決策原則</h4>
+                    <ul>
+                        <li><strong>相依性分析：</strong>高相依性功能需要大範圍統一設計</li>
+                        <li><strong>風險評估：</strong>高風險功能需要更謹慎的大範圍設計</li>
+                        <li><strong>使用頻率：</strong>高頻使用功能優先採用大範圍設計確保一致性</li>
+                        <li><strong>技術限制：</strong>考慮開發資源與技術可行性</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="answer-section task4">
+                <h2>
+                    <span class="task-icon">4</span>
+                    任務四：評量標準與優秀回答範例
+                </h2>
+
+                <div class="grading-rubric">
+                    <h3>📊 詳細評量標準</h3>
+                    
+                    <div class="rubric-category">
+                        <h4>學術思辨能力 (40%)</h4>
+                        <div class="score-levels">
+                            <div class="score-level">
+                                <h5>優秀 (90-100%)</h5>
+                                <p>能深入運用理論框架，提出創新見解，論證邏輯嚴密，顯示對概念的深度理解</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>良好 (80-89%)</h5>
+                                <p>正確運用理論框架，分析合理，論證清晰，顯示對概念的良好掌握</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>及格 (70-79%)</h5>
+                                <p>基本運用理論框架，分析簡單但正確，論證基本合理</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>不及格 (<70%)</h5>
+                                <p>無法正確運用理論框架，分析錯誤或不完整，論證薄弱</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rubric-category">
+                        <h4>實務應用能力 (35%)</h4>
+                        <div class="score-levels">
+                            <div class="score-level">
+                                <h5>優秀 (90-100%)</h5>
+                                <p>設計決策極具說服力，充分考慮實際限制，提出可行且創新的解決方案</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>良好 (80-89%)</h5>
+                                <p>設計決策合理，考慮主要實際因素，解決方案可行</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>及格 (70-79%)</h5>
+                                <p>設計決策基本合理，解決方案簡單但可行</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>不及格 (<70%)</h5>
+                                <p>設計決策不合理，未考慮實際限制，解決方案不可行</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rubric-category">
+                        <h4>團隊協作與表達 (25%)</h4>
+                        <div class="score-levels">
+                            <div class="score-level">
+                                <h5>優秀 (90-100%)</h5>
+                                <p>積極參與討論，貢獻獨特見解，表達清晰專業，能有效回應提問</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>良好 (80-89%)</h5>
+                                <p>良好參與討論，表達清晰，能適當回應提問</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>及格 (70-79%)</h5>
+                                <p>基本參與討論，表達尚可，能回應簡單提問</p>
+                            </div>
+                            <div class="score-level">
+                                <h5>不及格 (<70%)</h5>
+                                <p>參與度低，表達不清，無法有效回應提問</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-card">
+                    <h3 class="collapsible">🏆 優秀發表範例</h3>
+                    <div class="collapsible-content">
+                        <div class="strategy-item">
+                            <h4>範例發表結構</h4>
+                            <p><strong>1. 問題陳述 (30秒)</strong></p>
+                            <p>"我們分析的是電子銀行系統，探討其在系統複雜性空間中的定位及對應的設計策略選擇。"</p>
+                            
+                            <p><strong>2. 分析框架應用 (2分鐘)</strong></p>
+                            <p>"根據交互複雜性和領域複雜性二維分析，電子銀行系統位於高-高象限。交互複雜性體現在多層安全驗證、複雜的交易流程；領域複雜性體現在金融法規、風險控制等專業要求。"</p>
+                            
+                            <p><strong>3. 設計建議 (1.5分鐘)</strong></p>
+                            <p>"基於此定位，我們建議採用最高等級嚴謹性：包括詳盡的情境研究、多輪專家評估、嚴格的安全性測試等。"</p>
+                            
+                            <p><strong>4. 學術反思 (1分鐘)</strong></p>
+                            <p>"這個分析框架幫助我們理解，設計方法的選擇應該基於系統本身的複雜性特徵，而非設計師的偏好或習慣。"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-answers">
+                <h2>🤔 反思問題參考答案</h2>
+                
+                <div class="reflection-item">
+                    <h3>Q1: 如何平衡理想的嚴謹性與現實的資源限制？</h3>
+                    <p><strong>參考答案：</strong></p>
+                    <ul>
+                        <li><strong>優先級排序：</strong>識別最關鍵的風險點，集中資源在高風險領域</li>
+                        <li><strong>階段性實施：</strong>核心功能採用高嚴謹性，次要功能採用迭代優化</li>
+                        <li><strong>方法組合：</strong>結合高效與深度的研究方法，如快速原型+專家評估</li>
+                        <li><strong>槓桿效應：</strong>利用既有資源和數據，減少重複研究成本</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-item">
+                    <h3>Q2: 複雜性分析框架如何幫助設計方法選擇？</h3>
+                    <p><strong>參考答案：</strong></p>
+                    <ul>
+                        <li><strong>客觀化決策：</strong>提供系統性分析工具，減少主觀判斷偏誤</li>
+                        <li><strong>方法匹配：</strong>不同象限對應不同的設計方法組合</li>
+                        <li><strong>資源配置：</strong>幫助合理分配設計資源和時間</li>
+                        <li><strong>風險管理：</strong>預先識別設計風險，制定相應策略</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-item">
+                    <h3>Q3: 理論概念的深入研究方向？</h3>
+                    <p><strong>參考答案：</strong></p>
+                    <ul>
+                        <li><strong>量化測量：</strong>開發複雜性測量工具和量表</li>
+                        <li><strong>跨領域研究：</strong>結合認知科學、系統科學等學科</li>
+                        <li><strong>文化適應性：</strong>不同文化背景下的複雜性認知差異</li>
+                        <li><strong>技術演進影響：</strong>新技術對系統複雜性的影響</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-item">
+                    <h3>Q4: 如何應用到研究或教學實務？</h3>
+                    <p><strong>參考答案：</strong></p>
+                    <ul>
+                        <li><strong>研究應用：</strong>作為研究設計的理論基礎，提升研究方法選擇的合理性</li>
+                        <li><strong>教學應用：</strong>幫助學生建立系統性思維，理解設計決策的複雜性</li>
+                        <li><strong>實務指導：</strong>為設計團隊提供方法選擇的決策框架</li>
+                        <li><strong>評估工具：</strong>發展設計品質評估標準和工具</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="key-insights">
+                <h2>🎯 教學總結與關鍵洞察</h2>
+                
+                <div class="insight-item">
+                    <h3>1. 系統思維的重要性</h3>
+                    <p>UX設計不是孤立的活動，而是需要考慮系統複雜性、資源限制、風險評估等多重因素的系統性決策過程。</p>
+                </div>
+
+                <div class="insight-item">
+                    <h3>2. 理論與實務的橋接</h3>
+                    <p>學術理論框架能夠為實務決策提供客觀依據，避免經驗主義和主觀偏好的局限性。</p>
+                </div>
+
+                <div class="insight-item">
+                    <h3>3. 批判性思維的培養</h3>
+                    <p>設計師需要具備質疑和分析的能力，不盲從既有方法，而是根據具體情境做出適當選擇。</p>
+                </div>
+
+                <div class="insight-item">
+                    <h3>4. 持續學習的必要性</h3>
+                    <p>設計領域快速發展，需要持續更新理論知識和實務技能，保持學術敏感度。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 折疊功能
+        document.querySelectorAll('.collapsible').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('active');
+            });
+        });
+
+        // 嚴謹性條形動畫
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.rigor-fill').forEach(bar => {
+                    bar.style.width = bar.classList.contains('low') ? '30%' : 
+                                      bar.classList.contains('medium') ? '60%' : '90%';
+                });
+            }, 1000);
+        });
+
+        // 載入動畫
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.answer-section').forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 300);
+            });
+        });
+
+        // 互動效果
+        document.querySelectorAll('.case-item, .rigor-scenario').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.02)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

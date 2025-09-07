@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第28章：互動循環 - 學習單</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        
+        .student-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .info-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-field label {
+            font-weight: bold;
+            min-width: 80px;
+        }
+        
+        .info-field input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+        }
+        
+        .section-title {
+            background: #3498db;
+            color: white;
+            font-size: 1.3em;
+            font-weight: bold;
+            padding: 12px 20px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            border-radius: 5px;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .question-text {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+        
+        .answer-space {
+            border: 1px solid #ddd;
+            min-height: 80px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+        
+        .answer-space.large {
+            min-height: 120px;
+        }
+        
+        .answer-space.extra-large {
+            min-height: 180px;
+        }
+        
+        .diagram-space {
+            border: 2px dashed #bdc3c7;
+            min-height: 200px;
+            background: #fafafa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+        
+        .option input[type="checkbox"], .option input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        .matching-exercise {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .matching-column h4 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .matching-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .matching-item:hover {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+        
+        .scenario-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .scenario-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .analysis-cell {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            background: white;
+        }
+        
+        .analysis-cell h5 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 0.9em;
+        }
+        
+        .analysis-cell textarea {
+            width: 100%;
+            height: 60px;
+            border: none;
+            resize: none;
+            font-size: 0.85em;
+        }
+        
+        .reflection-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reflection-box h4 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        
+        .tips-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .tips-box h5 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 8px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+        
+        .checklist input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        @media print {
+            .tips-box, .reflection-box {
+                break-inside: avoid;
+            }
+            
+            .section {
+                break-inside: avoid;
+            }
+        }
+        
+        .evaluation-rubric {
+            margin-top: 30px;
+            border: 2px solid #34495e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .rubric-header {
+            background: #34495e;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+        }
+        
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .rubric-table th, .rubric-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .rubric-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        .score-cell {
+            text-align: center;
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>第28章：互動循環 (The Interaction Cycle)</h1>
+        <div class="subtitle">學習單 - 使用者體驗設計理論與實務</div>
+    </div>
+
+    <div class="student-info">
+        <div class="info-field">
+            <label>姓名：</label>
+            <input type="text" placeholder="請填寫姓名">
+        </div>
+        <div class="info-field">
+            <label>學號：</label>
+            <input type="text" placeholder="請填寫學號">
+        </div>
+        <div class="info-field">
+            <label>班級：</label>
+            <input type="text" placeholder="請填寫班級">
+        </div>
+        <div class="info-field">
+            <label>日期：</label>
+            <input type="date">
+        </div>
+    </div>
+
+    <!-- 第一部分：基礎概念理解 -->
+    <div class="section">
+        <div class="section-title">📚 第一部分：基礎概念理解 (25分)</div>
+        
+        <div class="question">
+            <div class="question-number">1. 定義題 (5分)</div>
+            <div class="question-text">請用自己的話解釋什麼是「互動循環」，並說明它與Norman行動階段模型的關係。</div>
+            <div class="answer-space large"></div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">2. 選擇題 (10分)</div>
+            <div class="question-text">請選擇互動循環的四個核心階段：</div>
+            <div class="options">
+                <label class="option">
+                    <input type="checkbox"> 規劃 (Planning)
+                </label>
+                <label class="option">
+                    <input type="checkbox"> 轉換 (Translation)
+                </label>
+                <label class="option">
+                    <input type="checkbox"> 執行 (Execution)
+                </label>
+                <label class="option">
+                    <input type="checkbox"> 評估 (Assessment)
+                </label>
+                <label class="option">
+                    <input type="checkbox"> 反思 (Reflection)
+                </label>
+                <label class="option">
+                    <input type="checkbox"> 實作 (Implementation)
+                </label>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">3. 配對題 (10分)</div>
+            <div class="question-text">請將左側的鴻溝類型與右側的描述配對：</div>
+            <div class="matching-exercise">
+                <div class="matching-column">
+                    <h4>鴻溝類型</h4>
+                    <div class="matching-item">A. 執行鴻溝 (Gulf of Execution)</div>
+                    <div class="matching-item">B. 評估鴻溝 (Gulf of Evaluation)</div>
+                </div>
+                <div class="matching-column">
+                    <h4>描述</h4>
+                    <div class="matching-item">1. 使用者需要幫助了解他們的行動是否有預期結果</div>
+                    <div class="matching-item">2. 使用者需要幫助知道要對系統中的什麼物件採取什麼行動</div>
+                </div>
+            </div>
+            <div class="answer-space">
+                配對答案：A-_____ , B-_____
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二部分：圖表繪製與分析 -->
+    <div class="section">
+        <div class="section-title">🎨 第二部分：圖表繪製與視覺化 (20分)</div>
+        
+        <div class="question">
+            <div class="question-number">4. 圖表繪製 (15分)</div>
+            <div class="question-text">請在下方空間繪製完整的互動循環圖，包含四個階段及其相互關係。標註每個階段的主要功能。</div>
+            <div class="diagram-space">
+                請在此空間繪製互動循環圖<br>
+                <small>提示：可以畫圓形、箭頭、文字標籤等</small>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">5. Norman模型轉換 (5分)</div>
+            <div class="question-text">說明Norman七階段模型如何簡化為四階段互動循環，哪些階段被合併了？</div>
+            <div class="answer-space"></div>
+        </div>
+    </div>
+
+    <!-- 第三部分：實務應用分析 -->
+    <div class="section">
+        <div class="section-title">💼 第三部分：實務應用分析 (30分)</div>
+        
+        <div class="scenario-box">
+            <h4>📱 情境：使用手機APP訂餐</h4>
+            <p>小明想要使用手機APP訂購午餐。他的目標是訂一份義大利麵套餐並安排外送到辦公室。請分析這個情境中的互動循環。</p>
+        </div>
+
+        <div class="question">
+            <div class="question-number">6. 階段分析 (20分)</div>
+            <div class="question-text">請根據上述情境，分析使用者在每個階段的具體行為和需求：</div>
+            <div class="analysis-grid">
+                <div class="analysis-cell">
+                    <h5>規劃階段</h5>
+                    <textarea placeholder="使用者在此階段的思考和決策..."></textarea>
+                </div>
+                <div class="analysis-cell">
+                    <h5>轉換階段</h5>
+                    <textarea placeholder="使用者需要將意圖轉換為具體行動..."></textarea>
+                </div>
+                <div class="analysis-cell">
+                    <h5>執行階段</h5>
+                    <textarea placeholder="使用者的實際操作行為..."></textarea>
+                </div>
+                <div class="analysis-cell">
+                    <h5>評估階段</h5>
+                    <textarea placeholder="使用者如何判斷操作結果..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="question-number">7. 問題識別 (10分)</div>
+            <div class="question-text">在上述訂餐情境中，可能出現哪些設計問題？請至少列出三個並說明它們屬於哪個階段。</div>
+            <div class="answer-space large"></div>
+        </div>
+    </div>
+
+    <!-- 第四部分：設計改善建議 -->
+    <div class="section">
+        <div class="section-title">🛠️ 第四部分：設計改善建議 (15分)</div>
+        
+        <div class="question">
+            <div class="question-number">8. 設計建議 (15分)</div>
+            <div class="question-text">
+                根據課文提到「75%的UX問題出現在轉換階段」，請提出三個具體的設計策略來改善轉換階段的使用者體驗。
+            </div>
+            
+            <div class="tips-box">
+                <h5>💡 思考提示</h5>
+                <ul>
+                    <li>認知可負擔性的設計</li>
+                    <li>前饋 (feedforward) 機制</li>
+                    <li>減少認知負荷的方法</li>
+                </ul>
+            </div>
+            
+            <div class="answer-space extra-large"></div>
+        </div>
+    </div>
+
+    <!-- 第五部分：批判思考與反思 -->
+    <div class="section">
+        <div class="section-title">🤔 第五部分：批判思考與反思 (10分)</div>
+        
+        <div class="question">
+            <div class="question-number">9. 批判分析 (10分)</div>
+            <div class="question-text">
+                互動循環模型有其優勢，但也可能有限制。請討論：
+                <br>a) 這個模型在分析複雜多步驟任務時可能遇到什麼挑戰？
+                <br>b) 對於多使用者協作情境，如何擴展這個模型？
+            </div>
+            <div class="answer-space extra-large"></div>
+        </div>
+        
+        <div class="reflection-box">
+            <h4>📝 學習反思</h4>
+            <div class="question-text">
+                完成本學習單後，請反思：這個理論框架如何幫助你更好地理解使用者體驗設計？你會如何應用到未來的設計工作中？
+            </div>
+            <div class="answer-space large"></div>
+        </div>
+    </div>
+
+    <!-- 自我檢核清單 -->
+    <div class="section">
+        <div class="section-title">✅ 自我檢核清單</div>
+        <ul class="checklist">
+            <li><input type="checkbox"> 我能清楚解釋互動循環的四個階段</li>
+            <li><input type="checkbox"> 我了解執行鴻溝和評估鴻溝的區別</li>
+            <li><input type="checkbox"> 我能將理論應用到實際的設計情境中</li>
+            <li><input type="checkbox"> 我知道如何識別不同階段的設計問題</li>
+            <li><input type="checkbox"> 我能提出改善轉換階段的具體策略</li>
+            <li><input type="checkbox"> 我思考了模型的限制和擴展可能性</li>
+            <li><input type="checkbox"> 我完成了所有答題並進行了檢查</li>
+        </ul>
+    </div>
+
+    <!-- 評分標準 -->
+    <div class="evaluation-rubric">
+        <div class="rubric-header">教師評分標準 (總分：100分)</div>
+        <table class="rubric-table">
+            <thead>
+                <tr>
+                    <th>評分項目</th>
+                    <th>優秀 (90-100)</th>
+                    <th>良好 (80-89)</th>
+                    <th>及格 (70-79)</th>
+                    <th>需改進 (60-69)</th>
+                    <th class="score-cell">得分</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>概念理解</td>
+                    <td>完全掌握核心概念，解釋清晰準確</td>
+                    <td>大致理解概念，解釋合理</td>
+                    <td>基本理解，有少許誤解</td>
+                    <td>理解不足，存在明顯錯誤</td>
+                    <td class="score-cell"></td>
+                </tr>
+                <tr>
+                    <td>應用能力</td>
+                    <td>能靈活應用理論分析實務情境</td>
+                    <td>能適當應用理論到具體案例</td>
+                    <td>應用能力一般，分析較淺</td>
+                    <td>難以將理論與實務連結</td>
+                    <td class="score-cell"></td>
+                </tr>
+                <tr>
+                    <td>批判思考</td>
+                    <td>展現深度思考，能識別模型限制</td>
+                    <td>有合理的思考和分析</td>
+                    <td>思考較淺，缺乏深度</td>
+                    <td>缺乏批判性思考</td>
+                    <td class="score-cell"></td>
+                </tr>
+                <tr>
+                    <td>表達清晰度</td>
+                    <td>論述清晰，邏輯性強</td>
+                    <td>表達清楚，組織良好</td>
+                    <td>表達一般，偶有不清</td>
+                    <td>表達不清，邏輯混亂</td>
+                    <td class="score-cell"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="padding: 15px; text-align: center;">
+            <strong>總分：_______ / 100</strong>　　
+            <strong>等第：_______</strong>　　
+            <strong>教師簽名：_______________</strong>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; text-align: center; color: #7f8c8d;">
+        <p><strong>完成時間建議：90-120分鐘</strong></p>
+        <p>建議搭配教科書第28章內容及課堂講解進行作答</p>
+    </div>
+</body>
+</html>

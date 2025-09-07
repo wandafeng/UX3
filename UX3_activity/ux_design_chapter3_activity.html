@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三章課程探討活動：設計情境分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .objectives {
+            background-color: #e8f5e8;
+            border-left-color: #27ae60;
+        }
+
+        .theory {
+            background-color: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+
+        .activity {
+            background-color: #fff3e0;
+            border-left-color: #ff9800;
+        }
+
+        .assessment {
+            background-color: #fce4ec;
+            border-left-color: #e91e63;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .objectives .icon { background-color: #27ae60; }
+        .theory .icon { background-color: #2196f3; }
+        .activity .icon { background-color: #ff9800; }
+        .assessment .icon { background-color: #e91e63; }
+
+        .complexity-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .quadrant {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .quadrant:hover {
+            transform: scale(1.05);
+        }
+
+        .q1 { background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; }
+        .q2 { background: linear-gradient(135deg, #4ecdc4, #6ee6dd); color: white; }
+        .q3 { background: linear-gradient(135deg, #45b7d1, #6bc5e8); color: white; }
+        .q4 { background: linear-gradient(135deg, #96ceb4, #a8d5ba); color: white; }
+
+        .task-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .task-card:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .task-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .discussion-points {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .discussion-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .discussion-points li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 10px;
+        }
+
+        .discussion-points li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .timeline {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .resources {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            margin-top: 40px;
+            border-radius: 10px;
+        }
+
+        .resources h3 {
+            margin-bottom: 15px;
+            color: #ecf0f1;
+        }
+
+        .resources ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .resources li {
+            padding: 5px 0;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .resources li:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .complexity-matrix {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>第三章課程探討活動</h1>
+            <p>設計情境：理解嚴謹性、範圍、複雜性與系統性質</p>
+        </div>
+
+        <div class="content">
+            <div class="section objectives">
+                <h2>
+                    <span class="icon">📋</span>
+                    學習目標
+                </h2>
+                <ul>
+                    <li><strong>理解UX設計中嚴謹性的重要性：</strong>掌握在不同設計情境下如何選擇適當的嚴謹程度</li>
+                    <li><strong>分析系統複雜性：</strong>學會運用交互複雜性與領域複雜性的二維分析框架</li>
+                    <li><strong>評估項目範圍：</strong>理解大範圍與小範圍設計方法的差異與應用時機</li>
+                    <li><strong>區分消費產品與企業系統：</strong>掌握不同類型產品的設計考量重點</li>
+                </ul>
+            </div>
+
+            <div class="section theory">
+                <h2>
+                    <span class="icon">📚</span>
+                    理論基礎回顧
+                </h2>
+                <div class="discussion-points">
+                    <h3>核心概念</h3>
+                    <ul>
+                        <li><strong>嚴謹性(Rigor)：</strong>指設計過程中的正式性、徹底性、精確度和準確性程度</li>
+                        <li><strong>交互複雜性：</strong>用戶行為的複雜程度，包括完成任務所需的認知行為難度</li>
+                        <li><strong>領域複雜性：</strong>工作領域的複雜程度或該領域的技術性質</li>
+                        <li><strong>範圍：</strong>目標系統或產品在實施中的分塊方式</li>
+                    </ul>
+                </div>
+
+                <h3>系統複雜性空間四象限</h3>
+                <div class="complexity-matrix">
+                    <div class="quadrant q1">
+                        <h4>複雜交互 + 複雜領域</h4>
+                        <p>航空交通管制系統<br>需要最高嚴謹性</p>
+                    </div>
+                    <div class="quadrant q2">
+                        <h4>複雜交互 + 簡單領域</h4>
+                        <p>Adobe Photoshop<br>重視功能豐富性</p>
+                    </div>
+                    <div class="quadrant q3">
+                        <h4>簡單交互 + 簡單領域</h4>
+                        <p>網站購花服務<br>注重簡潔易用</p>
+                    </div>
+                    <div class="quadrant q4">
+                        <h4>簡單交互 + 複雜領域</h4>
+                        <p>稅務軟件<br>需要領域專業知識</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section activity">
+                <h2>
+                    <span class="icon">🎯</span>
+                    主要活動：案例分析與設計決策
+                </h2>
+
+                <div class="timeline">
+                    ⏰ 活動時間：90分鐘（包含討論與發表）
+                </div>
+
+                <div class="task-card">
+                    <h3><span class="task-number">1</span>案例分析活動（30分鐘）</h3>
+                    <p><strong>分組任務：</strong>每組選擇一個數位產品或系統，運用系統複雜性空間框架進行分析</p>
+                    <h4>分析維度：</h4>
+                    <ul>
+                        <li>確定該系統在複雜性空間中的位置</li>
+                        <li>分析其交互複雜性特徵（用戶任務的認知負荷）</li>
+                        <li>評估其領域複雜性程度（專業知識需求）</li>
+                        <li>討論當前設計是否符合其複雜性定位</li>
+                    </ul>
+                    <p><strong>建議案例：</strong>電子銀行系統、學習管理系統、社群媒體平台、專業設計軟件等</p>
+                </div>
+
+                <div class="task-card">
+                    <h3><span class="task-number">2</span>嚴謹性評估練習（25分鐘）</h3>
+                    <p><strong>情境模擬：</strong>假設你是UX設計師，面對以下項目情境，如何決定採用的嚴謹性程度？</p>
+                    <div class="discussion-points">
+                        <h4>情境案例：</h4>
+                        <ul>
+                            <li><strong>情境A：</strong>新創公司的MVP產品開發（時間緊迫、資源有限）</li>
+                            <li><strong>情境B：</strong>醫療設備控制介面設計（安全性極重要）</li>
+                            <li><strong>情境C：</strong>大型企業內部管理系統升級（複雜業務流程）</li>
+                            <li><strong>情境D：</strong>消費性行動App改版（用戶基數龐大）</li>
+                        </ul>
+                    </div>
+                    <p><strong>分析要點：</strong>考慮風險容忍度、項目資源、團隊經驗、系統類型等因素</p>
+                </div>
+
+                <div class="task-card">
+                    <h3><span class="task-number">3</span>範圍規劃討論（20分鐘）</h3>
+                    <p><strong>設計挑戰：</strong>為一個大學的線上學習平台設計改版計畫</p>
+                    <h4>討論重點：</h4>
+                    <ul>
+                        <li>如何在大範圍設計與小範圍迭代之間取得平衡？</li>
+                        <li>哪些功能適合採用大範圍一次性設計？</li>
+                        <li>哪些部分可以採用敏捷迭代方式？</li>
+                        <li>如何處理不同使用者群體（學生、教師、管理員）的需求？</li>
+                    </ul>
+                </div>
+
+                <div class="task-card">
+                    <h3><span class="task-number">4</span>成果發表與討論（15分鐘）</h3>
+                    <p>各組準備5分鐘簡報，分享分析結果和設計決策理由</p>
+                    <p><strong>發表格式：</strong>問題陳述 → 分析框架應用 → 設計建議 → 學術反思</p>
+                </div>
+            </div>
+
+            <div class="section assessment">
+                <h2>
+                    <span class="icon">📊</span>
+                    評量與反思
+                </h2>
+                
+                <h3>評量標準</h3>
+                <div class="task-card">
+                    <h4>學術思辨能力（40%）</h4>
+                    <ul>
+                        <li>能否正確運用理論框架分析實際案例</li>
+                        <li>論證邏輯的清晰性與說服力</li>
+                        <li>對複雜設計問題的多角度思考</li>
+                    </ul>
+                </div>
+
+                <div class="task-card">
+                    <h4>實務應用能力（35%）</h4>
+                    <ul>
+                        <li>設計決策的合理性與可行性</li>
+                        <li>對不同情境下嚴謹性選擇的判斷</li>
+                        <li>範圍規劃的策略思考</li>
+                    </ul>
+                </div>
+
+                <div class="task-card">
+                    <h4>團隊協作與表達（25%）</h4>
+                    <ul>
+                        <li>小組討論的參與度與貢獻</li>
+                        <li>發表時的專業表達能力</li>
+                        <li>對其他組別提問的回應品質</li>
+                    </ul>
+                </div>
+
+                <div class="discussion-points">
+                    <h3>反思問題</h3>
+                    <ul>
+                        <li>在實際設計工作中，如何平衡理想的嚴謹性與現實的資源限制？</li>
+                        <li>複雜性分析框架如何幫助我們做出更好的設計方法選擇？</li>
+                        <li>從學術研究角度，這些理論概念還有哪些可以深入探討的方向？</li>
+                        <li>如何將今天學到的概念應用到您的研究或教學實務中？</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="resources">
+                <h3>📖 延伸學習資源</h3>
+                <ul>
+                    <li><strong>學術期刊文章：</strong>"Complexity in User Experience Design" - Interaction Design Journal</li>
+                    <li><strong>相關研究：</strong>Design Science Research在UX領域的應用</li>
+                    <li><strong>實務指南：</strong>《Universal Principles of Design》第三版</li>
+                    <li><strong>線上資源：</strong>ACM Digital Library - Human-Computer Interaction相關論文</li>
+                    <li><strong>工具推薦：</strong>複雜性評估量表與嚴謹性檢核表</li>
+                </ul>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #34495e;">
+                    <p><strong>📝 課後作業建議：</strong>選擇一個您感興趣的數位產品，撰寫1500字的學術分析報告，運用本章理論框架深入探討其設計決策的合理性，並提出改進建議。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加互動效果
+        document.querySelectorAll('.quadrant').forEach(quadrant => {
+            quadrant.addEventListener('click', function() {
+                const content = this.innerHTML;
+                alert('選中象限：\n' + this.textContent);
+            });
+        });
+
+        // 任務卡片展開效果
+        document.querySelectorAll('.task-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.backgroundColor = this.style.backgroundColor === 'rgb(240, 248, 255)' ? 'white' : '#f0f8ff';
+            });
+        });
+
+        // 載入動畫
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.section').forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第27章 UX設計中的示能性 - 學習單</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .worksheet-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2.2em;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+        
+        .student-info {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .info-field {
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-field label {
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 60px;
+        }
+        
+        .info-field input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            background: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        
+        .answer-space {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            min-height: 80px;
+            margin-top: 10px;
+            background: white;
+        }
+        
+        .short-answer {
+            min-height: 40px;
+        }
+        
+        .long-answer {
+            min-height: 120px;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-item input {
+            margin-right: 8px;
+        }
+        
+        .matching-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .matching-table th,
+        .matching-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .matching-table th {
+            background-color: #ecf0f1;
+            font-weight: bold;
+        }
+        
+        .matching-table select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .case-study-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .reflection-box {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .design-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .design-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .checklist {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        
+        .checklist-item input {
+            margin-right: 10px;
+        }
+        
+        .note-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .print-button:hover {
+            background: #2980b9;
+        }
+        
+        @media print {
+            .print-button {
+                display: none;
+            }
+            
+            .worksheet-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 20px;
+            }
+            
+            .answer-space {
+                min-height: 60px;
+                border: 1px solid #333;
+            }
+            
+            .long-answer {
+                min-height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">列印學習單</button>
+    
+    <div class="worksheet-container">
+        <div class="header">
+            <h1>第27章 UX設計中的示能性</h1>
+            <div class="subtitle">Affordances in UX Design - 學習單</div>
+        </div>
+        
+        <div class="student-info">
+            <div class="info-field">
+                <label>姓名：</label>
+                <input type="text" placeholder="請填寫您的姓名">
+            </div>
+            <div class="info-field">
+                <label>學號：</label>
+                <input type="text" placeholder="請填寫學號">
+            </div>
+            <div class="info-field">
+                <label>班級：</label>
+                <input type="text" placeholder="請填寫班級">
+            </div>
+            <div class="info-field">
+                <label>日期：</label>
+                <input type="date">
+            </div>
+        </div>
+
+        <!-- Section 1: 基本概念理解 -->
+        <div class="section">
+            <div class="section-title">一、基本概念理解 (20分)</div>
+            
+            <div class="question">
+                <div class="question-number">1. 什麼是示能性？(5分)</div>
+                <p>請用自己的話解釋「示能性（Affordance）」的定義，並說明它在UX設計中的重要性。</p>
+                <div class="answer-space short-answer"></div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">2. 示能性理論的發展歷程 (10分)</div>
+                <p>請按時間順序排列並簡述以下學者對示能性理論的貢獻：</p>
+                <table class="matching-table">
+                    <thead>
+                        <tr>
+                            <th>學者</th>
+                            <th>時間</th>
+                            <th>主要貢獻</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>J.J. Gibson</td>
+                            <td><input type="text" placeholder="年份"></td>
+                            <td><input type="text" placeholder="主要貢獻"></td>
+                        </tr>
+                        <tr>
+                            <td>Donald Norman</td>
+                            <td><input type="text" placeholder="年份"></td>
+                            <td><input type="text" placeholder="主要貢獻"></td>
+                        </tr>
+                        <tr>
+                            <td>William Gaver</td>
+                            <td><input type="text" placeholder="年份"></td>
+                            <td><input type="text" placeholder="主要貢獻"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">3. 文化共識的重要性 (5分)</div>
+                <p>根據課文中Pardha Pyla的郵箱範例，說明文化共識如何影響使用者對示能性的理解？</p>
+                <div class="answer-space short-answer"></div>
+            </div>
+        </div>
+
+        <!-- Section 2: 五種示能性類型 -->
+        <div class="section">
+            <div class="section-title">二、五種示能性類型分析 (30分)</div>
+            
+            <div class="question">
+                <div class="question-number">4. 示能性類型配對 (10分)</div>
+                <p>請將下列設計特徵與正確的示能性類型配對：</p>
+                <table class="matching-table">
+                    <thead>
+                        <tr>
+                            <th>設計特徵</th>
+                            <th>示能性類型</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>按鈕標籤說明點擊後的結果</td>
+                            <td>
+                                <select>
+                                    <option value="">請選擇</option>
+                                    <option value="cognitive">認知示能性</option>
+                                    <option value="physical">物理示能性</option>
+                                    <option value="sensory">感官示能性</option>
+                                    <option value="functional">功能示能性</option>
+                                    <option value="emotional">情感示能性</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>按鈕尺寸足夠大，易於點擊</td>
+                            <td>
+                                <select>
+                                    <option value="">請選擇</option>
+                                    <option value="cognitive">認知示能性</option>
+                                    <option value="physical">物理示能性</option>
+                                    <option value="sensory">感官示能性</option>
+                                    <option value="functional">功能示能性</option>
+                                    <option value="emotional">情感示能性</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>文字大小足以清楚閱讀</td>
+                            <td>
+                                <select>
+                                    <option value="">請選擇</option>
+                                    <option value="cognitive">認知示能性</option>
+                                    <option value="physical">物理示能性</option>
+                                    <option value="sensory">感官示能性</option>
+                                    <option value="functional">功能示能性</option>
+                                    <option value="emotional">情感示能性</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>系統後端排序功能的執行</td>
+                            <td>
+                                <select>
+                                    <option value="">請選擇</option>
+                                    <option value="cognitive">認知示能性</option>
+                                    <option value="physical">物理示能性</option>
+                                    <option value="sensory">感官示能性</option>
+                                    <option value="functional">功能示能性</option>
+                                    <option value="emotional">情感示能性</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>美麗的視覺效果增加互動樂趣</td>
+                            <td>
+                                <select>
+                                    <option value="">請選擇</option>
+                                    <option value="cognitive">認知示能性</option>
+                                    <option value="physical">物理示能性</option>
+                                    <option value="sensory">感官示能性</option>
+                                    <option value="functional">功能示能性</option>
+                                    <option value="emotional">情感示能性</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">5. 認知示能性深度分析 (10分)</div>
+                <p>認知示能性被認為是最重要的UX設計特徵之一。請回答以下問題：</p>
+                <div style="margin-left: 20px;">
+                    <p><strong>a) 為什麼認知示能性對缺乏經驗的使用者特別重要？</strong></p>
+                    <div class="answer-space short-answer"></div>
+                    
+                    <p><strong>b) 什麼是虛假認知示能性？請舉一個例子。</strong></p>
+                    <div class="answer-space short-answer"></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">6. 物理示能性與菲茨定律 (10分)</div>
+                <p>請解釋菲茨定律在物理示能性設計中的應用，並說明物理過度射擊問題及其解決方案。</p>
+                <div class="answer-space long-answer"></div>
+            </div>
+        </div>
+
+        <!-- Section 3: 案例分析 -->
+        <div class="section">
+            <div class="section-title">三、案例分析 (25分)</div>
+            
+            <div class="case-study-box">
+                <strong>案例情境：</strong>某電商網站的購物車按鈕設計
+                <br><br>
+                你正在設計一個電商網站的「加入購物車」按鈕。這個按鈕需要讓使用者能夠輕易理解其功能、方便點擊、清楚看見，並且與後端系統連接以實際執行購物車功能。
+            </div>
+            
+            <div class="question">
+                <div class="question-number">7. 多層次示能性設計 (15分)</div>
+                <p>針對上述購物車按鈕，請分析每種示能性應該如何設計：</p>
+                
+                <div style="margin-left: 20px;">
+                    <p><strong>認知示能性：</strong></p>
+                    <div class="answer-space short-answer"></div>
+                    
+                    <p><strong>物理示能性：</strong></p>
+                    <div class="answer-space short-answer"></div>
+                    
+                    <p><strong>感官示能性：</strong></p>
+                    <div class="answer-space short-answer"></div>
+                    
+                    <p><strong>功能示能性：</strong></p>
+                    <div class="answer-space short-answer"></div>
+                    
+                    <p><strong>情感示能性：</strong></p>
+                    <div class="answer-space short-answer"></div>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">8. 使用者創建示能性觀察 (10分)</div>
+                <p>如果你發現使用者在按鈕旁邊貼了便條紙寫著「點這裡買東西」，這說明了什麼問題？你會如何改進設計？</p>
+                <div class="answer-space long-answer"></div>
+            </div>
+        </div>
+
+        <!-- Section 4: 設計檢核與應用 -->
+        <div class="section">
+            <div class="section-title">四、設計檢核與應用 (15分)</div>
+            
+            <div class="question">
+                <div class="question-number">9. UX設計示能性檢核清單應用 (10分)</div>
+                <p>你正在評估一個手機App的登入按鈕。請使用示能性檢核清單進行評估：</p>
+                
+                <div class="checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="func">
+                        <label for="func">功能示能性 - 按鈕能正確執行登入功能</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cog">
+                        <label for="cog">認知示能性 - 使用者理解這是登入按鈕</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="phy">
+                        <label for="phy">物理示能性 - 按鈕大小適合手指點擊</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sen">
+                        <label for="sen">感官示能性 - 按鈕清晰可見且易於辨識</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="emo">
+                        <label for="emo">情感示能性 - 按鈕設計令人愉悅且符合品牌形象</label>
+                    </div>
+                </div>
+                
+                <p>如果有任何項目未通過檢核，請說明可能的改善方案：</p>
+                <div class="answer-space short-answer"></div>
+            </div>
+            
+            <div class="question">
+                <div class="question-number">10. 設計平衡考量 (5分)</div>
+                <p>在實際設計過程中，不同類型的示能性可能會產生衝突。請舉例說明這種情況，並提出解決方案。</p>
+                <div class="answer-space short-answer"></div>
+            </div>
+        </div>
+
+        <!-- Section 5: 反思與應用 -->
+        <div class="section">
+            <div class="section-title">五、反思與應用 (10分)</div>
+            
+            <div class="reflection-box">
+                <div class="question">
+                    <div class="question-number">11. 個人反思 (5分)</div>
+                    <p>回想你日常使用的產品或服務，找一個示能性設計良好的例子，分析它為什麼成功：</p>
+                    <div class="answer-space short-answer"></div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-number">12. 未來應用 (5分)</div>
+                    <p>作為一名設計師，你認為示能性概念在未來的設計趨勢（如AR/VR、AI介面等）中會如何演變？</p>
+                    <div class="answer-space short-answer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="note-box">
+            <strong>注意事項：</strong>
+            <ul>
+                <li>請用黑色或藍色筆作答</li>
+                <li>答案要求具體明確，避免過於抽象的描述</li>
+                <li>可以搭配簡單的圖示說明你的想法</li>
+                <li>如有疑問，請在課堂上提出討論</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
