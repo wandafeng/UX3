@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計學測量尺度學習閃卡</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        .flashcard-container {
+            perspective: 1000px;
+        }
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard-container.flipped .flashcard {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden; /* Safari */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            background-color: white;
+            border: 1px solid #e5e7eb;
+        }
+        .card-front {
+            
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        .no-select {
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none; /* Standard syntax */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">測量尺度學習閃卡</h1>
+        <p class="text-center text-gray-500 mb-8">點擊卡片來翻面學習！</p>
+        
+        <div id="flashcard-container" class="flashcard-container w-full h-96 md:h-[28rem] mb-6 cursor-pointer">
+            <div id="flashcard" class="flashcard">
+                <!-- Card Front -->
+                <div id="card-front" class="card-face card-front">
+                    <!-- Content will be injected by JS -->
+                </div>
+                <!-- Card Back -->
+                <div id="card-back" class="card-face card-back items-start justify-start text-left overflow-y-auto">
+                    <!-- Content will be injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button id="prev-btn" class="px-6 py-3 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 font-semibold hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                上一張
+            </button>
+            <div id="card-counter" class="text-gray-600 font-medium">1 / 5</div>
+            <button id="next-btn" class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-sm font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                下一張
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            {
+                front: {
+                    title: '名目尺度',
+                    subtitle: 'Nominal Scale'
+                },
+                back: {
+                    title: '名目尺度 (Nominal Scale)',
+                    sections: [
+                        {
+                            heading: '🧐 定義',
+                            content: '用來「分類」的尺度，數字只代表不同類別的標籤或代號，沒有大小、順序或距離的意義。'
+                        },
+                        {
+                            heading: '💡 例子',
+                            content: '<ul><li class="mb-1">‣ 性別 (1=男, 2=女)</li><li class="mb-1">‣ 血型 (A, B, AB, O)</li><li>‣ 身份證字號</li></ul>'
+                        },
+                        {
+                            heading: '🤔 想一想',
+                            content: '如果用 1 代表男生、2 代表女生，我們可以說「2 > 1」，所以女生比男生「大」嗎？<br><br><span class="font-semibold text-indigo-600">不行！因為這裡的數字只是代號。</span>'
+                        }
+                    ]
+                }
+            },
+            {
+                front: {
+                    title: '順序尺度',
+                    subtitle: 'Ordinal Scale'
+                },
+                back: {
+                    title: '順序尺度 (Ordinal Scale)',
+                    sections: [
+                        {
+                            heading: '🧐 定義',
+                            content: '不僅可以分類，還可以比較「順序或等級」。但我們無法知道等級之間的「差距」是否相等。'
+                        },
+                        {
+                            heading: '💡 例子',
+                            content: '<ul><li class="mb-1">‣ T恤尺寸 (S, M, L)</li><li class="mb-1">‣ 比賽名次 (第一名, 第二名)</li><li>‣ 滿意度 (非常滿意 > 滿意 > 普通)</li></ul>'
+                        },
+                        {
+                            heading: '🤔 想一想',
+                            content: '我們知道第一名比第二名好，但第一名和第二名的「實力差距」，跟第二名和第三名的「實力差距」一樣嗎？<br><br><span class="font-semibold text-indigo-600">不一定。我們只知道排名，不知道差距。</span>'
+                        }
+                    ]
+                }
+            },
+            {
+                front: {
+                    title: '等距尺度',
+                    subtitle: 'Interval Scale'
+                },
+                back: {
+                    title: '等距尺度 (Interval Scale)',
+                    sections: [
+                        {
+                            heading: '🧐 定義',
+                            content: '具有順序，且各個點之間的「距離是相等」的。但是，它沒有「絕對的零點」(0 不代表「沒有」)。'
+                        },
+                        {
+                            heading: '💡 例子',
+                            content: '<ul><li class="mb-1">‣ 溫度 (攝氏/華氏)</li><li class="mb-1">‣ 西元年份 (西元 2024 年)</li><li>‣ 智商 (IQ)</li></ul>'
+                        },
+                        {
+                            heading: '🤔 想一想',
+                            content: '攝氏 20 度是攝氏 10 度的「兩倍熱」嗎？<br><br><span class="font-semibold text-indigo-600">不行。因為攝氏 0 度不代表「沒有熱度」，所以不能直接計算比例。</span>'
+                        }
+                    ]
+                },
+            },
+            {
+                front: {
+                    title: '等比尺度',
+                    subtitle: 'Ratio Scale'
+                },
+                back: {
+                    title: '等比尺度 (Ratio Scale)',
+                    sections: [
+                        {
+                            heading: '🧐 定義',
+                            content: '擁有等距尺度的所有特性，再加上它有「絕對的零點」(0 代表「完全沒有」)。因此可以進行加減乘除，計算比例。'
+                        },
+                        {
+                            heading: '💡 例子',
+                            content: '<ul><li class="mb-1">‣ 身高 (公分)</li><li class="mb-1">‣ 體重 (公斤)</li><li class="mb-1">‣ 年齡 (歲)</li><li>‣ 價格 (新台幣)</li></ul>'
+                        },
+                        {
+                            heading: '🤔 想一想',
+                            content: '一件 500 元的衣服，是一件 250 元衣服的幾倍貴？<br><br><span class="font-semibold text-indigo-600">是 2 倍。因為 0 元代表「沒有價格」，是絕對零點，所以可以算比例。</span>'
+                        }
+                    ]
+                }
+            },
+            {
+                front: {
+                    title: '為什麼測量尺度很重要？',
+                    subtitle: ''
+                },
+                back: {
+                    title: '為什麼測量尺度很重要？',
+                    sections: [
+                        {
+                            heading: '🧐 核心觀念',
+                            content: '不同的測量尺度，決定了你可以使用哪些統計分析方法。用錯方法會得到沒有意義、甚至是錯誤的結論。'
+                        },
+                        {
+                            heading: '💡 適用方法舉例',
+                            content: '<ul><li class="mb-1">‣ <b>名目尺度</b>: 只能算次數、百分比。 (例：計算男女比例)</li><li class="mb-1">‣ <b>順序尺度</b>: 可算中位數、百分位數。 (例：找出排名在前 50% 的人)</li><li>‣ <b>等距/等比尺度</b>: 可算平均數、標準差等。 (例：計算全班平均身高)</li></ul>'
+                        },
+                        {
+                            heading: '🤔 想一想',
+                            content: '如果我把「血型」用 A=1, B=2, O=3, AB=4 來編碼，然後算出「平均血型」是 2.5，這個數字有意義嗎？<br><br><span class="font-semibold text-indigo-600">完全沒有意義！因為血型是名目尺度，不能拿來算平均值。</span>'
+                        }
+                    ]
+                }
+            }
+        ];
+
+        let currentCard = 0;
+
+        const flashcardContainer = document.getElementById('flashcard-container');
+        const cardFront = document.getElementById('card-front');
+        const cardBack = document.getElementById('card-back');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const cardCounter = document.getElementById('card-counter');
+
+        function updateCard() {
+            const data = flashcards[currentCard];
+            
+            // Update front
+            cardFront.innerHTML = `
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 text-center">${data.front.title}</h2>
+                <p class="text-xl md:text-2xl text-indigo-500 mt-2">${data.front.subtitle}</p>
+            `;
+
+            // Update back
+            let backHtml = `<h3 class="text-2xl font-bold text-gray-800 mb-4 w-full">${data.back.title}</h3>`;
+            data.back.sections.forEach(section => {
+                backHtml += `
+                    <div class="mb-4 w-full">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">${section.heading}</h4>
+                        <div class="text-gray-600 pl-2 border-l-4 border-indigo-200">${section.content}</div>
+                    </div>
+                `;
+            });
+            cardBack.innerHTML = backHtml;
+
+            // Update counter
+            cardCounter.textContent = `${currentCard + 1} / ${flashcards.length}`;
+
+            // Update buttons
+            prevBtn.disabled = currentCard === 0;
+            nextBtn.disabled = currentCard === flashcards.length - 1;
+
+            // Reset flip state
+            flashcardContainer.classList.remove('flipped');
+        }
+        
+        flashcardContainer.addEventListener('click', () => {
+            flashcardContainer.classList.toggle('flipped');
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentCard > 0) {
+                currentCard--;
+                updateCard();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentCard < flashcards.length - 1) {
+                currentCard++;
+                updateCard();
+            }
+        });
+
+        // Initial load
+        updateCard();
+    </script>
+</body>
+</html>
